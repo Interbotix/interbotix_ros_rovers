@@ -1,0 +1,68 @@
+<launch>
+
+  <arg name="robot_model"                       default="locobot_base"/>
+  <arg name="robot_name"                        default="$(arg robot_model)"/>
+  <arg name="show_lidar"                        default="false"/>
+  <arg name="external_urdf_loc"                 default=""/>
+  <arg name="external_srdf_loc"                 default=""/>
+  <arg name="mode_configs"                      default="$(find interbotix_xslocobot_moveit_interface)/config/modes_all.yaml"/>
+  <arg name="use_gazebo"                        default="false"/>
+  <arg name="use_actual"                        default="false"/>
+  <arg name="use_fake"                          default="false"/>
+  <arg name="dof"                               default="5"/>
+  <arg name="use_camera"                        default="false"/>
+  <arg name="use_moveit_rviz"                   default="true"/>
+  <arg name="world_name"                        default="$(find interbotix_xslocobot_gazebo)/worlds/xslocobot_gazebo.world"/>
+  <arg name="use_cpp_interface"                 default="false"/>
+  <arg name="moveit_interface_gui"              default="true"/>
+  <arg name="use_python_interface"              default="false"/>
+
+  <include file="$(find interbotix_xslocobot_moveit)/launch/locobot_moveit.launch">
+    <arg name="robot_model"                       value="$(arg robot_model)"/>
+    <arg name="robot_name"                        value="$(arg robot_name)"/>
+    <arg name="show_lidar"                        value="$(arg show_lidar)"/>
+    <arg name="external_urdf_loc"                 value="$(arg external_urdf_loc)"/>
+    <arg name="external_srdf_loc"                 value="$(arg external_srdf_loc)"/>
+    <arg name="mode_configs"                      value="$(arg mode_configs)"/>
+    <arg name="use_gazebo"                        value="$(arg use_gazebo)"/>
+    <arg name="use_actual"                        value="$(arg use_actual)"/>
+    <arg name="use_fake"                          value="$(arg use_fake)"/>
+    <arg name="dof"                               value="$(arg dof)"/>
+    <arg name="use_camera"                        value="$(arg use_camera)"/>
+    <arg name="use_moveit_rviz"                   value="$(arg use_moveit_rviz)"/>
+    <arg name="world_name"                        value="$(arg world_name)"/>
+  </include>
+
+  <group if="$(arg use_cpp_interface)">
+
+    <node
+      name="xs_moveit_interface"
+      pkg="interbotix_xs_moveit_interface"
+      type="xs_moveit_interface"
+      respawn="false"
+      output="screen"
+      ns="$(arg robot_name)"/>
+
+    <node if="$(arg moveit_interface_gui)"
+      name="xs_moveit_interface_gui"
+      pkg="interbotix_xs_moveit_interface"
+      type="xs_moveit_interface_gui"
+      output="screen"
+      ns="$(arg robot_name)"/>
+
+  </group>
+
+  <node if="$(arg use_python_interface)"
+    name="xs_moveit_python_interface"
+    pkg="interbotix_xs_moveit_interface"
+    type="xs_moveit_python_interface"
+    respawn="false"
+    output="screen"
+    ns="$(arg robot_name)">
+    <param name="robot_model"                     value="$(arg robot_model)"/>
+    <param name="dof"                             value="$(arg dof)"/>
+    <remap from="/attached_collision_object"      to="/$(arg robot_name)/attached_collision_object"/>
+    <remap from="/collision_object"               to="/$(arg robot_name)/collision_object"/>
+  </node>
+
+</launch>

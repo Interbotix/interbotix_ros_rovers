@@ -1,0 +1,74 @@
+<launch>
+
+  <arg name="robot_model_1"                     default="locobot_base"/>
+  <arg name="robot_model_2"                     default="locobot_px100"/>
+  <arg name="robot_model_3"                     default="locobot_wx200"/>
+  <arg name="robot_model_4"                     default="locobot_wx250s"/>
+  <arg name="robot_name_1"                      default="locobot_1"/>
+  <arg name="robot_name_2"                      default="locobot_2"/>
+  <arg name="robot_name_3"                      default="locobot_3"/>
+  <arg name="robot_name_4"                      default="locobot_4"/>
+  <arg name="rvizconfig"                        default="$(find interbotix_xslocobot_descriptions)/rviz/many_locobots.rviz" />
+
+  <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
+    <arg name="robot_model"                       value="$(arg robot_model_1)"/>
+    <arg name="robot_name"                        value="$(arg robot_name_1)"/>
+    <arg name="show_lidar"                        value="true"/>
+    <arg name="use_joint_pub_gui"                 value="true"/>
+    <arg name="use_rviz"                          value="false"/>
+  </include>
+
+  <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
+    <arg name="robot_model"                       value="$(arg robot_model_2)"/>
+    <arg name="robot_name"                        value="$(arg robot_name_2)"/>
+    <arg name="use_joint_pub_gui"                 value="true"/>
+    <arg name="use_rviz"                          value="false"/>
+  </include>
+
+  <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
+    <arg name="robot_model"                       value="$(arg robot_model_3)"/>
+    <arg name="robot_name"                        value="$(arg robot_name_3)"/>
+    <arg name="use_joint_pub_gui"                 value="true"/>
+    <arg name="use_rviz"                          value="false"/>
+  </include>
+
+  <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
+    <arg name="robot_model"                       value="$(arg robot_model_4)"/>
+    <arg name="robot_name"                        value="$(arg robot_name_4)"/>
+    <arg name="show_lidar"                        value="true"/>
+    <arg name="use_joint_pub_gui"                 value="true"/>
+    <arg name="use_rviz"                          value="false"/>
+  </include>
+
+  <node
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(arg rvizconfig)"
+    required="true"/>
+
+  <node
+    name="robot_transform_broadcaster_1"
+    pkg="tf2_ros"
+    type="static_transform_publisher"
+    args="0 0 0 0 0 0 /world /$(arg robot_name_1)/base_footprint"/>
+
+  <node
+    name="robot_transform_broadcaster_2"
+    pkg="tf2_ros"
+    type="static_transform_publisher"
+    args="1 0 0 3.14 0 0 /world /$(arg robot_name_2)/base_footprint"/>
+
+  <node
+    name="robot_transform_broadcaster_3"
+    pkg="tf2_ros"
+    type="static_transform_publisher"
+    args="0.5 -1 0 1.57 0 0 /world /$(arg robot_name_3)/base_footprint"/>
+
+  <node
+    name="robot_transform_broadcaster_4"
+    pkg="tf2_ros"
+    type="static_transform_publisher"
+    args="0.5 1 0 -1.57 0 0 /world /$(arg robot_name_4)/base_footprint"/>
+
+</launch>

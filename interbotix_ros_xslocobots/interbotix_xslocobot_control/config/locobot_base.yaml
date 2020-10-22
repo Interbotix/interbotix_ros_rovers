@@ -1,0 +1,36 @@
+port: /dev/ttyDXL
+
+joint_order: [pan ,tilt]
+sleep_positions: [0, 0]
+
+joint_state_publisher:
+  update_rate: 100
+  publish_states: true
+  topic_name: dynamixel/joint_states
+
+groups:
+  camera: [pan, tilt]
+
+sisters:
+  pan: tilt
+
+motors:
+  pan:
+    ID: 10
+    Baud_Rate: 3
+    Return_Delay_Time: 0
+    Drive_Mode: 0
+    Velocity_Limit: 131
+    Min_Position_Limit: 1024
+    Max_Position_Limit: 3072
+    Secondary_ID: 255
+
+  tilt:
+    ID: 11
+    Baud_Rate: 3
+    Return_Delay_Time: 0
+    Drive_Mode: 1
+    Velocity_Limit: 131
+    Min_Position_Limit: 1024
+    Max_Position_Limit: 3072
+    Secondary_ID: 255

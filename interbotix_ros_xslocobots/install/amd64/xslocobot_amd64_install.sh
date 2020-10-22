@@ -3,19 +3,19 @@
 ubuntu_version="$(lsb_release -r -s)"
 
 if [ $ubuntu_version == "16.04" ]; then
-	ROS_NAME="kinetic"
+  ROS_NAME="kinetic"
 elif [ $ubuntu_version == "18.04" ]; then
-	ROS_NAME="melodic"
+  ROS_NAME="melodic"
 else
-	echo -e "Unsupported Ubuntu verison: $ubuntu_version"
-	echo -e "Interbotix Locobot only works with 16.04 or 18.04"
-	exit 1
+  echo -e "Unsupported Ubuntu verison: $ubuntu_version"
+  echo -e "Interbotix Locobot only works with 16.04 or 18.04"
+  exit 1
 fi
 
 echo "Ubuntu $ubuntu_version detected. ROS-$ROS_NAME chosen for installation.";
 if [ $ROS_NAME == "melodic" ]; then
-	echo "There are no patches available for Kernel 5.4 at this time - needed for the RealSense Camera to work properly."
-	echo "The camera should still work with ROS but warnings will appear in your terminal window..."
+  echo "There are no patches available for Kernel 5.4 at this time - needed for the RealSense Camera to work properly."
+  echo "The camera should still work with ROS but warnings will appear in your terminal window..."
 fi
 
 echo -e "\e[1;33m ******************************************** \e[0m"
@@ -40,9 +40,9 @@ if [ $(dpkg-query -W -f='${Status}' ros-$ROS_NAME-desktop-full 2>/dev/null | gre
   sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
   sudo apt update
   sudo apt -y install ros-$ROS_NAME-desktop-full
-	if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
-		sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
-	fi
+  if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
+    sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
+  fi
   echo "source /opt/ros/$ROS_NAME/setup.bash" >> ~/.bashrc
   sudo apt -y install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
   sudo rosdep init
@@ -59,17 +59,17 @@ if [ $(dpkg-query -W -f='${Status}' librealsense2 2>/dev/null | grep -c "ok inst
   echo "Installing librealsense2..."
   sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
   sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo $(lsb_release -sc) main" -u
-	if [ $ubuntu_version == "16.04" ]; then
-		version="2.36.0-0~realsense0.3168"
-	elif [ $ubuntu_version == "18.04" ]; then
-		version="2.36.0-0~realsense0.3169"
-	fi
+  if [ $ubuntu_version == "16.04" ]; then
+    version="2.36.0-0~realsense0.3168"
+  elif [ $ubuntu_version == "18.04" ]; then
+    version="2.36.0-0~realsense0.3169"
+  fi
 
   sudo apt -y install librealsense2-udev-rules=${version}
-	# Patches for Kernel 5.4 is NOT supported yet, so don't even try to install the package below in Melodic
-	if [ $ROS_NAME == "kinetic" ]; then
-  	sudo apt -y install librealsense2-dkms=1.3.12-0ubuntu1
-	fi
+  # Patches for Kernel 5.4 is NOT supported yet, so don't even try to install the package below in Melodic
+  if [ $ROS_NAME == "kinetic" ]; then
+    sudo apt -y install librealsense2-dkms=1.3.12-0ubuntu1
+  fi
   sudo apt -y install librealsense2=${version}
   sudo apt -y install librealsense2-gl=${version}
   sudo apt -y install librealsense2-net=${version}
@@ -124,19 +124,19 @@ if [ ! -d "$INTERBOTIX_WS/src" ]; then
   echo "Installing ROS packages for the Interbotix Locobot..."
   mkdir -p $INTERBOTIX_WS/src
   cd $INTERBOTIX_WS/src
-	if [ $ROS_NAME != "kinetic" ]; then
-		echo "Building Kobuki ROS packages from source..."
-		git clone https://github.com/yujinrobot/kobuki
-		cd kobuki
-		git checkout melodic
-		sudo rm -r kobuki_capabilities kobuki
-		cd $INTERBOTIX_WS/src
-	fi
+  if [ $ROS_NAME != "kinetic" ]; then
+    echo "Building Kobuki ROS packages from source..."
+    git clone https://github.com/yujinrobot/kobuki
+    cd kobuki
+    git checkout melodic
+    sudo rm -r kobuki_capabilities kobuki
+    cd $INTERBOTIX_WS/src
+  fi
   git clone https://github.com/Interbotix/interbotix_ros_core.git
   git clone https://github.com/Interbotix/interbotix_ros_rovers.git
-	cd interbotix_ros_rovers
-	git checkout $ROS_NAME
-	cd ..
+  cd interbotix_ros_rovers
+  git checkout $ROS_NAME
+  cd ..
   git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git
   cd $INTERBOTIX_WS/src/interbotix_ros_core/interbotix_ros_xseries/interbotix_xs_sdk
   sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
@@ -152,11 +152,11 @@ source $INTERBOTIX_WS/devel/setup.bash
 
 # Step 5: Setup Environment Variables
 if [ -z "$ROS_IP" ]; then
-	echo "Setting up Environment Variables..."
-	echo 'export ROS_IP=$(echo `hostname -I | cut -d" " -f1`)' >> ~/.bashrc
-	echo -e 'if [ -z "$ROS_IP" ]; then\n\texport ROS_IP=127.0.0.1\nfi' >> ~/.bashrc
+  echo "Setting up Environment Variables..."
+  echo 'export ROS_IP=$(echo `hostname -I | cut -d" " -f1`)' >> ~/.bashrc
+  echo -e 'if [ -z "$ROS_IP" ]; then\n\texport ROS_IP=127.0.0.1\nfi' >> ~/.bashrc
 else
-	echo "Environment variables already set!"
+  echo "Environment variables already set!"
 fi
 
 end_time="$(date -u +%s)"

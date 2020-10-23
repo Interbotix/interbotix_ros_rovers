@@ -98,7 +98,7 @@ Now, we can open up new terminals (via **Ctrl-Shift-T**) on the locobot computer
 
 #### Installation Checks
 
-After running the installation script on the robot computer, verify that it was successful in finding the U2D2, Kobuki, and Lidar (if applicable) by checking that the port names show up as `ttyDXL`, `kobuki`, and `rpliar` (if applicable) respectively. Note that these sensors should be plugged back in at this point if they're not already.
+After running the installation script on the robot computer, verify that it was successful in finding the U2D2, Kobuki, and Lidar (if applicable) by checking that the port names show up as `ttyDXL`, `kobuki`, and `rplidar` (if applicable) respectively. Note that these sensors should be plugged back in at this point if they're not already.
 
     $ cd /dev
     $ ls

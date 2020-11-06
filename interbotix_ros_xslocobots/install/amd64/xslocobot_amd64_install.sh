@@ -60,9 +60,9 @@ if [ $(dpkg-query -W -f='${Status}' librealsense2 2>/dev/null | grep -c "ok inst
   sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
   sudo add-apt-repository "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo $(lsb_release -sc) main" -u
   if [ $ubuntu_version == "16.04" ]; then
-    version="2.36.0-0~realsense0.3168"
+    version="2.39.0-0~realsense0.3570"
   elif [ $ubuntu_version == "18.04" ]; then
-    version="2.36.0-0~realsense0.3169"
+    version="2.39.0-0~realsense0.3571"
   fi
 
   sudo apt -y install librealsense2-udev-rules=${version}
@@ -90,7 +90,7 @@ if [ ! -d "$REALSENSE_WS/src" ]; then
   cd $REALSENSE_WS/src
   git clone https://github.com/IntelRealSense/realsense-ros.git
   cd realsense-ros/
-  git checkout 2.2.15
+  git checkout 2.2.18
   cd $REALSENSE_WS
   catkin_make clean
   catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release

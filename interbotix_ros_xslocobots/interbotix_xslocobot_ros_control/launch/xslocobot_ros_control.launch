@@ -1,7 +1,7 @@
 <launch>
 
   <arg name="robot_model"                       default=""/>
-  <arg name="robot_name"                        default="$(arg robot_name)"/>
+  <arg name="robot_name"                        default="$(arg robot_model)"/>
   <arg name="show_lidar"                        default="false"/>
   <arg name="external_urdf_loc"                 default=""/>
   <arg name="use_rviz"                          default="false"/>

@@ -59,159 +59,159 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        locobot_wx250s/ar_tag_link:
+        locobot_wx200/ar_tag_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/arm_base_link:
+        locobot_wx200/arm_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/base_footprint:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        locobot_wx250s/base_link:
+        locobot_wx200/arm_cradle_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/battery_link:
+        locobot_wx200/base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        locobot_wx200/base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/camera_link:
+        locobot_wx200/battery_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/camera_tower_link:
+        locobot_wx200/camera_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/caster_back_link:
+        locobot_wx200/camera_tower_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/caster_front_link:
+        locobot_wx200/caster_back_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/cliff_sensor_front_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        locobot_wx250s/cliff_sensor_left_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        locobot_wx250s/cliff_sensor_right_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        locobot_wx250s/ee_arm_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        locobot_wx250s/ee_gripper_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        locobot_wx250s/fingers_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        locobot_wx250s/gripper_bar_link:
+        locobot_wx200/caster_front_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/gripper_link:
+        locobot_wx200/cliff_sensor_front_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        locobot_wx200/cliff_sensor_left_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        locobot_wx200/cliff_sensor_right_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        locobot_wx200/ee_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        locobot_wx200/ee_gripper_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        locobot_wx200/fingers_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        locobot_wx200/forearm_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/gripper_prop_link:
+        locobot_wx200/gripper_bar_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/gyro_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        locobot_wx250s/laser_frame_link:
+        locobot_wx200/gripper_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/left_finger_link:
+        locobot_wx200/gripper_prop_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/lidar_tower_link:
+        locobot_wx200/gyro_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        locobot_wx200/laser_frame_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/lower_forearm_link:
+        locobot_wx200/left_finger_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/pan_link:
+        locobot_wx200/lidar_tower_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/plate_link:
+        locobot_wx200/pan_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/right_finger_link:
+        locobot_wx200/plate_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/shoulder_link:
+        locobot_wx200/right_finger_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/tilt_link:
+        locobot_wx200/shoulder_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/upper_arm_link:
+        locobot_wx200/tilt_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/upper_forearm_link:
+        locobot_wx200/upper_arm_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/wheel_left_link:
+        locobot_wx200/wheel_left_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/wheel_right_link:
+        locobot_wx200/wheel_right_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot_wx250s/wrist_link:
+        locobot_wx200/wrist_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -222,6 +222,214 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        locobot_wx200/ar_tag_link:
+          Value: true
+        locobot_wx200/arm_base_link:
+          Value: true
+        locobot_wx200/arm_cradle_link:
+          Value: true
+        locobot_wx200/base_footprint:
+          Value: true
+        locobot_wx200/base_link:
+          Value: true
+        locobot_wx200/battery_link:
+          Value: true
+        locobot_wx200/camera_aligned_depth_to_color_frame:
+          Value: true
+        locobot_wx200/camera_color_frame:
+          Value: true
+        locobot_wx200/camera_color_optical_frame:
+          Value: true
+        locobot_wx200/camera_depth_frame:
+          Value: true
+        locobot_wx200/camera_depth_optical_frame:
+          Value: true
+        locobot_wx200/camera_link:
+          Value: true
+        locobot_wx200/camera_tower_link:
+          Value: true
+        locobot_wx200/caster_back_link:
+          Value: true
+        locobot_wx200/caster_front_link:
+          Value: true
+        locobot_wx200/cliff_sensor_front_link:
+          Value: true
+        locobot_wx200/cliff_sensor_left_link:
+          Value: true
+        locobot_wx200/cliff_sensor_right_link:
+          Value: true
+        locobot_wx200/ee_arm_link:
+          Value: true
+        locobot_wx200/ee_gripper_link:
+          Value: true
+        locobot_wx200/fingers_link:
+          Value: true
+        locobot_wx200/forearm_link:
+          Value: true
+        locobot_wx200/gripper_bar_link:
+          Value: true
+        locobot_wx200/gripper_link:
+          Value: true
+        locobot_wx200/gripper_prop_link:
+          Value: true
+        locobot_wx200/gyro_link:
+          Value: true
+        locobot_wx200/laser_frame_link:
+          Value: true
+        locobot_wx200/left_finger_link:
+          Value: true
+        locobot_wx200/lidar_tower_link:
+          Value: true
+        locobot_wx200/odom:
+          Value: true
+        locobot_wx200/pan_link:
+          Value: true
+        locobot_wx200/plate_link:
+          Value: true
+        locobot_wx200/right_finger_link:
+          Value: true
+        locobot_wx200/shoulder_link:
+          Value: true
+        locobot_wx200/tilt_link:
+          Value: true
+        locobot_wx200/upper_arm_link:
+          Value: true
+        locobot_wx200/wheel_left_link:
+          Value: true
+        locobot_wx200/wheel_right_link:
+          Value: true
+        locobot_wx200/wrist_link:
+          Value: true
+        map:
+          Value: true
+      Marker Scale: 0.150000006
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        map:
+          locobot_wx200/odom:
+            locobot_wx200/base_footprint:
+              locobot_wx200/base_link:
+                locobot_wx200/camera_tower_link:
+                  locobot_wx200/arm_cradle_link:
+                    {}
+                  locobot_wx200/lidar_tower_link:
+                    locobot_wx200/laser_frame_link:
+                      {}
+                  locobot_wx200/pan_link:
+                    locobot_wx200/tilt_link:
+                      locobot_wx200/camera_link:
+                        locobot_wx200/camera_aligned_depth_to_color_frame:
+                          locobot_wx200/camera_color_optical_frame:
+                            {}
+                        locobot_wx200/camera_color_frame:
+                          {}
+                        locobot_wx200/camera_depth_frame:
+                          locobot_wx200/camera_depth_optical_frame:
+                            {}
+                locobot_wx200/caster_back_link:
+                  {}
+                locobot_wx200/caster_front_link:
+                  {}
+                locobot_wx200/cliff_sensor_front_link:
+                  {}
+                locobot_wx200/cliff_sensor_left_link:
+                  {}
+                locobot_wx200/cliff_sensor_right_link:
+                  {}
+                locobot_wx200/gyro_link:
+                  {}
+                locobot_wx200/plate_link:
+                  locobot_wx200/arm_base_link:
+                    locobot_wx200/shoulder_link:
+                      locobot_wx200/upper_arm_link:
+                        locobot_wx200/forearm_link:
+                          locobot_wx200/wrist_link:
+                            locobot_wx200/gripper_link:
+                              locobot_wx200/ee_arm_link:
+                                locobot_wx200/ar_tag_link:
+                                  {}
+                                locobot_wx200/gripper_bar_link:
+                                  locobot_wx200/fingers_link:
+                                    locobot_wx200/ee_gripper_link:
+                                      {}
+                                    locobot_wx200/left_finger_link:
+                                      {}
+                                    locobot_wx200/right_finger_link:
+                                      {}
+                                locobot_wx200/gripper_prop_link:
+                                  {}
+                  locobot_wx200/battery_link:
+                    {}
+                locobot_wx200/wheel_left_link:
+                  {}
+                locobot_wx200/wheel_right_link:
+                  {}
+      Update Interval: 0
+      Value: true
+    - Alpha: 0.699999988
+      Class: rviz/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: false
+      Name: Map
+      Topic: /locobot_wx200/rtabmap/grid_map
+      Unreliable: false
+      Use Timestamp: false
+      Value: false
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Image
+          Enabled: true
+          Image Topic: /locobot_wx200/camera/color/image_raw
+          Max Value: 1
+          Median window: 5
+          Min Value: 0
+          Name: Image
+          Normalize Range: true
+          Queue Size: 2
+          Transport Hint: raw
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 0.376377642
+            Min Value: -0.767989218
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: AxisColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: PointCloud2
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.00999999978
+          Style: Points
+          Topic: /locobot_wx200/rtabmap/depth/color/obstacles
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+      Enabled: false
+      Name: Camera
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -246,162 +454,148 @@ Visualization Manager:
       Selectable: true
       Size (Pixels): 3
       Size (m): 0.00999999978
-      Style: Flat Squares
-      Topic: /locobot_wx250s/scan
+      Style: Points
+      Topic: /locobot_wx200/scan
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
-    - Class: rviz/Camera
+    - Class: rviz/Group
+      Displays:
+        - Class: rtabmap_ros/Info
+          Enabled: true
+          Name: Info
+          Topic: /locobot_wx200/rtabmap/info
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rtabmap_ros/MapCloud
+          Cloud decimation: 4
+          Cloud from scan: false
+          Cloud max depth (m): 4
+          Cloud min depth (m): 0
+          Cloud voxel size (m): 0.00999999978
+          Color: 255; 255; 255
+          Color Transformer: RGB8
+          Download graph: false
+          Download map: false
+          Enabled: true
+          Filter ceiling (m): 0
+          Filter floor (m): 0
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: MapCloud
+          Node filtering angle (degrees): 30
+          Node filtering radius (m): 0
+          Position Transformer: XYZ
+          Size (Pixels): 3
+          Size (m): 0.00999999978
+          Style: Points
+          Topic: /locobot_wx200/rtabmap/mapData
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Class: rtabmap_ros/MapGraph
+          Enabled: true
+          Global loop closure: 255; 0; 0
+          Local loop closure: 255; 255; 0
+          Merged neighbor: 255; 170; 0
+          Name: MapGraph
+          Neighbor: 0; 0; 255
+          Topic: /locobot_wx200/rtabmap/mapGraph
+          Unreliable: false
+          User: 255; 0; 0
+          Value: true
+          Virtual: 255; 0; 255
       Enabled: false
-      Image Rendering: background and overlay
-      Image Topic: /locobot_wx250s/camera/color/image_rect_color
-      Name: Camera
-      Overlay Alpha: 0.5
-      Queue Size: 2
-      Transport Hint: compressed
-      Unreliable: false
-      Value: false
-      Visibility:
-        Grid: false
-        LaserScan: true
-        RobotModel: false
-        TF: true
-        Value: true
-      Zoom Factor: 1
-    - Class: rviz/TF
-      Enabled: true
-      Frame Timeout: 15
-      Frames:
-        All Enabled: false
-        locobot_wx250s/ar_tag_link:
+      Name: RtabmapRos
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0.699999988
+          Class: rviz/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: Global Costmap
+          Topic: /locobot_wx200/move_base/global_costmap/costmap
+          Unreliable: false
+          Use Timestamp: false
           Value: true
-        locobot_wx250s/arm_base_link:
+        - Alpha: 0.699999988
+          Class: rviz/Map
+          Color Scheme: costmap
+          Draw Behind: false
+          Enabled: true
+          Name: Local Costmap
+          Topic: /locobot_wx200/move_base/local_costmap/costmap
+          Unreliable: false
+          Use Timestamp: false
           Value: true
-        locobot_wx250s/base_footprint:
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 25; 255; 0
+          Enabled: true
+          Head Diameter: 0.300000012
+          Head Length: 0.200000003
+          Length: 0.300000012
+          Line Style: Billboards
+          Line Width: 0.0299999993
+          Name: Global Plan
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.0299999993
+          Shaft Diameter: 0.100000001
+          Shaft Length: 0.100000001
+          Topic: /locobot_wx200/move_base/NavfnROS/plan
+          Unreliable: false
           Value: true
-        locobot_wx250s/base_link:
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 255; 0; 0
+          Enabled: true
+          Head Diameter: 0.300000012
+          Head Length: 0.200000003
+          Length: 0.300000012
+          Line Style: Billboards
+          Line Width: 0.0299999993
+          Name: Local Plan
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Radius: 0.0299999993
+          Shaft Diameter: 0.100000001
+          Shaft Length: 0.100000001
+          Topic: /locobot_wx200/move_base/TrajectoryPlannerROS/local_plan
+          Unreliable: false
           Value: true
-        locobot_wx250s/battery_link:
-          Value: true
-        locobot_wx250s/camera_link:
-          Value: true
-        locobot_wx250s/camera_tower_link:
-          Value: true
-        locobot_wx250s/caster_back_link:
-          Value: true
-        locobot_wx250s/caster_front_link:
-          Value: true
-        locobot_wx250s/cliff_sensor_front_link:
-          Value: true
-        locobot_wx250s/cliff_sensor_left_link:
-          Value: true
-        locobot_wx250s/cliff_sensor_right_link:
-          Value: true
-        locobot_wx250s/ee_arm_link:
-          Value: true
-        locobot_wx250s/ee_gripper_link:
-          Value: true
-        locobot_wx250s/fingers_link:
-          Value: true
-        locobot_wx250s/gripper_bar_link:
-          Value: true
-        locobot_wx250s/gripper_link:
-          Value: true
-        locobot_wx250s/gripper_prop_link:
-          Value: true
-        locobot_wx250s/gyro_link:
-          Value: true
-        locobot_wx250s/laser_frame_link:
-          Value: true
-        locobot_wx250s/left_finger_link:
-          Value: true
-        locobot_wx250s/lidar_tower_link:
-          Value: true
-        locobot_wx250s/lower_forearm_link:
-          Value: true
-        locobot_wx250s/pan_link:
-          Value: true
-        locobot_wx250s/plate_link:
-          Value: true
-        locobot_wx250s/right_finger_link:
-          Value: true
-        locobot_wx250s/shoulder_link:
-          Value: true
-        locobot_wx250s/tilt_link:
-          Value: true
-        locobot_wx250s/upper_arm_link:
-          Value: true
-        locobot_wx250s/upper_forearm_link:
-          Value: true
-        locobot_wx250s/wheel_left_link:
-          Value: true
-        locobot_wx250s/wheel_right_link:
-          Value: true
-        locobot_wx250s/wrist_link:
-          Value: true
-      Marker Scale: 0.150000006
-      Name: TF
-      Show Arrows: true
-      Show Axes: true
-      Show Names: true
-      Tree:
-        locobot_wx250s/base_footprint:
-          locobot_wx250s/base_link:
-            locobot_wx250s/camera_tower_link:
-              locobot_wx250s/lidar_tower_link:
-                locobot_wx250s/laser_frame_link:
-                  {}
-              locobot_wx250s/pan_link:
-                locobot_wx250s/tilt_link:
-                  locobot_wx250s/camera_link:
-                    {}
-            locobot_wx250s/caster_back_link:
-              {}
-            locobot_wx250s/caster_front_link:
-              {}
-            locobot_wx250s/cliff_sensor_front_link:
-              {}
-            locobot_wx250s/cliff_sensor_left_link:
-              {}
-            locobot_wx250s/cliff_sensor_right_link:
-              {}
-            locobot_wx250s/gyro_link:
-              {}
-            locobot_wx250s/plate_link:
-              locobot_wx250s/arm_base_link:
-                locobot_wx250s/shoulder_link:
-                  locobot_wx250s/upper_arm_link:
-                    locobot_wx250s/upper_forearm_link:
-                      locobot_wx250s/lower_forearm_link:
-                        locobot_wx250s/wrist_link:
-                          locobot_wx250s/gripper_link:
-                            locobot_wx250s/ar_tag_link:
-                              {}
-                            locobot_wx250s/ee_arm_link:
-                              locobot_wx250s/gripper_bar_link:
-                                locobot_wx250s/fingers_link:
-                                  locobot_wx250s/ee_gripper_link:
-                                    {}
-                                  locobot_wx250s/left_finger_link:
-                                    {}
-                                  locobot_wx250s/right_finger_link:
-                                    {}
-                              locobot_wx250s/gripper_prop_link:
-                                {}
-              locobot_wx250s/battery_link:
-                {}
-            locobot_wx250s/wheel_left_link:
-              {}
-            locobot_wx250s/wheel_right_link:
-              {}
-      Update Interval: 0
-      Value: true
+      Enabled: false
+      Name: Move Base
   Enabled: true
   Global Options:
     Background Color: 0; 176; 240
     Default Light: true
-    Fixed Frame: locobot_wx250s/base_footprint
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -422,7 +616,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2
+      Distance: 2.67887735
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -443,14 +637,14 @@ Visualization Manager:
       Yaw: 0.785398006
     Saved: ~
 Window Geometry:
-  Camera:
-    collapsed: false
   Displays:
     collapsed: false
   Height: 1056
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a00000396fc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000002800000396000000d700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d006500720061000000025f0000015f0000001600ffffff000000010000010f00000396fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000002800000396000000ad00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073f0000003efc0100000002fb0000000800540069006d006501000000000000073f0000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000005cf0000039600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Image:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a00000396fc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006100fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000002800000396000000d700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d00650072006100000003a8000000160000000000000000fb0000000a0049006d0061006700650000000299000001250000001600ffffff000000010000010f00000396fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000002800000396000000ad00fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073f0000003efc0100000002fb0000000800540069006d006501000000000000073f0000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000005cf0000039600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:

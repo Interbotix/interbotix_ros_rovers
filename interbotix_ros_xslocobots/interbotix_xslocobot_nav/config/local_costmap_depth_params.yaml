@@ -1,0 +1,10 @@
+local_costmap:
+  update_frequency: 5.0
+  publish_frequency: 5.0
+  rolling_window: true
+  width: 4.0
+  height: 4.0
+  resolution: 0.05
+  plugins:
+  - {name: depth_layer, type: "costmap_2d::ObstacleLayer"}
+  - {name: inflation_layer, type: "costmap_2d::InflationLayer"}

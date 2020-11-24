@@ -9,6 +9,10 @@
     pkg="rviz"
     type="rviz"
     args="-f $(arg rviz_frame) -d $(arg rvizconfig)"
-    ns="$(arg robot_name)"/>
+    ns="$(arg robot_name)">
+    <remap from="/clicked_point" to="clicked_point"/>
+    <remap from="/initialpose" to="initialpose"/>
+    <remap from="/move_base_simple/goal" to="move_base_simple/goal"/>
+  </node>
 
 </launch>

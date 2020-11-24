@@ -25,7 +25,7 @@
                                                          external_urdf_loc:=$(arg external_urdf_loc)
                                                          load_gazebo_configs:=$(arg load_gazebo_configs)"/>
 
-  <param name="$(arg robot_name)/robot_description" command="$(find xacro)/xacro $(arg model)" />
+  <param name="$(arg robot_name)/robot_description" command="xacro $(arg model)"/>
 
   <node if="$(arg use_joint_pub)"
     name="joint_state_publisher"
@@ -56,6 +56,9 @@
     type="rviz"
     args="-f $(arg rviz_frame) -d $(arg rvizconfig)"
     ns="$(arg robot_name)">
+    <remap from="/clicked_point" to="clicked_point"/>
+    <remap from="/initialpose" to="initialpose"/>
+    <remap from="/move_base_simple/goal" to="move_base_simple/goal"/>
   </node>
 
 </launch>

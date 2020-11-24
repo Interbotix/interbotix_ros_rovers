@@ -16,6 +16,8 @@ else
   exit 1
 fi
 
+sudo apt install ros-$ROS_NAME-rtabmap-ros
+
 # Step 1: Install Locobot packages
 INTERBOTIX_WS=~/interbotix_ws
 if [ ! -d "$INTERBOTIX_WS/src" ]; then

@@ -11,11 +11,11 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro '$(find interbotix_xslocobot_descriptions)/urdf/locobot.urdf.xacro'"/>
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro --inorder '$(find interbotix_xslocobot_descriptions)/urdf/locobot.urdf.xacro'"/>
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic"
-    command="xacro $(find interbotix_xslocobot_moveit)/config/srdf/$(arg robot_model).srdf.xacro
+    command="xacro --inorder $(find interbotix_xslocobot_moveit)/config/srdf/$(arg robot_model).srdf.xacro
             robot_name:=$(arg robot_name)
             show_lidar:=$(arg show_lidar)
             external_srdf_loc:=$(arg external_srdf_loc)"/>

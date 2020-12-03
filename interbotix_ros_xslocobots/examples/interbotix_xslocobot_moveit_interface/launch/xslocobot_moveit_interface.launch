@@ -17,7 +17,7 @@
   <arg name="moveit_interface_gui"              default="true"/>
   <arg name="use_python_interface"              default="false"/>
 
-  <include file="$(find interbotix_xslocobot_moveit)/launch/locobot_moveit.launch">
+  <include file="$(find interbotix_xslocobot_moveit)/launch/xslocobot_moveit.launch">
     <arg name="robot_model"                       value="$(arg robot_model)"/>
     <arg name="robot_name"                        value="$(arg robot_name)"/>
     <arg name="show_lidar"                        value="$(arg show_lidar)"/>

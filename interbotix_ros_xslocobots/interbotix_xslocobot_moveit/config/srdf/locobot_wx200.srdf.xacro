@@ -23,11 +23,11 @@
         <joint name="wrist_angle" />
         <joint name="wrist_rotate" />
         <joint name="ee_arm" />
+        <joint name="gripper_bar" />
+        <joint name="ee_bar" />
+        <joint name="ee_gripper" />
     </group>
     <group name="interbotix_gripper">
-        <link name="$(arg robot_name)/gripper_bar_link" />
-        <link name="$(arg robot_name)/fingers_link" />
-        <link name="$(arg robot_name)/ee_gripper_link" />
         <link name="$(arg robot_name)/left_finger_link" />
         <link name="$(arg robot_name)/right_finger_link" />
     </group>
@@ -66,7 +66,7 @@
         <joint name="right_finger" value="-0.015" />
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="interbotix_gripper" parent_link="$(arg robot_name)/ee_arm_link" group="interbotix_gripper" />
+    <end_effector name="interbotix_gripper" parent_link="$(arg robot_name)/ee_gripper_link" group="interbotix_gripper" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="$(arg robot_name)/ar_tag_link" link2="$(arg robot_name)/forearm_link" reason="Never" />
     <disable_collisions link1="$(arg robot_name)/ar_tag_link" link2="$(arg robot_name)/gripper_bar_link" reason="Default" />

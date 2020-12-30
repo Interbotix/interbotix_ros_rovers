@@ -5,7 +5,7 @@ import rospy
 import threading
 import numpy as np
 from interbotix_xslocobot_joy.msg import LocobotJoy
-from interbotix_xs_modules import angle_manipulation as ang
+from interbotix_common_modules import angle_manipulation as ang
 from interbotix_xs_modules.locobot import InterbotixLocobotXS
 
 class LocobotRobot(object):

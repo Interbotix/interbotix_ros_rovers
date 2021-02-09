@@ -67,7 +67,7 @@ While running the script, you should see a TF marker appear close to the top of 
 After running the demo, `Ctrl-C` from the launch file. The `base_link` to `plate_link` transform will automatically be saved in a file called 'static_transforms.yaml' in the [config](config/) directory (if you decided to go through the AR tag calibration). Now, you can run the demo script headless - first by typing...
 
 ```
-roslaunch interbotix_xsarm_perception xsarm_perception.launch robot_model:=locobot_wx200 use_rviz:=false use_static_transform_pub:=true
+roslaunch interbotix_xslocobot_perception xslocobot_perception.launch robot_model:=locobot_wx200 use_rviz:=false use_static_transform_pub:=true
 ```
 
 ...then heading over to the [scripts](scripts/) directory and running the [pick_place_no_armtag.py](scripts/pick_place_no_armtag.py) script. Note that you can leave the `use_static_transform_pub` argument above to its default value ('false') if you did not do the AR tag calibration

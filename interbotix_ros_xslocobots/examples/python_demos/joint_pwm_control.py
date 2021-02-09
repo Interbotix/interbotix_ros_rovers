@@ -3,7 +3,7 @@ from interbotix_xs_modules.locobot import InterbotixLocobotXS
 # This script commands PWMs to the arm joints
 #
 # To get started, open a terminal and type...
-# 'roslaunch interbotix_xslocobot_control xslocobot_control.launch robot_model:=locobot_wx250s'
+# 'roslaunch interbotix_xslocobot_control xslocobot_python.launch robot_model:=locobot_wx250s show_lidar:=true'
 # Then change to this directory and type 'python joint_pwm_control.py'
 
 def main():

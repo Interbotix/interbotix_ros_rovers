@@ -4,7 +4,7 @@ from interbotix_xs_modules.locobot import InterbotixLocobotXS
 # When operating motors in 'position' control mode, Time-Based-Profile allows you to easily set the duration of a particular movement
 #
 # To get started, open a terminal and type...
-# 'roslaunch interbotix_xslocobot_control xslocobot_control.launch robot_model:=locobot_base'
+# 'roslaunch interbotix_xslocobot_control xslocobot_python.launch robot_model:=locobot_base'
 # Then change to this directory and type 'python pan_tilt_control.py'
 
 def main():

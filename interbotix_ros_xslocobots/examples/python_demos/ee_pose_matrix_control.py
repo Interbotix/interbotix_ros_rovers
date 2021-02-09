@@ -4,7 +4,7 @@ import numpy as np
 # This script makes the end-effector go to a specific pose only possible with a 6dof arm using a transformation matrix
 #
 # To get started, open a terminal and type...
-# 'roslaunch interbotix_xslocobot_control xslocobot_control.launch robot_model:=locobot_wx250s'
+# 'roslaunch interbotix_xslocobot_control xslocobot_python.launch robot_model:=locobot_wx250s show_lidar:=true'
 # Then change to this directory and type 'python ee_pose_matrix_control.py'
 
 def main():

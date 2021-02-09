@@ -3,7 +3,7 @@ from interbotix_xs_modules.locobot import InterbotixLocobotXS
 # This script makes the end-effector go to a specific pose by defining the pose components
 #
 # To get started, open a terminal and type...
-# 'roslaunch interbotix_xslocobot_control xslocobot_control.launch robot_model:=wx200'
+# 'roslaunch interbotix_xslocobot_control xslocobot_python.launch robot_model:=locobot_wx200'
 # Then change to this directory and type 'python ee_pose_components.py'
 
 def main():

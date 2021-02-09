@@ -52,6 +52,12 @@ To further customize the launch file at run-time, refer to the table below.
 | use_lidar | if true, the RPLidar node is launched | false |
 | show_lidar | set to true if the lidar is installed on the robot; this will load the lidar related links to the 'robot_description' parameter | $(arg use_lidar) |
 | use_camera | if true, the RealSense D435 camera nodes are launched | false |
+| filters | types of RealSense camera filters to use (in this case, the 'pointcloud' filter is needed) | pointcloud |
+| align_depth | whether to publish topics with the depth stream aligned with the color stream | false |
+| color_fps | frame rate of the color images taken on the RealSense camera| 30 |
+| depth_fps | frame rate of the depth images taken on the RealSense camera| 30 |
+| color_width | horizontal resolution of the color images taken on the RealSense camera | 640 |
+| color_height | vertical resolution of the color images taken on the RealSense camera| 480 |
 | motor_configs | the file path to the 'motor config' YAML file | refer to [xslocobot_control.launch](launch/xslocobot_control.launch) |
 | mode_configs | the file path to the 'mode config' YAML file | refer to [xslocobot_control.launch](launch/xslocobot_control.launch) |
 | load_configs | a boolean that specifies whether or not the initial register values (under the 'motors' heading) in a Motor Config file should be written to the motors; as the values being written are stored in each motor's EEPROM (which means the values are retained even after a power cycle), this can be set to false after the first time using the robot. Setting to false also shortens the node startup time by a few seconds and preserves the life of the EEPROM | true |

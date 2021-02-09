@@ -4,7 +4,7 @@ import numpy as np
 # This script makes the end-effector perform pick, pour, and place tasks
 #
 # To get started, open a terminal and type...
-# 'roslaunch interbotix_xslocobot_control xslocobot_control.launch robot_model:=wx250s use_time_based_profile:=true'
+# 'roslaunch interbotix_xslocobot_control xslocobot_python.launch robot_model:=locobot_wx250s show_lidar:=true'
 # Then change to this directory and type 'python bartender.py'
 
 def main():

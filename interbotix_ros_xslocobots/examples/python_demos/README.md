@@ -41,9 +41,9 @@ Thus, in my opinion, the best way to control an arm from its Sleep pose is as fo
 Note, that if using a 6dof arm, it is also possible to use the `set_ee_cartesian_trajectory` function to move the end-effector along the 'Y-axis' of **T_sy** or to perform 'yaw' motion. One other thing to note is that the end-effector should not be pitched past +/- 89 degrees as that can lead to funky things happening... In any event, feel free to refer to the [bartender](bartender.py) script to see the above method put into action.
 
 ## Usage
-To get started, open up a terminal and type (assuming the **locobot_wx250s** is being launched with no lidar)...
+To get started, open up a terminal and type (assuming the **locobot_wx250s** is being launched with the lidar shown but not active)...
 ```
-roslaunch interbotix_xslocobot_control xslocobot_control.launch robot_model:=locobot_wx250s
+roslaunch interbotix_xslocobot_python xslocobot_python.launch robot_model:=locobot_wx250s show_lidar:=true
 ```
 In another terminal, navigate to this directory and type...
 ```
@@ -52,3 +52,57 @@ python bartender.py
 You should observe the robot pick up a virtual bottle (from behind a virtual bar), rotate so that the end-effector is facing the opposite direction, pour a virtual drink (on the virtual bar), then place the 'bottle' down, and go to its Sleep pose.
 
 The other scripts work in a similar fashion, but you must make sure to change the robot name in the file to the arm you have. You might also have to adjust the commanded poses/trajectories if working with smaller arm models (like the PincherX 100) as some of them might by physically unattainable. To make things easier, each script also outlines the commands necessary to get the robot moving!
+
+For reference, other launch file arguments are shown below. Depending on if you are doing SLAM, perception, or SLAM, perception, and arm manipulation, you can start the launch file accordingly.
+
+| Argument | Description | Default Value |
+| -------- | ----------- | :-----------: |
+| robot_model | model type of the Interbotix Locobot such as 'locobot_px100' or 'locobot_wx250s' | "" |
+| use_nav | whether to launch the Navigation Stack | false |
+| use_perception | whether to launch the Perception Pipeline | false |
+| use_armtag | whether to use the AprilTag on the arm when working with the Perception Pipeline | false |
+| use_static_transform_pub | whether to launch the **static_trans_pub** node which is responsible for loading transforms from the static_transforms.yaml file and publishing them to the /tf tree | false |
+| robot_name | name of the robot (typically equal to `robot_model`, but could be anything) | "$(arg robot_model)" |
+| show_gripper_bar | if true, the gripper_bar link is included in the 'robot_description' parameter; if false, the gripper_bar and finger links are not loaded to the parameter server. Set to false if you have a custom gripper attachment | true |
+| show_gripper_fingers | if true, the gripper fingers are included in the 'robot_description' parameter; if false, the gripper finger links are not loaded to the parameter server. Set to false if you have custom gripper fingers | true |
+| external_urdf_loc | the file path to the custom urdf.xacro file that you would like to include in the Interbotix robot's urdf.xacro file| "" |
+| use_rviz | launches Rviz; if you are SSH'd into the robot, DON'T set this to true | false |
+| rviz_frame | fixed frame in Rviz; this should be changed to `map` or `<robot_name>/odom` if mapping or using local odometry respectively | $(arg robot_name)/base_footprint |
+| use_base | if true, the Kobuki ROS nodes are launched | $(arg use_nav) |
+| use_lidar | if true, the RPLidar node is launched | false |
+| show_lidar | set to true if the lidar is installed on the robot; this will load the lidar related links to the 'robot_description' parameter | $(arg use_lidar) |
+| use_camera | if true, the RealSense D435 camera nodes are launched | refer to [xslocobot_python.launch](../../interbotix_xslocobot_control/launch/xslocobot_python.launch) |
+| filters | types of RealSense camera filters to use (in this case, the 'pointcloud' filter is needed) | pointcloud |
+| align_depth | whether to publish topics with the depth stream aligned with the color stream | $(arg use_nav) |
+| color_fps | frame rate of the color images taken on the RealSense camera| 30 |
+| depth_fps | frame rate of the depth images taken on the RealSense camera| 30 |
+| color_width | horizontal resolution of the color images taken on the RealSense camera | 640 |
+| color_height | vertical resolution of the color images taken on the RealSense camera| 480 |
+| load_configs | a boolean that specifies whether or not the initial register values (under the 'motors' heading) in a Motor Config file should be written to the motors; as the values being written are stored in each motor's EEPROM (which means the values are retained even after a power cycle), this can be set to false after the first time using the robot. Setting to false also shortens the node startup time by a few seconds and preserves the life of the EEPROM | true |
+| localization | if true, Rtabmap opens in localization only mode; if false, Rtabmap open in SLAM mode | false |
+| rtabmap_args | arguments that should be passed to the **rtabmap** node; note that these arguments are in addition to the arguments already specified in the *rtabmap_default_args* argument in the [xslocobot_nav.launch](../../interbotix_xslocobot_nav/launch/xslocobot_nav.launch) file | "" |
+| use_rtabmapviz | whether or not to use Rtabmap's Visualization tool; it's not really necessary as Rtabmap already has Rviz display plugins | false |
+| rtabmapviz_args | arguments to pass to the Rtabmapviz visualization node | "" |
+| database_path | location where all the mapping data Rtabmap collects should be stored | "~/.ros/rtabmap.db" |
+| camera_tilt_angle | desired angle [rad] that the D435 camera should be tilted when doing SLAM or localization | 0.2618 |
+| filter_ns | name-space where the pointcloud related nodes and parameters are located | $(arg robot_name)/pc_filter |
+| filter_params | file location of the parameters used to tune the perception pipeline filters | refer to [xslocobot_python.launch](../../interbotix_xslocobot_control/launch/xslocobot_python.launch) |
+| use_pointcloud_tuner_gui | whether to show a GUI that a user can use to tune filter parameters | false |
+| enable_pipeline | whether to enable the perception pipeline filters to run continuously; to save computer processing power, this should be set to False unless you are actively trying to tune the filter parameters; if False, the pipeline will only run if the `get_cluster_positions` ROS service is called | $(arg use_pointcloud_tuner_gui) |
+| cloud_topic | the absolute ROS topic name to subscribe to raw pointcloud data | /$(arg robot_name)/camera/depth/color/points |
+| tag_id | id of the AprilTag being used | 5 |
+| tag_size | size [m] of the AprilTag (as defined from one inside-corner to the opposite inside corner) | 0.02 |
+| tag_family | family to which the AprilTag belongs | tagStandard41h12 |
+| standalone_tags | individual AprilTags the algorithm should be looking for; this should not be user-set unless using multiple unique tags | refer to [xslocobot_python.launch](../../interbotix_xslocobot_control/launch/xslocobot_python.launch) |
+| camera_frame | the camera frame in which the AprilTag will be detected | $(arg robot_name)/camera_color_optical_frame |
+| apriltag_ns | name-space where the AprilTag related nodes and parameters are located | $(arg robot_name)/apriltag |
+| camera_color_topic | the absolute ROS topic name to subscribe to color images | $(arg robot_name)/camera/color/image_raw |
+| camera_info_topic | the absolute ROS topic name to subscribe to the camera color info | $(arg robot_name)/camera/color/camera_info |
+| armtag_ns | name-space where the Armtag related nodes and parameters are located | $(arg robot_name)/armtag |
+| ref_frame | the reference frame that the armtag node should use when publishing a static transform for where the arm is relative to the camera | $(arg robot_name)/base_link |
+| arm_base_frame | the child frame that the armtag node should use when publishing a static transform for where the arm is relative to the camera | $(arg robot_name)/plate_link |
+| arm_tag_frame | name of the frame on the arm where the AprilTag is located (defined in the URDF usually) | $(arg robot_name)/ar_tag_link |
+| use_armtag_tuner_gui | whether to show a GUI that a user can use to publish the 'ref_frame' to 'arm_base_frame' transform | false |
+| position_only | whether only the position component of the detected AprilTag pose should be used when calculating the 'ref_frame' to 'arm_base_frame' transform; this should only be set to true if a tf chain already exists connecting the camera and arm base_link frame, and you just want to use the AprilTag to refine the pose further | true |
+| load_transforms | whether or not the **static_trans_pub** node should publish any poses stored in the static_transforms.yaml file at startup; this should only be set to false if a tf chain already exists connecting the camera and arm base_link frame (usually defined in a URDF), and you'd rather use that tf chain as opposed to the one specified in the static_transforms.yaml file | true |
+| transform_filepath | filepath to the static_transforms.yaml file used by the **static_trans_pub** node; if the file does not exist yet, this is where you'd like the file to be generated | refer to [xslocobot_python.launch](../../interbotix_xslocobot_control/launch/xslocobot_python.launch) |

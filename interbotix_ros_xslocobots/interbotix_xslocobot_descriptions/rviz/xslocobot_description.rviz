@@ -25,7 +25,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: FilteredCloud
 Toolbars:
   toolButtonStyle: 2
 Visualization Manager:
@@ -156,17 +156,7 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        locobot_wx200/laser_frame_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         locobot_wx200/left_finger_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        locobot_wx200/lidar_tower_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -224,7 +214,7 @@ Visualization Manager:
       Visual Enabled: true
     - Class: rviz/TF
       Enabled: true
-      Frame Timeout: 15
+      Frame Timeout: 60
       Frames:
         All Enabled: false
         locobot_wx200/ar_tag_link:
@@ -238,8 +228,6 @@ Visualization Manager:
         locobot_wx200/base_link:
           Value: true
         locobot_wx200/battery_link:
-          Value: true
-        locobot_wx200/camera_aligned_depth_to_color_frame:
           Value: true
         locobot_wx200/camera_color_frame:
           Value: true
@@ -279,13 +267,7 @@ Visualization Manager:
           Value: true
         locobot_wx200/gyro_link:
           Value: true
-        locobot_wx200/laser_frame_link:
-          Value: true
         locobot_wx200/left_finger_link:
-          Value: true
-        locobot_wx200/lidar_tower_link:
-          Value: true
-        locobot_wx200/odom:
           Value: true
         locobot_wx200/pan_link:
           Value: true
@@ -305,73 +287,64 @@ Visualization Manager:
           Value: true
         locobot_wx200/wrist_link:
           Value: true
-        map:
-          Value: true
       Marker Scale: 0.150000006
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          locobot_wx200/odom:
-            locobot_wx200/base_footprint:
-              locobot_wx200/base_link:
-                locobot_wx200/camera_tower_link:
-                  locobot_wx200/arm_cradle_link:
-                    {}
-                  locobot_wx200/lidar_tower_link:
-                    locobot_wx200/laser_frame_link:
-                      {}
-                  locobot_wx200/pan_link:
-                    locobot_wx200/tilt_link:
-                      locobot_wx200/camera_link:
-                        locobot_wx200/camera_aligned_depth_to_color_frame:
-                          locobot_wx200/camera_color_optical_frame:
-                            {}
-                        locobot_wx200/camera_color_frame:
-                          {}
-                        locobot_wx200/camera_depth_frame:
-                          locobot_wx200/camera_depth_optical_frame:
-                            {}
-                locobot_wx200/caster_back_link:
-                  {}
-                locobot_wx200/caster_front_link:
-                  {}
-                locobot_wx200/cliff_sensor_front_link:
-                  {}
-                locobot_wx200/cliff_sensor_left_link:
-                  {}
-                locobot_wx200/cliff_sensor_right_link:
-                  {}
-                locobot_wx200/gyro_link:
-                  {}
-                locobot_wx200/plate_link:
-                  locobot_wx200/arm_base_link:
-                    locobot_wx200/shoulder_link:
-                      locobot_wx200/upper_arm_link:
-                        locobot_wx200/forearm_link:
-                          locobot_wx200/wrist_link:
-                            locobot_wx200/gripper_link:
-                              locobot_wx200/ee_arm_link:
-                                locobot_wx200/ar_tag_link:
+        locobot_wx200/base_footprint:
+          locobot_wx200/base_link:
+            locobot_wx200/camera_tower_link:
+              locobot_wx200/arm_cradle_link:
+                {}
+              locobot_wx200/pan_link:
+                locobot_wx200/tilt_link:
+                  locobot_wx200/camera_link:
+                    locobot_wx200/camera_color_frame:
+                      locobot_wx200/camera_color_optical_frame:
+                        {}
+                    locobot_wx200/camera_depth_frame:
+                      locobot_wx200/camera_depth_optical_frame:
+                        {}
+            locobot_wx200/caster_back_link:
+              {}
+            locobot_wx200/caster_front_link:
+              {}
+            locobot_wx200/cliff_sensor_front_link:
+              {}
+            locobot_wx200/cliff_sensor_left_link:
+              {}
+            locobot_wx200/cliff_sensor_right_link:
+              {}
+            locobot_wx200/gyro_link:
+              {}
+            locobot_wx200/plate_link:
+              locobot_wx200/arm_base_link:
+                locobot_wx200/shoulder_link:
+                  locobot_wx200/upper_arm_link:
+                    locobot_wx200/forearm_link:
+                      locobot_wx200/wrist_link:
+                        locobot_wx200/gripper_link:
+                          locobot_wx200/ee_arm_link:
+                            locobot_wx200/ar_tag_link:
+                              {}
+                            locobot_wx200/gripper_bar_link:
+                              locobot_wx200/fingers_link:
+                                locobot_wx200/ee_gripper_link:
                                   {}
-                                locobot_wx200/gripper_bar_link:
-                                  locobot_wx200/fingers_link:
-                                    locobot_wx200/ee_gripper_link:
-                                      {}
-                                    locobot_wx200/left_finger_link:
-                                      {}
-                                    locobot_wx200/right_finger_link:
-                                      {}
-                                locobot_wx200/gripper_prop_link:
+                                locobot_wx200/left_finger_link:
                                   {}
-                  locobot_wx200/battery_link:
-                    {}
-                locobot_wx200/wheel_left_link:
-                  {}
-                locobot_wx200/wheel_right_link:
-                  {}
+                                locobot_wx200/right_finger_link:
+                                  {}
+                            locobot_wx200/gripper_prop_link:
+                              {}
+              locobot_wx200/battery_link:
+                {}
+            locobot_wx200/wheel_left_link:
+              {}
+            locobot_wx200/wheel_right_link:
+              {}
       Update Interval: 0
       Value: true
     - Alpha: 0.699999988
@@ -401,14 +374,14 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 0.376377642
-            Min Value: -0.767989218
+            Max Value: 10
+            Min Value: -10
             Value: true
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 255; 255; 255
-          Color Transformer: AxisColor
+          Color Transformer: RGB8
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
@@ -423,7 +396,7 @@ Visualization Manager:
           Size (Pixels): 3
           Size (m): 0.00999999978
           Style: Points
-          Topic: /locobot_wx200/rtabmap/depth/color/obstacles
+          Topic: /locobot_wx200/camera/depth/color/points
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -510,6 +483,7 @@ Visualization Manager:
           Class: rtabmap_ros/MapGraph
           Enabled: true
           Global loop closure: 255; 0; 0
+          Landmark: 0; 128; 0
           Local loop closure: 255; 255; 0
           Merged neighbor: 255; 170; 0
           Name: MapGraph
@@ -519,6 +493,36 @@ Visualization Manager:
           User: 255; 0; 0
           Value: true
           Virtual: 255; 0; 255
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 0.376377642
+            Min Value: -0.767989218
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: AxisColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: ObstacleCloud
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.00999999978
+          Style: Points
+          Topic: /locobot_wx200/rtabmap/depth/color/obstacles
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
       Enabled: false
       Name: RtabmapRos
     - Class: rviz/Group
@@ -591,11 +595,91 @@ Visualization Manager:
           Value: true
       Enabled: false
       Name: Move Base
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: RGB8
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: FilteredCloud
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.00999999978
+          Style: Points
+          Topic: /locobot_wx200/pc_filter/pointcloud/filtered
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: RGB8
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: ObjectCloud
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.00999999978
+          Style: Points
+          Topic: /locobot_wx200/pointcloud/objects
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /locobot_wx200/pc_filter/markers/crop_box
+          Name: CropBoxMarker
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /locobot_wx200/pc_filter/markers/objects
+          Name: ObjectMarkers
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+      Enabled: false
+      Name: Perception
   Enabled: true
   Global Options:
     Background Color: 0; 176; 240
     Default Light: true
-    Fixed Frame: map
+    Fixed Frame: locobot_wx200/base_footprint
     Frame Rate: 30
   Name: root
   Tools:
@@ -616,7 +700,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.67887735
+      Distance: 1.10980976
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -631,10 +715,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.600000024
+      Pitch: 0.140000358
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.785398006
+      Yaw: 0.635398149
     Saved: ~
 Window Geometry:
   Displays:

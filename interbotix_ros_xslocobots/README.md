@@ -4,6 +4,7 @@
 ## Overview
 Welcome to the *interbotix_ros_xslocobots* sub-repo! This sub-repository contains ROS packages meant to be used with the various Locobot Rovers sold by Trossen Robotics. Packages were tested on Ubuntu Linux 16.04 & 18.04 using ROS Kinetic and ROS Melodic respectively. Additionally, all ROS nodes were written using Python or C++. However, any programming language capable of sending ROS messages can be used to control the robots. To that effect, the core packages inside this repo are as follows:
 - **interbotix_xslocobot_nav** - contains the config and launch files necessary to run the Nav Stack on the locobot
+- **interbotix_xslocobot_perception** - contains the config and launch files necessary to run the Perception Pipeline on the locobot
 - **interbotix_xslocobot_moveit** - contains the config files necessary to launch an arm (on the locobot) using MoveIt either in Gazebo, on the physical robot, or just in Rviz
 - **interbotix_xslocobot_gazebo** - contains the config files necessary to launch a locobot in Gazebo, including tuned PID gains for ros_control
 - **interbotix_xslocobot_control** - contains the motor configuration files and the 'root' launch file that is responsible for launching the locobot
@@ -153,7 +154,6 @@ That ends the quickstart tutorial. To get familiar with the architecture and lau
 Refer to the guide [here](https://github.com/Interbotix/interbotix_ros_core/blob/main/interbotix_ros_xseries/interbotix_xs_sdk/TROUBLESHOOTING.md#troubleshooting-a-dynamixel-based-robot) to try to solve your problem. If you still need help, feel free to contact us as trsupport@trossenrobotics.com or submit an Issue. We strongly recommend the latter option though so that other people who may be facing the same difficulty can benefit. This repository is actively maintained and any open Issues will be addressed as soon as possible.
 
 ## Future Work
-- Add demos to locate an object with the depth camera and use the arm to pick it up.
 - Create a more flushed out Gazebo simulation experience by simulating sensors correctly.
 
 ## Contributing

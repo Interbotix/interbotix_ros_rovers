@@ -6,13 +6,13 @@
   <arg name="show_lidar"                        default="$(arg use_lidar)"/>
   <arg name="external_urdf_loc"                 default=""/>
   <arg name="use_rviz"                          default="false"/>
-  <arg name="use_camera"                        default="true"/>
   <arg name="localization"                      default="false"/>
   <arg name="rtabmap_args"                      default=""/>
   <arg name="use_rtabmapviz"                    default="false"/>
   <arg name="rtabmapviz_args"                   default=""/>
   <arg name="database_path"                     default="~/.ros/rtabmap.db"/>
   <arg name="camera_tilt_angle"                 default="0.2618"/>
+  <arg name="launch_driver"                     default="true"/>
 
   <arg     if="$(arg use_lidar)" name="rtabmap_default_args" default="$(arg rtabmap_args)
                                                                       --RGBD/NeighborLinkRefining true
@@ -46,14 +46,16 @@
                                                                       --Reg/Strategy 0
                                                                       --Mem/STMSize 30"/>
 
-  <include file="$(find interbotix_xslocobot_control)/launch/xslocobot_control.launch">
+  <include if="$(arg launch_driver)" file="$(find interbotix_xslocobot_control)/launch/xslocobot_control.launch">
     <arg name="robot_model"                       value="$(arg robot_model)"/>
     <arg name="robot_name"                        value="$(arg robot_name)"/>
     <arg name="use_lidar"                         value="$(arg use_lidar)"/>
+    <arg name="show_lidar"                        value="$(arg show_lidar)"/>
     <arg name="external_urdf_loc"                 value="$(arg external_urdf_loc)"/>
     <arg name="use_rviz"                          value="$(arg use_rviz)"/>
     <arg name="rviz_frame"                        value="map"/>
-    <arg name="use_camera"                        value="$(arg use_camera)"/>
+    <arg name="use_camera"                        value="true"/>
+    <arg name="align_depth"                       value="true"/>
     <arg name="use_base"                          value="true"/>
   </include>
 

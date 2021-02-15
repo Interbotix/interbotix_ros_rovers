@@ -24,7 +24,7 @@ start_time="$(date -u +%s)"
 
 # Update the system
 sudo apt update && sudo apt -y upgrade
-sudo apt autoremove
+sudo apt -y autoremove
 
 # Install some necessary core packages
 sudo apt -y install openssh-server

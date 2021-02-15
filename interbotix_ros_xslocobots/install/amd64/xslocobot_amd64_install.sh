@@ -6,11 +6,11 @@ if [ $ubuntu_version == "16.04" ]; then
   ROS_NAME="kinetic"
 elif [ $ubuntu_version == "18.04" ]; then
   ROS_NAME="melodic"
-# elif [ $ubuntu_version == "20.04" ]; then
-#   ROS_NAME="noetic"
+elif [ $ubuntu_version == "20.04" ]; then
+  ROS_NAME="noetic"
 else
   echo -e "Unsupported Ubuntu verison: $ubuntu_version"
-  echo -e "Interbotix Locobot only works with 16.04 or 18.04"
+  echo -e "Interbotix Locobot only works with 16.04, 18.04, or 20.04"
   exit 1
 fi
 
@@ -129,6 +129,7 @@ fi
 source $APRILTAG_WS/devel_isolated/setup.bash
 
 # Step 4: Install Locobot packages
+shopt -s extglob
 INTERBOTIX_WS=~/interbotix_ws
 if [ ! -d "$INTERBOTIX_WS/src" ]; then
   echo "Installing ROS packages for the Interbotix Locobot..."
@@ -138,9 +139,16 @@ if [ ! -d "$INTERBOTIX_WS/src" ]; then
     echo "Building Kobuki ROS packages from source..."
     git clone https://github.com/yujinrobot/kobuki
     cd kobuki
-    git checkout $ROS_NAME
-    sudo rm -r kobuki_capabilities kobuki
-    cd $INTERBOTIX_WS/src
+    # there is no noetic branch yet, so if using noetic, clone the melodic branch
+    git checkout melodic
+    cd ..
+    if [ $ROS_NAME == "noetic" ]; then
+      sudo apt -y install liborocos-kdl-dev
+      git clone https://github.com/yujinrobot/yujin_ocs.git
+      cd yujin_ocs
+      sudo rm -r !(yocs_cmd_vel_mux|yocs_controllers|yocs_velocity_smoother)
+      cd ..
+    fi
   fi
   git clone https://github.com/Interbotix/interbotix_ros_core.git
   git clone https://github.com/Interbotix/interbotix_ros_rovers.git
@@ -161,6 +169,7 @@ else
   echo "Interbotix Locobot ROS packages already installed!"
 fi
 source $INTERBOTIX_WS/devel/setup.bash
+shopt -u extglob
 
 # Step 5: Setup Environment Variables
 if [ -z "$ROS_IP" ]; then

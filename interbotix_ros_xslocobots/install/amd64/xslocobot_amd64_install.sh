@@ -148,6 +148,7 @@ if [ ! -d "$INTERBOTIX_WS/src" ]; then
       cd yujin_ocs
       sudo rm -r !(yocs_cmd_vel_mux|yocs_controllers|yocs_velocity_smoother)
       cd ..
+      git clone https://github.com/Slamtec/rplidar_ros.git
     fi
   fi
   git clone https://github.com/Interbotix/interbotix_ros_core.git

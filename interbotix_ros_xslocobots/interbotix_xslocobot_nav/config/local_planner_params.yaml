@@ -16,7 +16,7 @@ TrajectoryPlannerROS:
   vx_samples: 3
   meter_scoring: true
 
-  pdist_scale: 0.75
-  gdist_scale: 1.0
+  path_distance_bias: 0.75
+  goal_distance_bias: 1.0
   occdist_scale: 0.01
   dwa: true

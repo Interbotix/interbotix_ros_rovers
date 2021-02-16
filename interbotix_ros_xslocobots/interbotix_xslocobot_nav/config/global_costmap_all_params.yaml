@@ -1,5 +1,5 @@
 global_costmap:
-  global_frame: /map
+  global_frame: map
   update_frequency: 1.0
   publish_frequency: 0.5
   plugins:

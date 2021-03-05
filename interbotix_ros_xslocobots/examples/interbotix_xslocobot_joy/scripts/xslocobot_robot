@@ -43,7 +43,7 @@ class LocobotRobot(object):
         rospy.loginfo("Current loop rate is %d Hz." % self.current_loop_rate)
 
     def update_T_yb(self):
-        T_sb = self.locobot.arm.get_ee_pose()
+        T_sb = self.locobot.arm.get_ee_pose_command()
         rpy = ang.rotationMatrixToEulerAngles(T_sb[:3, :3])
         self.T_sy[:2,:2] = ang.yawToRotationMatrix(rpy[2])
         self.T_yb = np.dot(ang.transInv(self.T_sy), T_sb)

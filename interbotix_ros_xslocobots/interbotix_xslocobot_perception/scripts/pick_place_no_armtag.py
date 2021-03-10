@@ -13,9 +13,9 @@ def main():
     bot = InterbotixLocobotXS("locobot_wx200", arm_model="mobile_wx200")
     # move camera such that it's tilting down
     bot.camera.pan_tilt_move(0, 0.75)
-    # get the positions of any clusters present w.r.t. the 'locobot_wx200/arm_base_link'
-    # sort the clusters such that they appear from left-to-right w.r.t. the 'locobot_wx200/arm_base_link'
-    success, clusters = bot.pcl.get_cluster_positions(ref_frame="locobot_wx200/arm_base_link", sort_axis="y", reverse=True)
+    # get the positions of any clusters present w.r.t. the 'locobot/arm_base_link'
+    # sort the clusters such that they appear from left-to-right w.r.t. the 'locobot/arm_base_link'
+    success, clusters = bot.pcl.get_cluster_positions(ref_frame="locobot/arm_base_link", sort_axis="y", reverse=True)
     # move the robot back so it's centered and open the gripper
     bot.arm.set_ee_pose_components(x=0.3, z=0.2, moving_time=1.5)
     bot.gripper.open()

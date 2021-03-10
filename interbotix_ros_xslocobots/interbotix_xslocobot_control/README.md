@@ -42,7 +42,7 @@ To further customize the launch file at run-time, refer to the table below.
 | Argument | Description | Default Value |
 | -------- | ----------- | :-----------: |
 | robot_model | model type of the Interbotix Locobot such as 'locobot_base' or 'locobot_wx250s' | "" |
-| robot_name | name of the robot (typically equal to `robot_model`, but could be anything) | "$(arg robot_model)" |
+| robot_name | name of the robot (could be anything but defaults to 'locobot') | "locobot" |
 | show_gripper_bar | if true, the gripper_bar link is included in the 'robot_description' parameter; if false, the gripper_bar and finger links are not loaded to the parameter server. Set to false if you have a custom gripper attachment | true |
 | show_gripper_fingers | if true, the gripper fingers are included in the 'robot_description' parameter; if false, the gripper finger links are not loaded to the parameter server. Set to false if you have custom gripper fingers | true |
 | external_urdf_loc | the file path to the custom urdf.xacro file that you would like to include in the Interbotix robot's urdf.xacro file| "" |

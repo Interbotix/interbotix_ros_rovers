@@ -8,7 +8,7 @@
   <arg name="use_static_transform_pub"          default="false"/>
 
   <!-- interbotix_xslocobot_control Launch File Arguments -->
-  <arg name="robot_name"                        default="$(arg robot_model)"/>
+  <arg name="robot_name"                        default="locobot"/>
   <arg name="show_gripper_bar"                  default="true"/>
   <arg name="show_gripper_fingers"              default="true"/>
   <arg name="external_urdf_loc"                 default=""/>

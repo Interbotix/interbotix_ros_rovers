@@ -21,7 +21,7 @@ This is the bare minimum needed to get up and running. Take a look at the table 
 | Argument | Description | Default Value |
 | -------- | ----------- | :-----------: |
 | robot_model | model type of the Interbotix Locobot such as 'locobot_base' or 'locobot_wx250s' | "" |
-| robot_name | name of the robot (typically equal to `robot_model`, but could be anything) | "$(arg robot_model)" |
+| robot_name | name of the robot (could be anything but defaults to 'locobot') | "locobot" |
 | arm_model | the Interbotix Arm model on the locobot; this should never be set manually but rather left to its default value | refer to [xslocobot_description.launch](launch/xslocobot_description.launch) |
 | show_lidar | if true, the lidar is included in the 'robot_description' parameter; only set to true if you purchased a lidar with your locobot | false |
 | show_gripper_bar | if true, the gripper_bar link is included in the 'robot_description' parameter; if false, the gripper_bar and finger links are not loaded to the parameter server. Set to false if you have a custom gripper attachment | true |

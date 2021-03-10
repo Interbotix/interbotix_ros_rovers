@@ -18,14 +18,14 @@ def main():
     # sleep half a second to give time for the arm to settle after moving
     time.sleep(0.5)
     # get the transform of the AR tag relative to the camera frame; based on that transform,
-    # publish a new transform from the 'locobot_wx200/plate_link' to the 'locobot_wx200/arm_base_link'
+    # publish a new transform from the 'locobot/plate_link' to the 'locobot/arm_base_link'
     bot.armtag.find_ref_to_arm_base_transform(position_only=True)
     # move the arm out of the way of the camera
     bot.arm.go_to_sleep_pose()
-    # get the positions of any clusters present w.r.t. the 'locobot_wx200/arm_base_link';
-    # sort the clusters such that they appear from left-to-right w.r.t. the 'locobot_wx200/arm_base_link'
+    # get the positions of any clusters present w.r.t. the 'locobot/arm_base_link';
+    # sort the clusters such that they appear from left-to-right w.r.t. the 'locobot/arm_base_link'
     time.sleep(0.5)
-    success, clusters = bot.pcl.get_cluster_positions(ref_frame="locobot_wx200/arm_base_link", sort_axis="y", reverse=True)
+    success, clusters = bot.pcl.get_cluster_positions(ref_frame="locobot/arm_base_link", sort_axis="y", reverse=True)
     # move the robot back so it's centered and open the gripper
     bot.arm.set_ee_pose_components(x=0.3, z=0.2, moving_time=1.5)
     bot.gripper.open()

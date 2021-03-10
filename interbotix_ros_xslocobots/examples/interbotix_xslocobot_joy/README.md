@@ -52,7 +52,7 @@ A red error message might appear in the screen saying `Couldn't open joystick fo
 | Argument | Description | Default Value |
 | -------- | ----------- | :-----------: |
 | robot_model | model type of the Interbotix Locobot such as 'locobot_base' or 'locobot_wx250s' | "" |
-| robot_name | name of the robot (typically equal to `robot_model`, but could be anything) | "$(arg robot_model)" |
+| robot_name | name of the robot (could be anything but defaults to 'locobot') | "locobot" |
 | use_rviz | launches Rviz; if you are SSH'd into the robot, DON'T set this to true | false |
 | use_base | if true, the Kobuki ROS nodes are launched | false |
 | use_lidar | if true, the RPLidar node is launched | false |

@@ -54,7 +54,7 @@ roslaunch interbotix_xslocobot_joy xslocobot_joy.launch robot_model:=locobot_wx2
 ```
 Setting the `launch_driver` argument to `false` tells the launch file not to startup the locobot driver nodes as the robot is already running. Finally, a third way to move the robot is to run the Kobuki **keyop** node. This will then allow you to use your keyboard arrow keys to move the robot. To do this, type the following either on the robot or remote computer...
 ```
-roslaunch kobuki_keyop keyop.launch __ns:=locobot_wx200
+roslaunch kobuki_keyop keyop.launch __ns:=locobot
 ```
 Note the two underscores before the *ns* launch file tag.
  Also note that only one of these control modes should be used at a time; otherwise, the base might not move correctly (as it's being bombarded with different velocity commands from multiple packages simultaneously).
@@ -123,7 +123,7 @@ This is the bare minimum needed to get up and running. Take a look at the table 
 | Argument | Description | Default Value |
 | -------- | ----------- | :-----------: |
 | robot_model | model type of the Interbotix Locobot such as 'locobot_base' or 'locobot_wx250s' | "" |
-| robot_name | name of the robot (typically equal to `robot_model`, but could be anything) | "$(arg robot_model)" |
+| robot_name | name of the robot (could be anything but defaults to 'locobot') | "locobot" |
 | use_lidar | if true, the RPLidar node is launched | false |
 | show_lidar | set to true if the lidar is installed on the robot; this will load the lidar related links to the 'robot_description' parameter | $(arg use_lidar) |
 | use_rviz | launches Rviz | false |

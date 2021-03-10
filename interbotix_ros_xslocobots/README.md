@@ -128,19 +128,19 @@ Now change the url inside from `https://api.ignitionfuel.org` to `https://api.ig
 
 2. By default, all the Dynamixel motors in the robot are torqued on so it will be very difficult to manually manipulate them. To torque off all the motors, execute the command below in another terminal (either via SSH or on your remote computer). Be aware though that this will cause the robot arm (if present) to collapse (if it's not already resting) so manually hold or secure it before executing.
 
-        $ rosservice call /locobot_wx250s/torque_enable "{cmd_type: 'group', name: 'all', enable: false}"
+        $ rosservice call /locobot/torque_enable "{cmd_type: 'group', name: 'all', enable: false}"
 
     The command above torques off every motor in the 'all' group. This is a special group that includes every Dynamixel motor. To only torque off the arm motors, change the name from 'all' to 'arm'. Likewise, to only torque off the motors controlling the camera, change the name from 'all' to 'camera'.
 
     Now you should be able to freely manipulate the arm, gripper, and pan/tilt mechanism. Take note of how the Rviz model accurately mimics the real robot. To make the robot hold a certain pose, manually hold the arm in the desired pose and execute the following command:
 
-        $ rosservice call /locobot_wx250s/torque_enable "{cmd_type: 'group', name: 'all', enable: true}"
+        $ rosservice call /locobot/torque_enable "{cmd_type: 'group', name: 'all', enable: true}"
 
     You can now let go and observe how the arm and pan/tilt mechanism stay in place.
 
 3. Now let's get the Kobuki base moving and visualize the sensor output! In the Rviz window, check the *Camera* and *LaserScan* displays and adjust the topic names as necessary. You should see image data from the camera streaming in the lower left corner of the window, and small red pixels being displayed in the Rviz grid from the lidar. To actually move the Kobuki base with a translational velocity of 0.5 m/s and angular velocity of 0.3 rad/s, type the following in another terminal...
 
-        $ rostopic pub -r 10 /locobot_wx250s/mobile_base/commands/velocity geometry_msgs/Twist '{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.3}}'
+        $ rostopic pub -r 10 /locobot/mobile_base/commands/velocity geometry_msgs/Twist '{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.3}}'
 
     To stop the base from moving, just `Cntrl-C` the publisher.
 

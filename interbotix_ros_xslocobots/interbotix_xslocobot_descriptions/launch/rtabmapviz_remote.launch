@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="robot_name"                        default=""/>
+  <arg name="robot_name"                        default="locobot"/>
   <arg name="use_lidar"                         default="false"/>
   <arg name="rtabmapviz_args"                   default=""/>
 

@@ -62,7 +62,7 @@ For reference, other launch file arguments are shown below. Depending on if you 
 | use_perception | whether to launch the Perception Pipeline | false |
 | use_armtag | whether to use the AprilTag on the arm when working with the Perception Pipeline | false |
 | use_static_transform_pub | whether to launch the **static_trans_pub** node which is responsible for loading transforms from the static_transforms.yaml file and publishing them to the /tf tree | false |
-| robot_name | name of the robot (typically equal to `robot_model`, but could be anything) | "$(arg robot_model)" |
+| robot_name | name of the robot (could be anything but defaults to 'locobot') | "locobot" |
 | show_gripper_bar | if true, the gripper_bar link is included in the 'robot_description' parameter; if false, the gripper_bar and finger links are not loaded to the parameter server. Set to false if you have a custom gripper attachment | true |
 | show_gripper_fingers | if true, the gripper fingers are included in the 'robot_description' parameter; if false, the gripper finger links are not loaded to the parameter server. Set to false if you have custom gripper fingers | true |
 | external_urdf_loc | the file path to the custom urdf.xacro file that you would like to include in the Interbotix robot's urdf.xacro file| "" |

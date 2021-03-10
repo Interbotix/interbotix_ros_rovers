@@ -37,13 +37,13 @@ Rviz should pop up along with two standalone GUIs. One of those GUIs will look l
 Depending on how you setup your arm and camera in your workspace, the AprilTag on the arm may not be visible to the camera. To make it visible, first torque off all the arm joints by opening a terminal and typing...
 
 ```
-rosservice call /locobot_wx200/torque_enable "{cmd_type: 'group', name: 'arm', enable: false}"
+rosservice call /locobot/torque_enable "{cmd_type: 'group', name: 'arm', enable: false}"
 ```
 
 Next, manually manipulate the arm such that the AprilTag is clearly visible to the camera (the live video stream in the bottom left of the Rviz display should help with that). Then in the same terminal as before, torque the arm back on as follows...
 
 ```
-rosservice call /locobot_wx200/torque_enable "{cmd_type: 'group', name: 'arm', enable: true}"
+rosservice call /locobot/torque_enable "{cmd_type: 'group', name: 'arm', enable: true}"
 ```
 
 Now, in the Armtag Tuner GUI, click the 'Snap Pose' button. Feel free to toggle up/down the number of snapshots that should be taken. The poses calculated from the snapshots will then be averaged to come up with a more accurate pose of where the arm is relative to the camera. One way to check the accuracy of the calculated pose is to toggle the `RawPointCloud` display in Rviz. Hopefully, the pointcloud version of the AprilTag should be located on (possibly a couple millimeters below) the AR tag link of the virtual robot model. If it's not, feel free to keep pressing the 'Snap Pose' button until it looks alright. As an FYI, from experience, it seems the camera thinks the arm should really be 2-3 mm offset along the `plate_link`'s X and Y axes. However, this could just be due to how the Apriltag is placed on the arm. It also thinks the `plate_link` should be offset upwards on its Z axis by just over 4 mm.
@@ -52,10 +52,10 @@ Now, in the Armtag Tuner GUI, click the 'Snap Pose' button. Feel free to toggle 
 
 At this point, you should see a pointcloud version of your tabletop with the objects on it. If your arm is in the way, just torque it off and move it to its Sleep pose (make sure to hold the arm before torquing it off). Then, using the PointCloud Tuner GUI, tune the pointcloud parameters for your specific use case. A detailed explanation of how to go about doing this can be found [here](https://github.com/Interbotix/interbotix_ros_toolboxes/tree/main/interbotix_perception_toolbox/interbotix_perception_modules). Don't forget to save your configs after tuning them!
 
-Now, you are almost ready to run the [python demo](scripts/pick_place_no_armtag.py) script. First make sure to edit the robot name in the script to your robot model (if it's not 'locobot_wx200'). Second, open a terminal and type...
+Now, you are almost ready to run the [python demo](scripts/pick_place_no_armtag.py) script. First make sure to edit the robot model name in the script to your robot model (if it's not 'locobot_wx200'). Second, open a terminal and type...
 
 ```
-rosparam set /locobot_wx200/use_perception true
+rosparam set /locobot/use_perception true
 ```
 
 The above command sets the `use_perception` ROS parameter so that when you run the python script, it knows to include an instance of the InterbotixPointCloudInterface module as part of the Locobot. Finally, navigate to the [pick_place_no_armtag.py](scripts/pick_place_no_armtag.py) script and execute it.
@@ -79,7 +79,7 @@ Other launch file arguments for further customization can be seen below...
 | Argument | Description | Default Value |
 | -------- | ----------- | :-----------: |
 | robot_model | model type of the Interbotix Locobot such as 'locobot_px100' or 'locobot_wx250s' | "" |
-| robot_name | name of the robot (typically equal to `robot_model`, but could be anything) | "$(arg robot_model)" |
+| robot_name | name of the robot (could be anything but defaults to 'locobot') | "locobot" |
 | external_urdf_loc | the file path to the custom urdf.xacro file that you would like to include in the Interbotix robot's urdf.xacro file| "" |
 | use_rviz | launches Rviz; if you are SSH'd into the robot, DON'T set this to true | false |
 | rviz_frame | fixed frame in Rviz; this should be changed to `map` or `<robot_name>/odom` if mapping or using local odometry respectively | $(arg robot_name)/base_footprint |

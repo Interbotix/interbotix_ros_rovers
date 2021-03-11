@@ -16,6 +16,7 @@ class LocobotRobot(object):
         self.joy_msg = LocobotJoy()
         self.joy_mutex = threading.Lock()
         self.rate = rospy.Rate(self.current_loop_rate)
+        self.use_base = rospy.get_param("~use_base")
         robot_model = rospy.get_param("~robot_model")
         robot_name = rospy.get_namespace().strip("/")
         self.arm_model = "mobile_" + robot_model.split("_")[1]
@@ -74,7 +75,7 @@ class LocobotRobot(object):
             self.update_speed(self.loop_rates["fine"])
 
         # check base_reset_odom_cmd
-        if (msg.base_reset_odom_cmd == LocobotJoy.RESET_ODOM):
+        if (msg.base_reset_odom_cmd == LocobotJoy.RESET_ODOM and self.use_base):
             self.locobot.base.reset_odom()
 
         if self.arm_model is None:  return
@@ -118,7 +119,8 @@ class LocobotRobot(object):
             self.locobot.camera.pan_tilt_move(cam_positions[0], cam_positions[1], 0.2, 0.1, 0.2, 0.1, False)
 
         # check Kobuki related commands
-        self.locobot.base.command_velocity(msg.base_x_cmd, msg.base_theta_cmd)
+        if self.use_base:
+            self.locobot.base.command_velocity(msg.base_x_cmd, msg.base_theta_cmd)
 
         if self.arm_model is None: return
 

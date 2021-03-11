@@ -3,6 +3,7 @@
   <arg name="robot_model"                       default=""/>
   <arg name="robot_name"                        default="locobot"/>
   <arg name="use_rviz"                          default="false"/>
+  <arg name="rviz_frame"                        default="$(arg robot_name)/odom"/>
   <arg name="use_base"                          default="true"/>
   <arg name="use_lidar"                         default="false"/>
   <arg name="show_lidar"                        default="$(arg use_lidar)"/>
@@ -10,6 +11,10 @@
   <arg name="threshold"                         default="0.75"/>
   <arg name="controller"                        default="ps4"/>
   <arg name="launch_driver"                     default="true"/>
+  <arg name="use_sim"                           default="false"/>
+
+  <arg name="xs_sdk_type" value="xs_sdk" unless="$(arg use_sim)"/>
+  <arg name="xs_sdk_type" value="xs_sdk_sim" if="$(arg use_sim)"/>
 
   <arg if="$(eval robot_model == 'locobot_base')"     name="mode_type" value="base"/>
   <arg unless="$(eval robot_model == 'locobot_base')" name="mode_type" value="all"/>
@@ -19,12 +24,13 @@
     <arg name="robot_model"                       value="$(arg robot_model)"/>
     <arg name="robot_name"                        value="$(arg robot_name)"/>
     <arg name="use_rviz"                          value="$(arg use_rviz)"/>
-    <arg name="rviz_frame"                        value="$(arg robot_name)/odom"/>
+    <arg name="rviz_frame"                        value="$(arg rviz_frame)"/>
     <arg name="use_base"                          value="$(arg use_base)"/>
     <arg name="use_lidar"                         value="$(arg use_lidar)"/>
     <arg name="show_lidar"                        value="$(arg show_lidar)"/>
     <arg name="use_camera"                        value="$(arg use_camera)"/>
     <arg name="mode_configs"                      value="$(arg mode_configs)"/>
+    <arg name="use_sim"                           value="$(arg use_sim)"/>
   </include>
 
   <node
@@ -54,6 +60,7 @@
     output="screen"
     ns="$(arg robot_name)">
     <param name="robot_model"                     value="$(arg robot_model)"/>
+    <param name="use_base"                        value="$(arg use_base)"/>
   </node>
 
 </launch>

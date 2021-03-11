@@ -19,6 +19,10 @@
   <arg name="color_height"                      default="480"/>
   <arg name="motor_configs"                     default="$(find interbotix_xslocobot_control)/config/$(arg robot_model).yaml"/>
   <arg name="load_configs"                      default="true"/>
+  <arg name="use_sim"                           default="false"/>
+
+  <arg name="xs_sdk_type" value="xs_sdk" unless="$(arg use_sim)"/>
+  <arg name="xs_sdk_type" value="xs_sdk_sim" if="$(arg use_sim)"/>
 
   <arg if="$(eval robot_model == 'locobot_base')"     name="mode_type" value="base"/>
   <arg unless="$(eval robot_model == 'locobot_base')" name="mode_type" value="all"/>
@@ -41,7 +45,7 @@
   <node
     name="xs_sdk"
     pkg="interbotix_xs_sdk"
-    type="xs_sdk"
+    type="$(arg xs_sdk_type)"
     output="screen"
     ns="$(arg robot_name)">
     <param name="motor_configs"                   value="$(arg motor_configs)"/>

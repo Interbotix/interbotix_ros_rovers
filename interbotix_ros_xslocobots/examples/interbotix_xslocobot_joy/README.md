@@ -54,13 +54,15 @@ A red error message might appear in the screen saying `Couldn't open joystick fo
 | robot_model | model type of the Interbotix Locobot such as 'locobot_base' or 'locobot_wx250s' | "" |
 | robot_name | name of the robot (could be anything but defaults to 'locobot') | "locobot" |
 | use_rviz | launches Rviz; if you are SSH'd into the robot, DON'T set this to true | false |
-| use_base | if true, the Kobuki ROS nodes are launched | false |
+| rviz_frame | fixed frame in Rviz; this should be changed to `map` or `<robot_name>/odom` if mapping or using local odometry respectively | $(arg robot_name)/odom |
+| use_base | if true, the Kobuki ROS nodes are launched | true |
 | use_lidar | if true, the RPLidar node is launched | false |
 | show_lidar | set to true if the lidar is installed on the robot; this will load the lidar related links to the 'robot_description' parameter | $(arg use_lidar) |
 | use_camera | if true, the RealSense D435 camera nodes are launched | false |
 | threshold | value from 0 to 1 defining joystick sensitivity; a larger number means the joystick should be less sensitive | 0.75 |
 | controller | type of PlayStation controller ('ps3' or 'ps4') | ps4 |
 | mode_configs | the file path to the 'mode config' YAML file | refer to [xslocobot_joy.launch](launch/xslocobot_joy.launch) |
+| use_sim | if true, the Dynamixel simulator node is run; use Rviz to visualize the robot's motion; if false, the real Dynamixel driver node is run | false |
 
 To understand how the joystick buttons map to controlling the robot, look at the diagram and table below:
 

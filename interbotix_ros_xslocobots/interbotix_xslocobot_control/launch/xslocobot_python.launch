@@ -6,6 +6,7 @@
   <arg name="use_perception"                    default="false"/>
   <arg name="use_armtag"                        default="false"/>
   <arg name="use_static_transform_pub"          default="false"/>
+  <arg name="use_sim"                           default="false"/>
 
   <!-- interbotix_xslocobot_control Launch File Arguments -->
   <arg name="robot_name"                        default="locobot"/>
@@ -85,6 +86,7 @@
     <arg name="color_width"                       value="$(arg color_width)"/>
     <arg name="color_height"                      value="$(arg color_height)"/>
     <arg name="load_configs"                      value="$(arg load_configs)"/>
+    <arg name="use_sim"                           value="$(arg use_sim)"/>
   </include>
 
   <include if="$(arg use_nav)" file="$(find interbotix_xslocobot_nav)/launch/xslocobot_nav.launch">

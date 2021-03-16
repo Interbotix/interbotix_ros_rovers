@@ -22,9 +22,11 @@
   <arg name="filters"                           default="pointcloud"/>
   <arg name="align_depth"                       default="$(arg use_nav)"/>
   <arg name="color_fps"                         default="30"/>
-  <arg name="depth_fps"                         default="30"/>
   <arg name="color_width"                       default="640"/>
   <arg name="color_height"                      default="480"/>
+  <arg name="depth_fps"                         default="30"/>
+  <arg name="depth_width"                       default="640"/>
+  <arg name="depth_height"                      default="480"/>
   <arg name="load_configs"                      default="true"/>
 
   <!-- interbotix_xslocobot_nav Launch File Arguments -->
@@ -82,9 +84,11 @@
     <arg name="filters"                           value="$(arg filters)"/>
     <arg name="align_depth"                       value="$(arg align_depth)"/>
     <arg name="color_fps"                         value="$(arg color_fps)"/>
-    <arg name="depth_fps"                         value="$(arg depth_fps)"/>
     <arg name="color_width"                       value="$(arg color_width)"/>
     <arg name="color_height"                      value="$(arg color_height)"/>
+    <arg name="depth_fps"                         value="$(arg depth_fps)"/>
+    <arg name="depth_width"                       value="$(arg depth_width)"/>
+    <arg name="depth_height"                      value="$(arg depth_height)"/>
     <arg name="load_configs"                      value="$(arg load_configs)"/>
     <arg name="use_sim"                           value="$(arg use_sim)"/>
   </include>

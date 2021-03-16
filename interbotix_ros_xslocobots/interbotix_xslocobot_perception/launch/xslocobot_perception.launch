@@ -8,9 +8,11 @@
   <arg name="load_configs"                      default="true"/>
   <arg name="filters"                           default="pointcloud"/>
   <arg name="color_fps"                         default="30"/>
-  <arg name="depth_fps"                         default="30"/>
   <arg name="color_width"                       default="640"/>
   <arg name="color_height"                      default="480"/>
+  <arg name="depth_fps"                         default="30"/>
+  <arg name="depth_width"                       default="640"/>
+  <arg name="depth_height"                      default="480"/>
   <arg name="launch_driver"                     default="true"/>
 
   <arg name="filter_ns"                         default="$(arg robot_name)/pc_filter"/>
@@ -49,9 +51,11 @@
     <arg name="filters"                           value="pointcloud"/>
     <arg name="align_depth"                       value="false"/>
     <arg name="color_fps"                         value="$(arg color_fps)"/>
-    <arg name="depth_fps"                         value="$(arg depth_fps)"/>
     <arg name="color_width"                       value="$(arg color_width)"/>
     <arg name="color_height"                      value="$(arg color_height)"/>
+    <arg name="depth_fps"                         value="$(arg depth_fps)"/>
+    <arg name="depth_width"                       value="$(arg depth_width)"/>
+    <arg name="depth_height"                      value="$(arg depth_height)"/>
     <arg name="load_configs"                      value="$(arg load_configs)"/>
   </include>
 

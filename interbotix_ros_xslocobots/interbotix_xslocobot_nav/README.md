@@ -20,7 +20,7 @@ Note that there are also a few Rtabmap nodelets that are started up under the *r
 There are three ways this package can be used. One way is to build a map from scratch and have the robot perform SLAM. A second way is to load a pre-built map and continue SLAM. Finally, a third way is to load a pre-built map and just do localization. Note that the commands below assume the user has a Locobot WidowX 200 robot with the lidar add-on. However, any X-Series Locobot will work. If no lidar is being used, make sure the `use_lidar` argument is set to `false`.
 
 #### SLAM From Scratch
-To get SLAM up and runnig from scratch, type the following in a terminal on the robot computer:
+To get SLAM up and running from scratch, type the following in a terminal on the robot computer:
 ```
 $ roslaunch interbotix_xslocobot_nav xslocobot_nav.launch robot_model:=locobot_wx200 use_lidar:=true rtabmap_args:=-d
 ```
@@ -34,7 +34,7 @@ rtabmap (3): Rate=1.00s, Limit=0.000s, RTAB-Map=0.0697s, Maps update=0.0099s pub
 
 Now, to visualize the robot in Rviz, run the following on your personal Linux computer (note that you should first run the remote installation script on your personal computer if you haven't done so already):
 ```
-$ roslaunch interbotix_xslocobot_descriptions remote_view.launch robot_name:=locobot_wx200 rviz_frame:=map
+$ roslaunch interbotix_xslocobot_descriptions remote_view.launch rviz_frame:=map
 ```
 
 Rviz should now open up looking like the picture below:

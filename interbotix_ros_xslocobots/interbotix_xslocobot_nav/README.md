@@ -76,7 +76,7 @@ After mapping, you should have a MapCloud similar in structure to the one below.
 #### Continuing SLAM From a Pre-Built Map
 To continue doing SLAM, type the following in a terminal on the robot computer:
 ```
-roslaunch interbotix_xslocobot_nav xslocobot_nav.launch robot_model:=locobot_wx200 use_lidar:=true rtabmap_args:=--Rtabmap/StartNewMapOnLoopClosure true
+roslaunch interbotix_xslocobot_nav xslocobot_nav.launch robot_model:=locobot_wx200 use_lidar:=true rtabmap_args:='--Rtabmap/StartNewMapOnLoopClosure true'
 ```
 
 Setting the `Rtabmap/StartNewMapOnLoopClosure` parameter to `true` tells Rtabmap to wait on starting a new map until it detects a loop closure with the old map. If you'd rather have Rtabmap start creating a new map right away before finding loop closures (perhaps you're mapping a different part of your office that's not next to the first part), then set the parameter to `false` (which it should be by default).

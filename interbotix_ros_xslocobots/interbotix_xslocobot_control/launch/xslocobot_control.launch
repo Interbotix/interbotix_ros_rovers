@@ -30,6 +30,8 @@
   <arg unless="$(eval robot_model == 'locobot_base')" name="mode_type" value="all"/>
   <arg name="mode_configs" default="$(find interbotix_xslocobot_control)/config/modes_$(arg mode_type).yaml"/>
 
+  <param name="$(arg robot_name)/use_base"      value="$(arg use_base)"/>
+
   <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
     <arg name="robot_model"                       value="$(arg robot_model)"/>
     <arg name="robot_name"                        value="$(arg robot_name)"/>

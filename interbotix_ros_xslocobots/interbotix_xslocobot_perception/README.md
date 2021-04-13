@@ -52,13 +52,7 @@ Now, in the Armtag Tuner GUI, click the 'Snap Pose' button. Feel free to toggle 
 
 At this point, you should see a pointcloud version of your tabletop with the objects on it. If your arm is in the way, just torque it off and move it to its Sleep pose (make sure to hold the arm before torquing it off). Then, using the PointCloud Tuner GUI, tune the pointcloud parameters for your specific use case. A detailed explanation of how to go about doing this can be found [here](https://github.com/Interbotix/interbotix_ros_toolboxes/tree/main/interbotix_perception_toolbox/interbotix_perception_modules). Don't forget to save your configs after tuning them!
 
-Now, you are almost ready to run the [python demo](scripts/pick_place_no_armtag.py) script. First make sure to edit the robot model name in the script to your robot model (if it's not 'locobot_wx200'). Second, open a terminal and type...
-
-```
-rosparam set /locobot/use_perception true
-```
-
-The above command sets the `use_perception` ROS parameter so that when you run the python script, it knows to include an instance of the InterbotixPointCloudInterface module as part of the Locobot. Finally, navigate to the [pick_place_no_armtag.py](scripts/pick_place_no_armtag.py) script and execute it.
+Now, you are almost ready to run the [python demo](scripts/pick_place_no_armtag.py) script. First make sure to edit the robot model name in the script to your robot model (if it's not 'locobot_wx200'). Then navigate to the [pick_place_no_armtag.py](scripts/pick_place_no_armtag.py) script and execute it.
 
 While running the script, you should see a TF marker appear close to the top of each object's cluster (see the image below for clarification). This is where the camera believes the top of each cluster to be, and is the position returned to the user from the `get_cluster_positions` function. These TFs are temporary and will fade from Rviz after a minute is up. The arm will then line up its `ee_gripper_link` to be in the same spot as each of these cluster positions and hopefully pick up the objects.
 

@@ -41,6 +41,9 @@
   <arg name="load_transforms"                   default="true"/>
   <arg name="transform_filepath"                default="$(find interbotix_xslocobot_perception)/config/static_transforms.yaml"/>
 
+  <param name="$(arg robot_name)/use_perception" value="true"/>
+  <param name="$(arg robot_name)/use_armtag"     value="$(arg use_armtag)"/>
+
   <include if="$(arg launch_driver)" file="$(find interbotix_xslocobot_control)/launch/xslocobot_control.launch">
     <arg name="robot_model"                       value="$(arg robot_model)"/>
     <arg name="robot_name"                        value="$(arg robot_name)"/>

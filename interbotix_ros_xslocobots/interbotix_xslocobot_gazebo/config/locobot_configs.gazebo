@@ -58,7 +58,6 @@
   <gazebo reference="$(arg robot_name)/gripper_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
-    <self_collide>true</self_collide>
   </gazebo>
 
   <gazebo reference="$(arg robot_name)/ar_tag_link">

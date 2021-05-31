@@ -2,7 +2,7 @@
 ![xslocobot_banner](images/xslocobot_banner.png)
 
 ## Overview
-Welcome to the *interbotix_ros_xslocobots* sub-repo! This sub-repository contains ROS packages meant to be used with the various Locobot Rovers sold by Trossen Robotics. Packages were tested on Ubuntu Linux 16.04 & 18.04 using ROS Kinetic and ROS Melodic respectively. Additionally, all ROS nodes were written using Python or C++. However, any programming language capable of sending ROS messages can be used to control the robots. To that effect, the core packages inside this repo are as follows:
+Welcome to the *interbotix_ros_xslocobots* sub-repo! This sub-repository contains ROS packages meant to be used with the various Locobot Rovers sold by Trossen Robotics. Packages were tested on Ubuntu Linux 16.04, 18.04, and 20.04 using ROS Kinetic, Melodic, and Noetic respectively. Additionally, all ROS nodes were written using Python or C++. However, any programming language capable of sending ROS messages can be used to control the robots. To that effect, the core packages inside this repo are as follows:
 - **interbotix_xslocobot_nav** - contains the config and launch files necessary to run the Nav Stack on the locobot
 - **interbotix_xslocobot_perception** - contains the config and launch files necessary to run the Perception Pipeline on the locobot
 - **interbotix_xslocobot_moveit** - contains the config files necessary to launch an arm (on the locobot) using MoveIt either in Gazebo, on the physical robot, or just in Rviz
@@ -106,7 +106,7 @@ After running the installation script on the robot computer, verify that it was 
     $ ls
     $ cd
 
-Verify that the RealSense camera can be found by typing `rs-enumerate-devices -S` in the terminal. The output should give info about the type of RealSense camera that is plugged in. Note that the camera should be plugged back in at this point if it's not already.  
+Verify that the RealSense camera can be found by typing `rs-enumerate-devices -S` in the terminal. The output should give info about the type of RealSense camera that is plugged in. Note that the camera should be plugged back in at this point if it's not already.
 
 For ROS Melodic users, open the following Gazebo config file to fix an issue described [here](https://answers.gazebosim.org//question/25030/gazebo-error-restcc205-error-in-rest-request/).
 
@@ -163,7 +163,7 @@ To contribute your own custom X-Series locobot in this repo, you will need to do
 - Create a set of Gazeo/ROS position controllers similar to the ones found [here](interbotix_xslocobot_gazebo/config/position_controllers/).
 - Create a set of Gazeo/ROS trajectory controllers similar to the ones found [here](interbotix_xslocobot_gazebo/config/trajectory_controllers/).
 - Create an SRDF file for Moveit similar to the ones found [here](interbotix_xslocobot_moveit/config/srdf/). You should first use the MoveIt Setup Assistant Wizard for this step and then edit the generated SRDF file based on the structure of those files.
-- Unless you are using a custom arm, add the appropriate Screw axes and M matrices to the [mr_descriptions](https://github.com/Interbotix/interbotix_ros_toolboxes/blob/main/interbotix_xs_toolbox/interbotix_xs_modules/src/interbotix_xs_modules/mr_descriptions.py) module (syntax should be something like *mobile_XXXXX*). For help doing this, refer to Chapter 4 in [Modern Robotics](http://hades.mech.northwestern.edu/images/7/7f/MR.pdf) and [this video](https://www.youtube.com/watch?v=cKHsil0V6Qk&ab_channel=NorthwesternRobotics).
+- If you are integrating your own Dynamixel-based custom designed arm (not one of the Interbotix models), add the appropriate Screw axes and M matrices to the [mr_descriptions](https://github.com/Interbotix/interbotix_ros_toolboxes/blob/main/interbotix_xs_toolbox/interbotix_xs_modules/src/interbotix_xs_modules/mr_descriptions.py) module (syntax should be something like *mobile_XXXXX*). For help doing this, refer to Chapter 4 in [Modern Robotics](http://hades.mech.northwestern.edu/images/7/7f/MR.pdf) and [this video](https://www.youtube.com/watch?v=cKHsil0V6Qk&ab_channel=NorthwesternRobotics).
 - Make sure to follow the same naming convention, structure, and documentation procedures as found in the repo before making a PR.
 
 ## Contributors

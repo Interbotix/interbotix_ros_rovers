@@ -61,7 +61,7 @@ Follow the [assembly guide]() on our website to fully build the locobot. Note th
 To get all the code setup, refer to the computer platform types below (currently only one option, but this may change in the future) and run the appropriate installation script. Afterwards, continue with the [Installation Checks](#installation-checks) sub-section.
 
 ###### AMD64 Architecture
-If you purchased a NUC-based ROS Locobot from our website, note that it comes pre-installed with the [latest Ubuntu Desktop image (18.04.5)](https://releases.ubuntu.com/bionic/) already on it. After powering it on via the steps in the previous section, a login screen should appear with **locobot** as the user name. Conveniently, the password is the same as the user name so type *locobot* and hit **Enter**. Next, update the computer by performing the following steps.
+If you purchased a NUC-based ROS Locobot from our website, note that it comes pre-installed with [Ubuntu Desktop image (20.04)](https://releases.ubuntu.com/focal/) already on it. After powering it on via the steps in the previous section, a login screen should appear with **locobot** as the user name. Conveniently, the password is the same as the user name so type *locobot* and hit **Enter**. Next, update the computer by performing the following steps.
 
 1. Connect to the Internet. This is as simple as clicking the Wifi icon on the top right of the Desktop and selecting your desired network.
 2. Press **Ctrl-Alt-T** to open a terminal screen, and type `sudo apt update`.

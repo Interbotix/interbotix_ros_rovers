@@ -16,7 +16,7 @@
   <arg name="use_rviz"                          default="false"/>
   <arg name="rviz_frame"                        default="$(arg robot_name)/base_footprint"/>
   <arg name="use_base"                          default="$(arg use_nav)"/>
-  <arg name="dock"                              default="true"/>
+  <arg name="dock"                              default="false"/>
   <arg name="use_lidar"                         default="false"/>
   <arg name="show_lidar"                        default="$(arg use_lidar)"/>
   <arg name="use_camera"                        default="$(eval arg('use_nav') or arg('use_perception'))"/>

@@ -49,6 +49,7 @@ To further customize the launch file at run-time, refer to the table below.
 | use_rviz | launches Rviz; if you are SSH'd into the robot, DON'T set this to true | false |
 | rviz_frame | fixed frame in Rviz; this should be changed to `map` or `<robot_name>/odom` if mapping or using local odometry respectively | $(arg robot_name)/base_footprint |
 | use_base | if true, the Kobuki ROS nodes are launched | false |
+| dock | if true, loads Kobuki AutoDock features | false |
 | use_lidar | if true, the RPLidar node is launched | false |
 | show_lidar | set to true if the lidar is installed on the robot; this will load the lidar related links to the 'robot_description' parameter | $(arg use_lidar) |
 | use_camera | if true, the RealSense D435 camera nodes are launched | false |

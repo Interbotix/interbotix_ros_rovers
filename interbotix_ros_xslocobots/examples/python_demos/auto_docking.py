@@ -1,4 +1,3 @@
-import math
 from interbotix_xs_modules.locobot import InterbotixLocobotXS
 
 # This script sends the Locobot to its docking station to charge
@@ -8,7 +7,7 @@ from interbotix_xs_modules.locobot import InterbotixLocobotXS
 #       - locobot_px100
 
 # Update this value with your model
-MODEL = "locobot_px100"
+MODEL = "px100"
 
 # To get started, open a terminal on the robot and type...
 # 'roslaunch interbotix_xslocobot_control xslocobot_python.launch robot_model:=MODEL use_base:=true dock:=true'
@@ -17,7 +16,11 @@ MODEL = "locobot_px100"
 
 
 def main(): 
-    locobot = InterbotixLocobotXS(robot_model=MODEL)
+    if MODEL is not ("px100" or "base"):
+        print("This script should only be run on robots with smaller or no arms")
+        exit()
+
+    locobot = InterbotixLocobotXS(robot_model="locobot_"+MODEL, use_dock=True)
     locobot.base.auto_dock()
 
 

@@ -22,10 +22,8 @@
   <arg name="cloud_topic"                       default="/$(arg robot_name)/camera/depth/color/points"/>
 
   <arg name="use_armtag"                        default="false"/>
-  <arg name="tag_id"                            default="5"/>
-  <arg name="tag_size"                          default="0.02"/>
   <arg name="tag_family"                        default="tagStandard41h12"/>
-  <arg name="standalone_tags"                   default="[{id: $(arg tag_id), size: $(arg tag_size), name: ar_tag}]"/>
+  <arg name="standalone_tags"                   default="$(find interbotix_perception_modules)/config/tags.yaml"/>
   <arg name="camera_frame"                      default="$(arg robot_name)/camera_color_optical_frame"/>
   <arg name="apriltag_ns"                       default="$(arg robot_name)/apriltag"/>
   <arg name="camera_color_topic"                default="$(arg robot_name)/camera/color/image_raw"/>
@@ -71,8 +69,6 @@
   </include>
 
   <include if="$(arg use_armtag)" file="$(find interbotix_perception_modules)/launch/armtag.launch">
-    <arg name="tag_id"                            value="$(arg tag_id)"/>
-    <arg name="tag_size"                          value="$(arg tag_size)"/>
     <arg name="tag_family"                        value="$(arg tag_family)"/>
     <arg name="standalone_tags"                   value="$(arg standalone_tags)"/>
     <arg name="camera_frame"                      value="$(arg camera_frame)"/>

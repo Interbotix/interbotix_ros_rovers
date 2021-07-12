@@ -8,7 +8,7 @@
   <arg name="use_rviz"                          default="false"/>
   <arg name="rviz_frame"                        default="$(arg robot_name)/base_footprint"/>
   <arg name="use_base"                          default="false"/>
-  <arg name="dock"                              default="false"/>
+  <arg name="use_dock"                          default="false"/>
   <arg name="use_lidar"                         default="false"/>
   <arg name="show_lidar"                        default="$(arg use_lidar)"/>
   <arg name="use_camera"                        default="false"/>
@@ -84,7 +84,7 @@
       <rosparam command="load"                      file="$(find kobuki_node)/param/diagnostics.yaml" />
     </node>
 
-    <node if="$(arg dock)"
+    <node if="$(arg use_dock)"
       pkg="nodelet" 
       type="nodelet" 
       name="dock_drive" 

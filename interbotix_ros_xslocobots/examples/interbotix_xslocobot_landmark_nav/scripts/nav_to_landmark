@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+
+import yaml
+import rospy
+from interbotix_xs_modules.locobot import InterbotixLocobotXS as Locobot
+from interbotix_landmark_modules.landmark import Landmark, LandmarkCollection
+
+# Update this value with your model
+MODEL = "px100"
+
+
+# To get started, open a terminal on the robot and type...`
+# `roslaunch interbotix_xslocobot_landmark_nav xslocobot_landmark_nav.launch robot_model:=locobot_MODEL localization:=true`
+#                                                                                                   ^ update MODEL
+# Then open a new terminal in this directory and type 'python nav_to_landmark'
+
+class NavigationInerface(object):
+    landmarks = LandmarkCollection()
+    
+    def __init__(self, path_to_landmarks):
+        self.path_to_landmarks = path_to_landmarks
+        self.active_lm = None
+        self.tags = []
+        self.locobot = Locobot(
+            robot_model="locobot_"+MODEL, 
+            use_dock=True,
+            use_move_base_action=True)
+        self.lm_config_filepath = "/home/locobot/interbotix_ws/src/interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_landmark_modules/landmarks/landmarks.yaml"
+        self._load_landmarks()
+
+    def run(self):
+        while not rospy.is_shutdown():
+            print("Landmarks available to navigate to")
+            print(self.landmarks.data.values())
+            for lm in self.landmarks.data.values():
+                print("\t- ({}): {}".format(lm.id_, lm.label_))
+                print("\t\tgoto:")
+                print("\t\t  x:\t{}".format((lm.get_goto().x)))
+                print("\t\t  y:\t{}".format((lm.get_goto().y)))
+                print("\t\t  theta\t{}".format((lm.get_goto().theta)))
+            print("//======================//")
+
+            while True:
+                self.active_lm = int(raw_input("Choose landmark: "))
+                if self.active_lm in self.landmarks.data.keys():
+                    print(
+                        "You have chosen to nav to {}.".format(
+                            self.landmarks.data[self.active_lm].get_label()))
+                    break
+                else:
+                    print("%s is not in the list of landmarks. Choose again." 
+                        % self.active_lm)
+            x, y, yaw = self.landmarks.data[self.active_lm].get_mb_goal()
+
+            result = self.locobot.base.move_to_pose(x, y, yaw, wait=True)
+            if result:
+                print(
+                    "Successfully reached landmark {}".format(
+                        self.landmarks.data[self.active_lm].get_label()))
+                print("Go to another landmark?")
+                print("\t[y/n]")
+                more = str(raw_input("  >  "))
+                if (more != "y") or (more != "yes"):
+                    break
+
+    def _load_landmarks(self):
+        if self.landmarks.load(self.lm_config_filepath):
+            self.tags = self.landmarks.get_valid_tags()
+            print("Loaded landmarks from " + self.lm_config_filepath)
+            print(self.landmarks)
+        else:
+            exit()
+
+if __name__ == "__main__":
+    nav = NavigationInerface(path_to_landmarks="")
+    nav.run()

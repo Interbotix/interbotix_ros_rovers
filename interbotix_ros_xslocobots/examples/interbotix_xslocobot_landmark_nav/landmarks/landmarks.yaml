@@ -1,0 +1,16 @@
+5:
+  goto:
+    theta: 0.0
+    x: 0.5
+    y: 0.0
+  id: 5
+  label: landmark_1
+  set: false
+413:
+  goto:
+    theta: 0.0
+    x: 0.0
+    y: 0.25
+  id: 413
+  label: landmark_2
+  set: false

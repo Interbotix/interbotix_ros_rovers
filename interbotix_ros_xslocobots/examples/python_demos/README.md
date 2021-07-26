@@ -99,10 +99,8 @@ For reference, other launch file arguments are shown below. Depending on if you 
 | use_pointcloud_tuner_gui | whether to show a GUI that a user can use to tune filter parameters | false |
 | enable_pipeline | whether to enable the perception pipeline filters to run continuously; to save computer processing power, this should be set to False unless you are actively trying to tune the filter parameters; if False, the pipeline will only run if the `get_cluster_positions` ROS service is called | $(arg use_pointcloud_tuner_gui) |
 | cloud_topic | the absolute ROS topic name to subscribe to raw pointcloud data | /$(arg robot_name)/camera/depth/color/points |
-| tag_id | id of the AprilTag being used | 5 |
-| tag_size | size [m] of the AprilTag (as defined from one inside-corner to the opposite inside corner) | 0.02 |
 | tag_family | family to which the AprilTag belongs | tagStandard41h12 |
-| standalone_tags | individual AprilTags the algorithm should be looking for; this should not be user-set unless using multiple unique tags | refer to [xslocobot_python.launch](../../interbotix_xslocobot_control/launch/xslocobot_python.launch) |
+| standalone_tags | individual AprilTags the algorithm should be looking for | refer to [xslocobot_python.launch](../../interbotix_xslocobot_control/launch/xslocobot_python.launch) |
 | camera_frame | the camera frame in which the AprilTag will be detected | $(arg robot_name)/camera_color_optical_frame |
 | apriltag_ns | name-space where the AprilTag related nodes and parameters are located | $(arg robot_name)/apriltag |
 | camera_color_topic | the absolute ROS topic name to subscribe to color images | $(arg robot_name)/camera/color/image_raw |

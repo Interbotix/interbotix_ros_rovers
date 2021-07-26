@@ -2,6 +2,7 @@
 
 import yaml
 import rospy
+import rospkg
 from interbotix_xs_modules.locobot import InterbotixLocobotXS as Locobot
 from interbotix_landmark_modules.landmark import Landmark, LandmarkCollection
 
@@ -17,21 +18,24 @@ MODEL = "px100"
 class NavigationInerface(object):
     landmarks = LandmarkCollection()
     
-    def __init__(self, path_to_landmarks):
-        self.path_to_landmarks = path_to_landmarks
+    def __init__(self):
         self.active_lm = None
         self.tags = []
         self.locobot = Locobot(
             robot_model="locobot_"+MODEL, 
-            use_dock=True,
             use_move_base_action=True)
-        self.lm_config_filepath = "/home/locobot/interbotix_ws/src/interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_landmark_modules/landmarks/landmarks.yaml"
+        r = rospkg.RosPack()
+        pkg_path = r.get_path("interbotix_landmark_modules")
+        self.lm_config_filepath = rospy.get_param(
+            "~landmark_config",
+            "{}/landmarks/landmarks.yaml".format(pkg_path))
+        # self.lm_config_filepath = rospy.get_param()
+        # self.lm_config_filepath = "/home/locobot/interbotix_ws/src/interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_landmark_modules/landmarks/landmarks.yaml"
         self._load_landmarks()
 
     def run(self):
         while not rospy.is_shutdown():
             print("Landmarks available to navigate to")
-            print(self.landmarks.data.values())
             for lm in self.landmarks.data.values():
                 print("\t- ({}): {}".format(lm.id_, lm.label_))
                 print("\t\tgoto:")
@@ -67,10 +71,9 @@ class NavigationInerface(object):
         if self.landmarks.load(self.lm_config_filepath):
             self.tags = self.landmarks.get_valid_tags()
             print("Loaded landmarks from " + self.lm_config_filepath)
-            print(self.landmarks)
         else:
             exit()
 
 if __name__ == "__main__":
-    nav = NavigationInerface(path_to_landmarks="")
+    nav = NavigationInerface()
     nav.run()

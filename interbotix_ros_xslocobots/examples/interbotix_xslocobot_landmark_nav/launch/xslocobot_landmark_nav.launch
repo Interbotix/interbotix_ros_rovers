@@ -14,6 +14,7 @@
     <!-- rtabmap Args -->   
     <arg name="rtabmap_args"                    default=""/>
 
+    <arg name="use_lidar"                       default="true"/>
     <arg name="mapping"                         default="false"/>
     <arg name="localization"                    default="false"/>
     <arg name="landmark_config"                 default="$(find interbotix_xslocobot_landmark_nav)/landmarks/landmarks.yaml"/>
@@ -21,17 +22,16 @@
 
     <!-- Static Transform Publisher -->
     <include file="$(find interbotix_perception_modules)/launch/static_transform_pub.launch">
-        <arg name="load_transforms"                   value="false"/>
-        <arg name="save_transforms"                   value="false"/>
-        <arg name="transform_filepath"                value="$(find interbotix_xslocobot_landmark_nav)/config/static_tfs.yaml"/>
+        <arg name="load_transforms"             value="false"/>
+        <arg name="save_transforms"             value="false"/>
+        <arg name="transform_filepath"          value="$(find interbotix_xslocobot_landmark_nav)/config/static_tfs.yaml"/>
     </include>
 
     <!-- Adds /landmark TF under /map in tree -->
-    <node
-        pkg="interbotix_landmark_modules"
-        type="tf_map_to_landmark"
-        name="tf_map_to_landmark">
-    </node>
+    <include file="$(find interbotix_landmark_modules)/launch/tf_map_to_landmark.launch">
+        <arg name="fixed_frame"                 value="$(arg fixed_frame)"/>
+        <arg name="original_frame"              value="map"/>
+    </include>
 
     <!-- Mapping Functions -->
     <group if="$(arg mapping)">
@@ -42,25 +42,25 @@
             type="landmark_finder"
             name="landmark_finder"
             output="screen">
-            <param name="landmark_config" value="$(arg landmark_config)"/>
-            <param name="obs_frame" value="$(arg obs_frame)"/>
-            <param name="fixed_frame" value="$(arg fixed_frame)"/>
+            <param name="landmark_config"       value="$(arg landmark_config)"/>
+            <param name="obs_frame"             value="$(arg obs_frame)"/>
+            <param name="fixed_frame"           value="$(arg fixed_frame)"/>
         </node>
 
         <!-- AprilTag -->
         <include file="$(find interbotix_perception_modules)/launch/apriltag.launch">
-            <arg name="apriltag_ns"                             value="$(arg apriltag_ns)"/>
-            <arg name="camera_color_topic"                      value="$(arg camera_color_topic)"/>
-            <arg name="camera_info_topic"                       value="$(arg camera_info_topic)"/>
+            <arg name="apriltag_ns"             value="$(arg apriltag_ns)"/>
+            <arg name="camera_color_topic"      value="$(arg camera_color_topic)"/>
+            <arg name="camera_info_topic"       value="$(arg camera_info_topic)"/>
         </include>
 
         <!-- Interbotix Navigation -->
         <include file="$(find interbotix_xslocobot_nav)/launch/xslocobot_nav.launch">
-            <arg name="robot_model"                     value="$(arg robot_model)"/>
-            <arg name="robot_name"                      value="$(arg robot_name)"/>
-            <arg name="localization"                    value="$(arg localization)"/>
-            <arg name="rtabmap_args"                    value="$(arg rtabmap_args)"/>
-            <arg name="use_lidar"                       default="true"/>
+            <arg name="robot_model"             value="$(arg robot_model)"/>
+            <arg name="robot_name"              value="$(arg robot_name)"/>
+            <arg name="localization"            value="$(arg localization)"/>
+            <arg name="rtabmap_args"            value="$(arg rtabmap_args)"/>
+            <arg name="use_lidar"               value="$(arg use_lidar)"/>
         </include>
     </group>
 
@@ -69,12 +69,12 @@
 
         <!-- Python Control -->
         <include file="$(find interbotix_xslocobot_control)/launch/xslocobot_python.launch">
-            <arg name="robot_model"                     value="$(arg robot_model)"/>
-            <arg name="robot_name"                      value="$(arg robot_name)"/>
-            <arg name="use_base"                        value="true"/>
-            <arg name="use_nav"                         value="true"/>
-            <arg name="use_dock"                        value="true"/>
-            <arg name="use_lidar"                       value="true"/>
+            <arg name="robot_model"             value="$(arg robot_model)"/>
+            <arg name="robot_name"              value="$(arg robot_name)"/>
+            <arg name="use_base"                value="true"/>
+            <arg name="use_nav"                 value="true"/>
+            <arg name="use_dock"                value="true"/>
+            <arg name="use_lidar"               value="$(arg use_lidar)"/>
         </include>
 
         <!-- Navigation to Landmark Node -->

@@ -1,7 +1,7 @@
-# interbotix_xslocobot_landmark_nav (WIP)
+# interbotix_xslocobot_landmark_nav
 
 ## Overview
-This package builds on top of the *interbotix_xslocobot_nav* and *interbotix_landmark_modules*, and *interbotix_perception_modules* packages to provide a method to traverse the map towards points of interest (landmarks) marked by AprilTags.
+This package builds on top of the *interbotix_xslocobot_nav*, *interbotix_landmark_modules*, and *interbotix_perception_modules* packages to provide a method to traverse the map towards points of interest (landmarks) marked by AprilTags.
 
 ## Structure
 <!-- ![xslocobot_landmark_nav_flowchart](images/xslocobot_landmark_nav_flowchart.png) -->

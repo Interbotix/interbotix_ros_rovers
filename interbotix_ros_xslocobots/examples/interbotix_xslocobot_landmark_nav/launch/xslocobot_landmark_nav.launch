@@ -87,6 +87,7 @@
             pkg="interbotix_xslocobot_landmark_nav"
             type="nav_to_landmark"
             name="nav_to_landmark"
+            launch-prefix="gnome-terminal --command"
             output="screen">
             <param name="landmark_config"       value="$(arg landmark_config)"/>
         </node>

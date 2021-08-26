@@ -9,12 +9,6 @@ from interbotix_landmark_modules.landmark import Landmark, LandmarkCollection
 # Update this value with your model
 MODEL = "px100"
 
-
-# To get started, open a terminal on the robot and type...`
-# `roslaunch interbotix_xslocobot_landmark_nav xslocobot_landmark_nav.launch robot_model:=locobot_MODEL localization:=true`
-#                                                                                                   ^ update MODEL
-# Then open a new terminal in this directory and type 'python nav_to_landmark'
-
 class NavigationInerface(object):
     landmarks = LandmarkCollection()
     
@@ -25,12 +19,10 @@ class NavigationInerface(object):
             robot_model="locobot_"+MODEL, 
             use_move_base_action=True)
         r = rospkg.RosPack()
-        pkg_path = r.get_path("interbotix_landmark_modules")
+        pkg_path = r.get_path("interbotix_xslocobot_landmark_nav")
         self.lm_config_filepath = rospy.get_param(
             "~landmark_config",
             "{}/landmarks/landmarks.yaml".format(pkg_path))
-        # self.lm_config_filepath = rospy.get_param()
-        # self.lm_config_filepath = "/home/locobot/interbotix_ws/src/interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_landmark_modules/landmarks/landmarks.yaml"
         self._load_landmarks()
 
     def run(self):
@@ -38,10 +30,8 @@ class NavigationInerface(object):
             print("Landmarks available to navigate to")
             for lm in self.landmarks.data.values():
                 print("\t- ({}): {}".format(lm.id_, lm.label_))
-                print("\t\tgoto:")
-                print("\t\t  x:\t{}".format((lm.get_goto().x)))
-                print("\t\t  y:\t{}".format((lm.get_goto().y)))
-                print("\t\t  theta\t{}".format((lm.get_goto().theta)))
+                print("\t\tmounted: {}".format(lm.is_mounted()))
+                print("\t\tmounted offset:\t{}".format((lm.get_mounted_offset())))
             print("//======================//")
 
             while True:

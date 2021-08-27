@@ -10,7 +10,8 @@ from interbotix_landmark_modules.landmark import Landmark, LandmarkCollection
 MODEL = "px100"
 
 class NavigationInerface(object):
-    landmarks = LandmarkCollection()
+    landmarks = LandmarkCollection(
+        ros_on=True)
     
     def __init__(self):
         self.active_lm = None
@@ -64,6 +65,8 @@ class NavigationInerface(object):
                 print("No landmarks are set. Did your robot see any landmarks?")
                 exit()
             print("Loaded landmarks from " + self.lm_config_filepath)
+            self.landmarks.pub_markers(self.landmarks.get_set_tags())
+            self.landmarks.pub_tfs(self.landmarks.get_set_tags())
         else:
             exit()
 

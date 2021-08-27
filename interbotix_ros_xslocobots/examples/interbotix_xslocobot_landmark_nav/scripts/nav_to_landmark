@@ -28,7 +28,7 @@ class NavigationInerface(object):
     def run(self):
         while not rospy.is_shutdown():
             print("Landmarks available to navigate to")
-            for lm in self.landmarks.data.values():
+            for lm in self.set_lms:
                 print("\t- ({}): {}".format(lm.id_, lm.label_))
                 print("\t\tmounted: {}".format(lm.is_mounted()))
                 print("\t\tmounted offset:\t{}".format((lm.get_mounted_offset())))
@@ -59,7 +59,10 @@ class NavigationInerface(object):
 
     def _load_landmarks(self):
         if self.landmarks.load(self.lm_config_filepath):
-            self.tags = self.landmarks.get_valid_tags()
+            self.set_lms = self.landmarks.get_set_landmarks()
+            if len(self.set_lms) == 0:
+                print("No landmarks are set. Did your robot see any landmarks?")
+                exit()
             print("Loaded landmarks from " + self.lm_config_filepath)
         else:
             exit()

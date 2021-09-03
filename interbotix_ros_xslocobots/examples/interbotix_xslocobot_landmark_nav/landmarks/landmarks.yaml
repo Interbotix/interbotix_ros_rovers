@@ -1,0 +1,12 @@
+5:
+  id: 5
+  label: landmark_1
+  mounted: true
+  mounted_offset: 0.4
+  set: false
+413:
+  id: 413
+  label: landmark_2
+  mounted: true
+  mounted_offset: 1.0
+  set: false

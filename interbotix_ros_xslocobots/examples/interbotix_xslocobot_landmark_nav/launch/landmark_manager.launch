@@ -1,0 +1,10 @@
+<launch>
+
+    <arg name="landmark_config"                 default="$(find interbotix_xslocobot_landmark_nav)/landmarks/landmarks.yaml"/>
+
+    <!-- Landmark Manager -->
+    <include file="$(find interbotix_landmark_modules)/launch/landmark_manager.launch">
+        <arg name="landmark_config"             value="$(find interbotix_xslocobot_landmark_nav)/landmarks/landmarks.yaml"/>
+    </include>
+
+</launch>

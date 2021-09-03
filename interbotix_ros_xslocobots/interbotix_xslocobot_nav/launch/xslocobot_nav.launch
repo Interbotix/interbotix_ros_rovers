@@ -57,6 +57,7 @@
     <arg name="use_camera"                        value="true"/>
     <arg name="align_depth"                       value="true"/>
     <arg name="use_base"                          value="true"/>
+    <arg name="use_dock"                          value="true"/>
   </include>
 
   <group ns="$(arg robot_name)/rtabmap">

@@ -20,7 +20,7 @@ def main():
         print("This script should only be run on robots with smaller or no arms")
         exit()
 
-    locobot = Locobot(robot_model="locobot_"+MODEL, use_dock=True)
+    locobot = Locobot(robot_model="locobot_"+MODEL)
     locobot.base.auto_dock()
 
 

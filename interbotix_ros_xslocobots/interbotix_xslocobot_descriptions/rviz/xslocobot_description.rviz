@@ -432,6 +432,14 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: false
+    - Class: rviz/MarkerArray
+      Enabled: false
+      Marker Topic: /marker_viz
+      Name: Landmark Nav Goals
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: false
     - Class: rviz/Group
       Displays:
         - Class: rtabmap_ros/Info

@@ -13,6 +13,12 @@ Welcome to the *interbotix_ros_xslocobots* sub-repo! This sub-repository contain
 
 Finally, there is also an **examples** directory containing various demos of how the above mentioned core packages can be used. So what are you waiting for? Let's get started!
 
+<p align="center">
+  <a href=”https://www.youtube.com/watch?v=xIril2gF0-Y”>
+    <img width="410" height="auto" src="https://www.trossenrobotics.com/shared/github/github_open_source.png">
+  </a>
+</p>
+
 ## IRROS Structure
 Refer [here](https://github.com/Interbotix/interbotix_ros_core#code-structure) to get a general understanding of IRROS.
 ![xslocobot_irros_structure](images/xslocobot_irros_structure.png)
@@ -57,8 +63,20 @@ Follow the [assembly guide]() on our website to fully build the locobot. Note th
 - Turn on the computer. A red light should appear in the [U2D2](https://www.trossenrobotics.com/dynamixel-u2d2.aspx).
 - For normal operation, you could now turn on the Kobuki base by pressing the On/Off switch on the side of the platform. The base should make a chirping noise and a green 'Status' LED should appear. If the LED is yellow, this means the base must be charged. However, the base could be turned on at any time before, after, or during this power-on sequence. Also, the base does not have to be on to perform the installation below.
 
+<p align="center">
+    <a href=”https://www.youtube.com/watch?v=PQxgWxqFeZg”>
+        <img width="410" height="auto" src="https://www.trossenrobotics.com/shared/github/github_locobot_hardware.png">
+    </a>
+</p>
+
 ## Software Setup
 To get all the code setup, refer to the computer platform types below (currently only one option, but this may change in the future) and run the appropriate installation script. Afterwards, continue with the [Installation Checks](#installation-checks) sub-section.
+
+<p align="center">
+    <a href=”https://www.youtube.com/watch?v=0lnbw6n6vs4”>
+        <img width="410" height="auto" src="https://www.trossenrobotics.com/shared/github/github_locobot_software.png">
+    </a>
+</p>
 
 ###### AMD64 Architecture
 If you purchased a NUC-based ROS Locobot from our website, note that it comes pre-installed with [Ubuntu Desktop image (20.04)](https://releases.ubuntu.com/focal/) already on it. After powering it on via the steps in the previous section, a login screen should appear with **locobot** as the user name. Conveniently, the password is the same as the user name so type *locobot* and hit **Enter**. Next, update the computer by performing the following steps.

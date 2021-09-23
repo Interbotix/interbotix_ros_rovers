@@ -3,6 +3,21 @@
 ## Overview
 This package configures the ROS Navigation Stack needed to give any X-Series Interbotix Locobot platform the ability to perform simultaneous localization and mapping (a.k.a SLAM), navigation, or just localization. It can be used with just the [Intel RealSense D435](https://www.intelrealsense.com/depth-camera-d435/) camera or with both the camera and the [A2M8 RPLidar](https://www.slamtec.com/en/Lidar/A2) laser scanner. The localization and mapping part is done using the [rtabmap_ros](http://wiki.ros.org/rtabmap_ros) ROS package while the navigation part is accomplished via the [move_base](http://wiki.ros.org/move_base) ROS package. For best results, this package should be run with the robot in an indoor, uncluttered environment that does not contain too much sunlight and has minimal reflective surfaces.
 
+<table style="margin-left:auto;margin-right:auto">
+  <tr>
+    <td>
+      <a href=”https://www.youtube.com/watch?v=xIril2gF0-Y”>
+        <img width="410" height="auto" src="https://www.trossenrobotics.com/shared/github/github_in_depth_look.png">
+      </a>
+    </td>
+    <td>
+      <a href=”https://www.youtube.com/watch?v=QpSxw0tvfIo”>
+        <img width="410" height="auto" src="https://www.trossenrobotics.com/shared/github/github_SLAM.png">
+      </a>
+    </td>
+  </tr>
+</table>
+
 ## Structure
 ![xslocobot_nav_flowchart](images/xslocobot_nav_flowchart.png)
 As shown above, this package builds on top of the *interbotix_xslocobot_control* package (which starts the **xs_sdk** node), and is used in conjunction with the *rtabmap_ros* and *move_base* ROS packages. A short description of the nodes needed from those packages can be found below:

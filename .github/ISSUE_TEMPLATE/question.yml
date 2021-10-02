@@ -1,7 +1,7 @@
 name: Question
 description: Ask a question
 title: "[Question]: "
-labels: ["question", "manipulators"]
+labels: ["question", "rovers"]
 assignees:
   - LSInterbotix
 body:
@@ -21,7 +21,7 @@ body:
     attributes:
       label: Robot Model
       description: Which robot are you asking about (if any)?
-      placeholder: px_100, wx_200, etc.
+      placeholder: locobot_px100, locobot_wx200, etc.
   - type: textarea
     id: operating_system
     attributes:

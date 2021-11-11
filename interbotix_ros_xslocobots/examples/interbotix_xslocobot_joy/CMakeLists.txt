@@ -9,7 +9,7 @@ add_compile_options(-std=c++11)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   interbotix_xslocobot_control
-  message_generation
+  interbotix_xs_msgs
   joy
   std_msgs
 )
@@ -17,29 +17,13 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
-# Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  LocobotJoy.msg
-)
-
-## Generate added messages and services with any dependencies listed here
-generate_messages(
- DEPENDENCIES
- std_msgs
-)
-
 ###################################
 ## catkin specific configuration ##
 ###################################
 ## The catkin_package macro generates cmake config files for your package
 ## Declare things to be passed to dependent projects
 catkin_package(
-CATKIN_DEPENDS interbotix_xslocobot_control message_runtime joy std_msgs
+CATKIN_DEPENDS interbotix_xslocobot_control interbotix_xs_msgs joy std_msgs
 )
 
 ###########

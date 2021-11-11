@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Joy.h>
-#include "interbotix_xslocobot_joy/LocobotJoy.h"
+#include "interbotix_xs_msgs/LocobotJoy.h"
 
 static const double MAX_BASE_X = 0.7;         // Max translational motion that the Kobuki base can do is 0.7 m/s
 static const double MAX_BASE_THETA = 3.14;    // Max rotational motion that the Kobuki base can do is 3.14 rad/s
@@ -65,7 +65,7 @@ static const std::map<std::string, int> ps4 = {{"GRIPPER_PWM_DEC", 0}, // button
 
 ros::Publisher pub_joy_cmd;                                 // ROS Publisher to publish LocobotJoy messages
 ros::Subscriber sub_joy_raw;                                // ROS Subscriber to get Joy messages from the 'joy_node'
-interbotix_xslocobot_joy::LocobotJoy prev_joy_cmd;          // Keep track of the previously commanded LocobotJoy message so that only unique messages are published
+interbotix_xs_msgs::LocobotJoy prev_joy_cmd;          // Keep track of the previously commanded LocobotJoy message so that only unique messages are published
 std::map<std::string, int> cntlr;                           // Holds either the PS3 or PS4 button mappings
 std::string controller_type;                                // Holds the name of the controller received from the ROS Parameter server
 double threshold;                                           // Joystick sensitivity threshold
@@ -82,7 +82,7 @@ void joy_state_cb(const sensor_msgs::Joy &msg)
   static bool flip_ee_roll_cmd_last_state = false;
   static bool flip_ee_x_cmd = false;
   static bool flip_ee_x_cmd_last_state = false;
-  interbotix_xslocobot_joy::LocobotJoy joy_cmd;
+  interbotix_xs_msgs::LocobotJoy joy_cmd;
 
   // Check if the switch_cmd button was pressed
   if (msg.buttons.at(cntlr["SWITCH"]) == 1 && switch_cmd_last_state == false)
@@ -96,29 +96,29 @@ void joy_state_cb(const sensor_msgs::Joy &msg)
   {
     // Check the speed_cmd
     if (msg.buttons.at(cntlr["SPEED_INC"]) == 1)
-      joy_cmd.speed_cmd = interbotix_xslocobot_joy::LocobotJoy::SPEED_INC;
+      joy_cmd.speed_cmd = interbotix_xs_msgs::LocobotJoy::SPEED_INC;
     else if (msg.buttons.at(cntlr["SPEED_DEC"]) == 1)
-      joy_cmd.speed_cmd = interbotix_xslocobot_joy::LocobotJoy::SPEED_DEC;
+      joy_cmd.speed_cmd = interbotix_xs_msgs::LocobotJoy::SPEED_DEC;
 
     // Check the speed_toggle_cmd
     if (msg.buttons.at(cntlr["SPEED_COURSE"]) == 1)
-      joy_cmd.speed_toggle_cmd = interbotix_xslocobot_joy::LocobotJoy::SPEED_COURSE;
+      joy_cmd.speed_toggle_cmd = interbotix_xs_msgs::LocobotJoy::SPEED_COURSE;
     else if (msg.buttons.at(cntlr["SPEED_FINE"]) == 1)
-      joy_cmd.speed_toggle_cmd = interbotix_xslocobot_joy::LocobotJoy::SPEED_FINE;
+      joy_cmd.speed_toggle_cmd = interbotix_xs_msgs::LocobotJoy::SPEED_FINE;
   }
   else if (controller_type == "ps4")
   {
     // Check the speed_cmd
     if (msg.axes.at(cntlr["SPEED"]) == 1)
-      joy_cmd.speed_cmd = interbotix_xslocobot_joy::LocobotJoy::SPEED_INC;
+      joy_cmd.speed_cmd = interbotix_xs_msgs::LocobotJoy::SPEED_INC;
     else if (msg.axes.at(cntlr["SPEED"]) == -1)
-      joy_cmd.speed_cmd = interbotix_xslocobot_joy::LocobotJoy::SPEED_DEC;
+      joy_cmd.speed_cmd = interbotix_xs_msgs::LocobotJoy::SPEED_DEC;
 
     // Check the speed_toggle_cmd
     if (msg.axes.at(cntlr["SPEED_TYPE"]) == 1)
-      joy_cmd.speed_toggle_cmd = interbotix_xslocobot_joy::LocobotJoy::SPEED_COURSE;
+      joy_cmd.speed_toggle_cmd = interbotix_xs_msgs::LocobotJoy::SPEED_COURSE;
     else if (msg.axes.at(cntlr["SPEED_TYPE"]) == -1)
-      joy_cmd.speed_toggle_cmd = interbotix_xslocobot_joy::LocobotJoy::SPEED_FINE;
+      joy_cmd.speed_toggle_cmd = interbotix_xs_msgs::LocobotJoy::SPEED_FINE;
   }
 
   if (switch_cmd == false)
@@ -143,25 +143,25 @@ void joy_state_cb(const sensor_msgs::Joy &msg)
 
     // Check the base_reset_odom_cmd
     if (msg.buttons.at(cntlr["RESET_ODOM"]) == 1)
-      joy_cmd.base_reset_odom_cmd = interbotix_xslocobot_joy::LocobotJoy::RESET_ODOM;
+      joy_cmd.base_reset_odom_cmd = interbotix_xs_msgs::LocobotJoy::RESET_ODOM;
 
     // Check the pan_cmd
     if (msg.axes.at(cntlr["PAN"]) >= threshold)
-      joy_cmd.pan_cmd = interbotix_xslocobot_joy::LocobotJoy::PAN_CCW;
+      joy_cmd.pan_cmd = interbotix_xs_msgs::LocobotJoy::PAN_CCW;
     else if (msg.axes.at(cntlr["PAN"]) <= -threshold)
-      joy_cmd.pan_cmd = interbotix_xslocobot_joy::LocobotJoy::PAN_CW;
+      joy_cmd.pan_cmd = interbotix_xs_msgs::LocobotJoy::PAN_CW;
 
     // Check the tilt_cmd
     if (msg.axes.at(cntlr["TILT"]) >= threshold)
-      joy_cmd.tilt_cmd = interbotix_xslocobot_joy::LocobotJoy::TILT_DOWN;
+      joy_cmd.tilt_cmd = interbotix_xs_msgs::LocobotJoy::TILT_DOWN;
     else if (msg.axes.at(cntlr["TILT"]) <= -threshold)
-      joy_cmd.tilt_cmd = interbotix_xslocobot_joy::LocobotJoy::TILT_UP;
+      joy_cmd.tilt_cmd = interbotix_xs_msgs::LocobotJoy::TILT_UP;
 
     // Check if the camera pan-and-tilt mechanism should be reset
     if (msg.buttons.at(cntlr["PAN_TILT_HOME"]) == 1)
     {
-      joy_cmd.pan_cmd = interbotix_xslocobot_joy::LocobotJoy::PAN_TILT_HOME;
-      joy_cmd.tilt_cmd = interbotix_xslocobot_joy::LocobotJoy::PAN_TILT_HOME;
+      joy_cmd.pan_cmd = interbotix_xs_msgs::LocobotJoy::PAN_TILT_HOME;
+      joy_cmd.tilt_cmd = interbotix_xs_msgs::LocobotJoy::PAN_TILT_HOME;
     }
   }
   else
@@ -176,25 +176,25 @@ void joy_state_cb(const sensor_msgs::Joy &msg)
 
     // Check the ee_x_cmd
     if (msg.axes.at(cntlr["EE_X"]) >= threshold && flip_ee_x_cmd == false)
-      joy_cmd.ee_x_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_X_INC;
+      joy_cmd.ee_x_cmd = interbotix_xs_msgs::LocobotJoy::EE_X_INC;
     else if (msg.axes.at(cntlr["EE_X"]) <= -threshold && flip_ee_x_cmd == false)
-      joy_cmd.ee_x_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_X_DEC;
+      joy_cmd.ee_x_cmd = interbotix_xs_msgs::LocobotJoy::EE_X_DEC;
     else if (msg.axes.at(cntlr["EE_X"]) >= threshold && flip_ee_x_cmd == true)
-      joy_cmd.ee_x_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_X_DEC;
+      joy_cmd.ee_x_cmd = interbotix_xs_msgs::LocobotJoy::EE_X_DEC;
     else if (msg.axes.at(cntlr["EE_X"]) <= -threshold && flip_ee_x_cmd == true)
-      joy_cmd.ee_x_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_X_INC;
+      joy_cmd.ee_x_cmd = interbotix_xs_msgs::LocobotJoy::EE_X_INC;
 
     // Check the ee_y_cmd
     if (msg.buttons.at(cntlr["EE_Y_INC"]) == 1)
-      joy_cmd.ee_y_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_Y_INC;
+      joy_cmd.ee_y_cmd = interbotix_xs_msgs::LocobotJoy::EE_Y_INC;
     else if (msg.buttons.at(cntlr["EE_Y_DEC"]) == 1)
-      joy_cmd.ee_y_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_Y_DEC;
+      joy_cmd.ee_y_cmd = interbotix_xs_msgs::LocobotJoy::EE_Y_DEC;
 
     // Check the ee_z_cmd
     if (msg.axes.at(cntlr["EE_Z"]) >= threshold)
-      joy_cmd.ee_z_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_Z_INC;
+      joy_cmd.ee_z_cmd = interbotix_xs_msgs::LocobotJoy::EE_Z_INC;
     else if (msg.axes.at(cntlr["EE_Z"]) <= -threshold)
-      joy_cmd.ee_z_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_Z_DEC;
+      joy_cmd.ee_z_cmd = interbotix_xs_msgs::LocobotJoy::EE_Z_DEC;
 
     // Check if the ee_roll_cmd should be flipped
     if (msg.buttons.at(cntlr["FLIP_EE_ROLL"]) == 1 && flip_ee_roll_cmd_last_state == false)
@@ -206,43 +206,43 @@ void joy_state_cb(const sensor_msgs::Joy &msg)
 
     // Check the ee_roll_cmd
     if (msg.axes.at(cntlr["EE_ROLL"]) >= threshold && flip_ee_roll_cmd == false)
-      joy_cmd.ee_roll_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_ROLL_CW;
+      joy_cmd.ee_roll_cmd = interbotix_xs_msgs::LocobotJoy::EE_ROLL_CW;
     else if (msg.axes.at(cntlr["EE_ROLL"]) <= -threshold && flip_ee_roll_cmd == false)
-      joy_cmd.ee_roll_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_ROLL_CCW;
+      joy_cmd.ee_roll_cmd = interbotix_xs_msgs::LocobotJoy::EE_ROLL_CCW;
     else if (msg.axes.at(cntlr["EE_ROLL"]) >= threshold && flip_ee_roll_cmd == true)
-      joy_cmd.ee_roll_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_ROLL_CCW;
+      joy_cmd.ee_roll_cmd = interbotix_xs_msgs::LocobotJoy::EE_ROLL_CCW;
     else if (msg.axes.at(cntlr["EE_ROLL"]) <= -threshold && flip_ee_roll_cmd == true)
-      joy_cmd.ee_roll_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_ROLL_CW;
+      joy_cmd.ee_roll_cmd = interbotix_xs_msgs::LocobotJoy::EE_ROLL_CW;
 
     // Check the ee_pitch_cmd
     if (msg.axes.at(cntlr["EE_PITCH"]) >= threshold)
-      joy_cmd.ee_pitch_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_PITCH_UP;
+      joy_cmd.ee_pitch_cmd = interbotix_xs_msgs::LocobotJoy::EE_PITCH_UP;
     else if (msg.axes.at(cntlr["EE_PITCH"]) <= -threshold)
-      joy_cmd.ee_pitch_cmd = interbotix_xslocobot_joy::LocobotJoy::EE_PITCH_DOWN;
+      joy_cmd.ee_pitch_cmd = interbotix_xs_msgs::LocobotJoy::EE_PITCH_DOWN;
 
     // Check the waist_cmd
     if (msg.buttons.at(cntlr["WAIST_CCW"]) == 1)
-      joy_cmd.waist_cmd = interbotix_xslocobot_joy::LocobotJoy::WAIST_CCW;
+      joy_cmd.waist_cmd = interbotix_xs_msgs::LocobotJoy::WAIST_CCW;
     else if (msg.buttons.at(cntlr["WAIST_CW"]) == 1)
-      joy_cmd.waist_cmd = interbotix_xslocobot_joy::LocobotJoy::WAIST_CW;
+      joy_cmd.waist_cmd = interbotix_xs_msgs::LocobotJoy::WAIST_CW;
 
     // Check the gripper_cmd
     if (msg.buttons.at(cntlr["GRIPPER_CLOSE"]) == 1)
-      joy_cmd.gripper_cmd = interbotix_xslocobot_joy::LocobotJoy::GRIPPER_CLOSE;
+      joy_cmd.gripper_cmd = interbotix_xs_msgs::LocobotJoy::GRIPPER_CLOSE;
     else if (msg.buttons.at(cntlr["GRIPPER_OPEN"]) == 1)
-      joy_cmd.gripper_cmd = interbotix_xslocobot_joy::LocobotJoy::GRIPPER_OPEN;
+      joy_cmd.gripper_cmd = interbotix_xs_msgs::LocobotJoy::GRIPPER_OPEN;
 
     // Check the pose_cmd
     if (msg.buttons.at(cntlr["HOME_POSE"]) == 1)
-      joy_cmd.pose_cmd = interbotix_xslocobot_joy::LocobotJoy::HOME_POSE;
+      joy_cmd.pose_cmd = interbotix_xs_msgs::LocobotJoy::HOME_POSE;
     else if (msg.buttons.at(cntlr["SLEEP_POSE"]) == 1)
-      joy_cmd.pose_cmd = interbotix_xslocobot_joy::LocobotJoy::SLEEP_POSE;
+      joy_cmd.pose_cmd = interbotix_xs_msgs::LocobotJoy::SLEEP_POSE;
 
     // Check the gripper_pwm_cmd
     if (msg.buttons.at(cntlr["GRIPPER_PWM_INC"]) == 1)
-      joy_cmd.gripper_pwm_cmd = interbotix_xslocobot_joy::LocobotJoy::GRIPPER_PWM_INC;
+      joy_cmd.gripper_pwm_cmd = interbotix_xs_msgs::LocobotJoy::GRIPPER_PWM_INC;
     else if (msg.buttons.at(cntlr["GRIPPER_PWM_DEC"]) == 1)
-      joy_cmd.gripper_pwm_cmd = interbotix_xslocobot_joy::LocobotJoy::GRIPPER_PWM_DEC;
+      joy_cmd.gripper_pwm_cmd = interbotix_xs_msgs::LocobotJoy::GRIPPER_PWM_DEC;
   }
 
   // Only publish a LocobotJoy message if any of the following fields have changed.
@@ -277,7 +277,7 @@ int main(int argc, char **argv)
   else
     cntlr = ps4;
   sub_joy_raw = n.subscribe("commands/joy_raw", 10, joy_state_cb);
-  pub_joy_cmd = n.advertise<interbotix_xslocobot_joy::LocobotJoy>("commands/joy_processed", 10);
+  pub_joy_cmd = n.advertise<interbotix_xs_msgs::LocobotJoy>("commands/joy_processed", 10);
   ros::spin();
   return 0;
 }

@@ -44,13 +44,13 @@ Note, that if using a 6dof arm, it is also possible to use the `set_ee_cartesian
 To get started, open up a terminal and type (assuming the **locobot_wx250s** is being launched with the lidar shown but not active)...
 
 ```
-roslaunch interbotix_xslocobot_python xslocobot_python.launch robot_model:=locobot_wx250s show_lidar:=true
+roslaunch interbotix_xslocobot_control xslocobot_python.launch robot_model:=locobot_wx250s show_lidar:=true
 ```
 
 Note, that if you want to test out your Dynamixel-related code first on a [simulated](https://github.com/Interbotix/interbotix_ros_core/tree/main/interbotix_ros_xseries/interbotix_xs_sdk#overview) robot, you can type...
 
 ```
-roslaunch interbotix_xslocobot_python xslocobot_python.launch robot_model:=locobot_wx250s show_lidar:=true use_sim:=true
+roslaunch interbotix_xslocobot_control xslocobot_python.launch robot_model:=locobot_wx250s show_lidar:=true use_sim:=true
 ```
 
 In another terminal, navigate to this directory and type...

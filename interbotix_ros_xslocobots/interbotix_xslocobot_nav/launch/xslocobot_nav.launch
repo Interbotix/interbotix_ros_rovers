@@ -180,7 +180,7 @@
     pkg="rostopic"
     type="rostopic"
     name="camera_tilt"
-    args="pub -1 commands/joint_group interbotix_xs_sdk/JointGroupCommand --latch '{name: 'camera', cmd: [0, $(arg camera_tilt_angle)]}'"
+    args="pub -1 commands/joint_group interbotix_xs_msgs/JointGroupCommand --latch '{name: 'camera', cmd: [0, $(arg camera_tilt_angle)]}'"
     ns="$(arg robot_name)">
   </node>
 

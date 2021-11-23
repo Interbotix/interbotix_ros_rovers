@@ -30,10 +30,10 @@ sudo apt -y autoremove
 sudo apt -y install openssh-server curl
 if [ $ROS_NAME != "noetic" ]; then
   sudo apt -y install python-pip
-  sudo -H pip install modern_robotics
+  sudo -H pip install modern_robotics six
 else
   sudo apt -y install python3-pip
-  sudo -H pip3 install modern_robotics
+  sudo -H pip3 install modern_robotics six
 fi
 
 # Step 1: Install ROS

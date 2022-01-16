@@ -26,6 +26,9 @@
   <arg name="external_srdf_loc" default=""/>
   <arg name="dof" default=""/>
   <arg name="use_camera" default=""/>
+  <arg name="pipeline" default="ompl" />
+
+
 
   <include file="$(find interbotix_xslocobot_moveit)/launch/planning_context.launch">
     <arg name="robot_model"        value="$(arg robot_model)"/>
@@ -52,9 +55,34 @@
   -->
 
     <!-- Planning Functionality -->
-    <include ns="move_group" file="$(find interbotix_xslocobot_moveit)/launch/planning_pipeline.launch.xml">
+    
+  <!-- Planning Pipelines -->
+  <!-- <group ns="move_group"> -->
+
+    <!-- OMPL -->
+    <include ns="move_group/planning_pipelines" file="$(find interbotix_xslocobot_moveit)/launch/planning_pipeline.launch.xml">
       <arg name="pipeline" value="ompl" />
     </include>
+
+    <!-- CHOMP -->
+    <!-- <include file="$(dirname)/planning_pipeline.launch.xml">
+      <arg name="pipeline" value="chomp" />
+    </include> -->
+
+    <!-- Pilz Industrial Motion -->
+    <!-- <include file="$(dirname)/planning_pipeline.launch.xml">
+      <arg name="pipeline" value="pilz_industrial_motion_planner" />
+    </include> -->
+
+    <!-- Support custom planning pipeline -->
+    <!-- <include if="$(eval arg('pipeline') not in ['ompl', 'chomp', 'pilz_industrial_motion_planner'])"
+             file="$(dirname)/planning_pipeline.launch.xml">
+      <arg name="pipeline" value="$(arg pipeline)" />
+    </include> -->
+  <!-- </group> -->
+    <!-- <include ns="move_group/planning_pipelines" file="$(find interbotix_xslocobot_moveit)/launch/planning_pipeline.launch.xml">
+      <arg name="pipeline" value="ompl" />
+    </include> -->
 
     <!-- Trajectory Execution Functionality -->
     <include ns="move_group" file="$(find interbotix_xslocobot_moveit)/launch/trajectory_execution.launch.xml" if="$(arg allow_trajectory_execution)">
@@ -75,7 +103,8 @@
       <env name="DISPLAY" value="$(optenv DISPLAY :0)" />
 
       <param name="allow_trajectory_execution" value="$(arg allow_trajectory_execution)"/>
-      <param name="max_safe_path_cost" value="$(arg max_safe_path_cost)"/>
+      <param name="sense_for_plan/max_safe_path_cost" value="$(arg max_safe_path_cost)"/>
+        <param name="default_planning_pipeline" value="$(arg pipeline)" />
       <param name="jiggle_fraction" value="$(arg jiggle_fraction)" />
       <param name="capabilities" value="$(arg capabilities)"/>
       <param name="disable_capabilities" value="$(arg disable_capabilities)"/>

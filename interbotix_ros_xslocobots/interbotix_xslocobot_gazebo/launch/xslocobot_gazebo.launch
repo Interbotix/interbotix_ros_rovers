@@ -17,14 +17,14 @@
   <arg name="use_sim_time"                      default="true"/>
   <arg name="use_position_controllers"          default="false"/>
   <arg name="use_trajectory_controllers"        default="false"/>
-  <arg name="dof"                               default="5"/>
+  <arg name="dof"                               default="6"/>
 
   <env name="GAZEBO_RESOURCE_PATH"              value="$(find interbotix_xslocobot_gazebo)"/>
-
-  <rosparam file="$(find interbotix_xslocobot_gazebo)/config/locobot_gazebo_controllers.yaml" command="load" ns="$(arg robot_name)"/>
+  <!-- ns="$(arg robot_name)" -->
+  <rosparam file="$(find interbotix_xslocobot_gazebo)/config/locobot_gazebo_controllers.yaml" command="load"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name"                        value="$(arg world_name)"/>
+    <arg name="world_name" value="$(find gazebo_ros)/worlds/xslocobot_gazebo.world"/>
     <arg name="gui"                               value="$(arg gui)" />
     <arg name="debug"                             value="$(arg debug)" />
     <arg name="paused"                            value="$(arg paused)"/>
@@ -33,16 +33,17 @@
   </include>
 
   <group if="$(eval robot_model != 'locobot_base')">
-
+    <!-- ns="$(arg robot_name)" -->
     <group if="$(arg use_trajectory_controllers)">
-      <rosparam file="$(find interbotix_xslocobot_gazebo)/config/trajectory_controllers/$(arg arm_model)_trajectory_controllers.yaml" command="load" ns="$(arg robot_name)"/>
+    <!-- ns="$(arg robot_name)" -->
+      <rosparam file="$(find interbotix_xslocobot_gazebo)/config/trajectory_controllers/$(arg arm_model)_trajectory_controllers.yaml" command="load" />
       <node
         name="controller_spawner"
         pkg="controller_manager"
         type="controller_manager"
         respawn="false"
         output="screen"
-        ns="$(arg robot_name)"
+    
         args="spawn arm_controller gripper_controller pan_controller tilt_controller joint_state_controller"/>
     </group>
 
@@ -72,13 +73,15 @@
                     left_finger_controller right_finger_controller pan_controller
                     tilt_controller"/>
 
+
+           <!-- ns="$(arg robot_name)" -->
       <node if="$(eval dof == 6)"
         name="controller_spawner"
         pkg="controller_manager"
         type="controller_manager"
         respawn="false"
         output="screen"
-        ns="$(arg robot_name)"
+   
         args="spawn joint_state_controller waist_controller shoulder_controller
                     elbow_controller forearm_roll_controller wrist_angle_controller
                     wrist_rotate_controller left_finger_controller right_finger_controller
@@ -86,14 +89,14 @@
     </group>
 
   </group>
-
+    <!-- ns="$(arg robot_name)" -->
   <node unless="$(eval robot_model != 'locobot_base')"
     name="controller_spawner"
     pkg="controller_manager"
     type="controller_manager"
     respawn="false"
     output="screen"
-    ns="$(arg robot_name)"
+
     args="spawn pan_controller tilt_controller joint_state_controller"/>
 
   <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
@@ -107,14 +110,15 @@
     <arg name="use_rviz"                          value="$(arg use_rviz)"/>
     <arg name="rviz_frame"                        value="$(arg rviz_frame)"/>
   </include>
-
+    <!-- ns="$(arg robot_name)" -->
   <node
     name="urdf_spawner"
     pkg="gazebo_ros"
     type="spawn_model"
     respawn="false"
     output="screen"
-    ns="$(arg robot_name)"
-	  args="-urdf -model $(arg robot_name) -param robot_description"/>
 
+	  args="-urdf -model $(arg robot_name) -param robot_description"/>
+ <!-- args="-urdf -model $(arg robot_name) -param robot_description -x 0 -y 0 -z 0 -J elbow -1.5708"/> -->
 </launch>
+

@@ -10,80 +10,84 @@
 
 <!-- ********************************** Arm **********************************  -->
 
-  <gazebo reference="$(arg robot_name)/plate_link">
+  <gazebo reference="$(arg robot_name)_plate_link">
     <material>Custom/Interbotix</material>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/arm_base_link">
-    <material>Custom/Interbotix</material>
-    <dampingFactor>0.01</dampingFactor>
-  </gazebo>
-
-  <gazebo reference="$(arg robot_name)/shoulder_link">
+  <gazebo reference="$(arg robot_name)_arm_base_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
-    <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/upper_arm_link">
+  <gazebo reference="$(arg robot_name)_shoulder_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/forearm_link">
+  <gazebo reference="$(arg robot_name)_upper_arm_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/upper_forearm_link">
+  <gazebo reference="$(arg robot_name)_forearm_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/lower_forearm_link">
+  <gazebo reference="$(arg robot_name)_upper_forearm_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/wrist_link">
+  <gazebo reference="$(arg robot_name)_lower_forearm_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/gripper_link">
+  <gazebo reference="$(arg robot_name)_wrist_link">
+    <material>Custom/Interbotix</material>
+    <dampingFactor>0.01</dampingFactor>
+    <self_collide>true</self_collide>
+  </gazebo>
+
+  <gazebo reference="$(arg robot_name)_gripper_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/ar_tag_link">
+  <gazebo reference="$(arg robot_name)_ar_tag_link">
     <material>Custom/Interbotix</material>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/gripper_prop_link">
+  <gazebo reference="$(arg robot_name)_gripper_prop_link">
     <dampingFactor>0.01</dampingFactor>
     <material>Custom/Interbotix</material>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/gripper_bar_link">
+  <gazebo reference="$(arg robot_name)_gripper_bar_link">
     <material>Custom/Interbotix</material>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/left_finger_link">
-    <material>Custom/Interbotix</material>
-    <dampingFactor>0.01</dampingFactor>
-  </gazebo>
-
-  <gazebo reference="$(arg robot_name)/right_finger_link">
+  <gazebo reference="$(arg robot_name)_left_finger_link">
     <material>Custom/Interbotix</material>
     <dampingFactor>0.01</dampingFactor>
+    <mu1>100.0</mu1>
+    <mu2>100.0</mu2>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/arm_cradle_link">
+  <gazebo reference="$(arg robot_name)_right_finger_link">
+    <material>Custom/Interbotix</material>
+    <dampingFactor>0.01</dampingFactor>
+    <mu1>100.0</mu1>
+    <mu2>100.0</mu2>
+  </gazebo>
+
+  <gazebo reference="$(arg robot_name)_arm_cradle_link">
     <material>Custom/Interbotix</material>
   </gazebo>
 
@@ -121,34 +125,34 @@
 
 <!-- ********************************** Base **********************************  -->
 
-  <gazebo reference="$(arg robot_name)/battery_link">
+  <gazebo reference="$(arg robot_name)_battery_link">
     <material>Gazebo/Grey</material>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/camera_tower_link">
+  <gazebo reference="$(arg robot_name)_camera_tower_link">
     <material>Custom/Interbotix</material>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/pan_link">
-    <material>Custom/Interbotix</material>
-    <self_collide>true</self_collide>
-  </gazebo>
-
-  <gazebo reference="$(arg robot_name)/tilt_link">
+  <gazebo reference="$(arg robot_name)_pan_link">
     <material>Custom/Interbotix</material>
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/camera_link">
+  <gazebo reference="$(arg robot_name)_tilt_link">
+    <material>Custom/Interbotix</material>
+    <self_collide>true</self_collide>
+  </gazebo>
+
+  <gazebo reference="$(arg robot_name)_camera_link">
     <material>Gazebo/Grey</material>
     <self_collide>true</self_collide>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/lidar_tower_link">
+  <gazebo reference="$(arg robot_name)_lidar_tower_link">
     <material>Custom/Interbotix</material>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/laser_frame_link">
+  <gazebo reference="$(arg robot_name)_laser_frame_link">
     <material>Custom/Interbotix</material>
   </gazebo>
 
@@ -177,7 +181,7 @@
      the ones used in the URDFs, but not sure exactly sure how all these plugins work...-->
 
 <!-- camera -->
-  <gazebo reference="$(arg robot_name)/camera_link">
+  <gazebo reference="$(arg robot_name)_camera_link">
       <sensor name="camera_frame_sensor" type="depth">
           <always_on>true</always_on>
           <update_rate>30.0</update_rate>
@@ -221,7 +225,7 @@
 <!-- Gazebo plugins for the base of the robot -->
 <!--     <gazebo><plugin name="kobuki_controller" filename="libgazebo_ros_kobuki.so"><publish_tf>1</publish_tf><left_wheel_joint_name>wheel_left_joint</left_wheel_joint_name><right_wheel_joint_name>wheel_right_joint</right_wheel_joint_name><wheel_separation>.230</wheel_separation><wheel_diameter>0.070</wheel_diameter><torque>1.0</torque><velocity_command_timeout>0.6</velocity_command_timeout><cliff_sensor_left_name>cliff_sensor_left</cliff_sensor_left_name><cliff_sensor_center_name>cliff_sensor_front</cliff_sensor_center_name><cliff_sensor_right_name>cliff_sensor_right</cliff_sensor_right_name><cliff_detection_threshold>0.04</cliff_detection_threshold><bumper_name>bumpers</bumper_name><imu_name>imu</imu_name></plugin></gazebo>-->
 
-  <gazebo reference="$(arg robot_name)/wheel_left_link">
+  <gazebo reference="$(arg robot_name)_wheel_left_link">
       <mu1>1.0</mu1>
       <mu2>1.0</mu2>
       <kp>1000000.0</kp>
@@ -230,7 +234,7 @@
       <maxVel>1.0</maxVel>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/wheel_right_link">
+  <gazebo reference="$(arg robot_name)_wheel_right_link">
       <mu1>1.0</mu1>
       <mu2>1.0</mu2>
       <kp>1000000.0</kp>
@@ -239,7 +243,7 @@
       <maxVel>1.0</maxVel>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/caster_front_link">
+  <gazebo reference="$(arg robot_name)_caster_front_link">
       <mu1>0.0</mu1>
       <mu2>0.0</mu2>
       <kp>1000000.0</kp>
@@ -248,7 +252,7 @@
       <maxVel>1.0</maxVel>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/caster_back_link">
+  <gazebo reference="$(arg robot_name)_caster_back_link">
     <mu1>0.0</mu1>
     <mu2>0.0</mu2>
     <kp>1000000.0</kp>
@@ -257,7 +261,7 @@
     <maxVel>1.0</maxVel>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/cliff_sensor_left_link">
+  <gazebo reference="$(arg robot_name)_cliff_sensor_left_link">
       <sensor name="cliff_sensor_left" type="ray">
           <always_on>true</always_on>
           <update_rate>50</update_rate>
@@ -282,7 +286,7 @@
       </sensor>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/cliff_sensor_right_link">
+  <gazebo reference="$(arg robot_name)_cliff_sensor_right_link">
       <sensor name="cliff_sensor_right" type="ray">
           <always_on>true</always_on>
           <update_rate>50</update_rate>
@@ -307,7 +311,7 @@
       </sensor>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/cliff_sensor_front_link">
+  <gazebo reference="$(arg robot_name)_cliff_sensor_front_link">
       <sensor name="cliff_sensor_front" type="ray">
           <always_on>true</always_on>
           <update_rate>50</update_rate>
@@ -332,7 +336,7 @@
       </sensor>
   </gazebo>
 
-  <gazebo reference="$(arg robot_name)/base_link">
+  <gazebo reference="$(arg robot_name)_base_link">
       <mu1>0.3</mu1>
       <mu2>0.3</mu2>
       <sensor type="contact" name="bumpers">
@@ -346,7 +350,7 @@
   </gazebo>
 
 
-  <gazebo reference="$(arg robot_name)/gyro_link">
+  <gazebo reference="$(arg robot_name)_gyro_link">
       <sensor name="imu" type="imu">
           <always_on>true</always_on>
           <update_rate>50</update_rate>
@@ -419,7 +423,7 @@
     <plugin filename="libgazebo_ros_p3d.so" name="p3d_base_controller">
         <alwaysOn>true</alwaysOn>
         <updateRate>100.0</updateRate>
-        <bodyName>$(arg robot_name)/base_link</bodyName>
+        <bodyName>$(arg robot_name)_base_link</bodyName>
         <topicName>base/absolute_position</topicName>
         <gaussianNoise>0</gaussianNoise>
         <frameName>map</frameName>

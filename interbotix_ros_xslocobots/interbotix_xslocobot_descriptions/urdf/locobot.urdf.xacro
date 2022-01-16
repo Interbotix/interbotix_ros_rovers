@@ -27,16 +27,21 @@
   </material>
 
     <!-- ********************************** Kobuki ********************************** -->
+  <link name="world"/>
+   <joint name="virtual_joint" type="fixed">
+   <parent link="world"/>
+   <child link="$(arg robot_name)_base_footprint"/>
+  </joint>
 
-  <link name="$(arg robot_name)/base_footprint"/>
+  <link name="$(arg robot_name)_base_footprint"/>
 
   <joint name="base_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0.0102"/>
-    <parent link="$(arg robot_name)/base_footprint"/>
-    <child link="$(arg robot_name)/base_link"/>
+    <parent link="$(arg robot_name)_base_footprint"/>
+    <child link="$(arg robot_name)_base_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/base_link">
+  <link name="$(arg robot_name)_base_link">
     <visual>
       <origin rpy="0 0 0" xyz="0.001 0 0.05199"/>
       <geometry>
@@ -45,9 +50,12 @@
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 0 0.05949"/>
-      <geometry>
-        <cylinder length="0.10938" radius="0.178"/>
+       <geometry>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_main_body.dae"/>
       </geometry>
+      <!-- <geometry>
+        <cylinder length="0.10938" radius="0.178"/>
+      </geometry> -->
     </collision>
     <inertial>
       <origin rpy="0 0 0" xyz="0.01 0 0"/>
@@ -59,8 +67,8 @@
   <joint name="wheel_left_joint" type="continuous">
     <axis xyz="0 0 1"/>
     <origin rpy="-1.57079632679 0 0" xyz="0.00 0.115 0.0250"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/wheel_left_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_wheel_left_link"/>
   </joint>
 
   <transmission name="trans_wheel_left_joint">
@@ -73,7 +81,7 @@
     </actuator>
   </transmission>
 
-  <link name="$(arg robot_name)/wheel_left_link">
+  <link name="$(arg robot_name)_wheel_left_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -96,8 +104,8 @@
   <joint name="wheel_right_joint" type="continuous">
     <axis xyz="0 0 1"/>
     <origin rpy="-1.57079632679 0 0" xyz="0.00 -0.115 0.0250"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/wheel_right_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_wheel_right_link"/>
   </joint>
 
   <transmission name="trans_wheel_right_joint">
@@ -110,7 +118,7 @@
     </actuator>
   </transmission>
 
-  <link name="$(arg robot_name)/wheel_right_link">
+  <link name="$(arg robot_name)_wheel_right_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -132,11 +140,11 @@
 
   <joint name="caster_front_joint" type="fixed">
     <origin rpy="-1.57079632679 0 0" xyz="0.115 0.0 0.007"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/caster_front_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_caster_front_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/caster_front_link">
+  <link name="$(arg robot_name)_caster_front_link">
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -152,11 +160,11 @@
 
   <joint name="caster_back_joint" type="fixed">
     <origin rpy="-1.57079632679 0 0" xyz="-0.135 0.0 0.009"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/caster_back_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_caster_back_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/caster_back_link">
+  <link name="$(arg robot_name)_caster_back_link">
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -172,11 +180,11 @@
 
   <joint name="gyro_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.056 0.062 0.0202"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/gyro_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_gyro_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/gyro_link">
+  <link name="$(arg robot_name)_gyro_link">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.001"/>
@@ -186,11 +194,11 @@
 
   <joint name="cliff_sensor_left_joint" type="fixed">
     <origin rpy="0 1.57079632679 0" xyz="0.08734 0.13601 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_left_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_cliff_sensor_left_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/cliff_sensor_left_link">
+  <link name="$(arg robot_name)_cliff_sensor_left_link">
     <inertial>
       <mass value="0.0001"/>
       <origin xyz="0 0 0"/>
@@ -200,11 +208,11 @@
 
   <joint name="cliff_sensor_right_joint" type="fixed">
     <origin rpy="0 1.57079632679 0" xyz="0.085 -0.13601 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_right_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_cliff_sensor_right_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/cliff_sensor_right_link">
+  <link name="$(arg robot_name)_cliff_sensor_right_link">
     <inertial>
       <origin xyz="0 0 0"/>
       <mass value="0.0001"/>
@@ -214,11 +222,11 @@
 
   <joint name="cliff_sensor_front_joint" type="fixed">
     <origin rpy="0 1.57079632679 0" xyz="0.156 0.00 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_front_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_cliff_sensor_front_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/cliff_sensor_front_link">
+  <link name="$(arg robot_name)_cliff_sensor_front_link">
     <inertial>
       <mass value="0.0001"/>
       <origin xyz="0 0 0"/>
@@ -230,11 +238,11 @@
 
   <joint name="plate" type="fixed">
     <origin rpy="0 0 0" xyz="0.0 0 0.08825"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/plate_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_plate_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/plate_link">
+  <link name="$(arg robot_name)_plate_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -264,11 +272,11 @@
       <joint name="arm_cradle" type="fixed">
          <axis xyz="0 0 0"/>
          <origin rpy="0 0 0" xyz="0.0215 0 0.1195"/>
-         <parent link="$(arg robot_name)/camera_tower_link"/>
-         <child link="$(arg robot_name)/arm_cradle_link"/>
+         <parent link="$(arg robot_name)_camera_tower_link"/>
+         <child link="$(arg robot_name)_arm_cradle_link"/>
       </joint>
 
-     <link name="$(arg robot_name)/arm_cradle_link">
+     <link name="$(arg robot_name)_arm_cradle_link">
        <visual>
          <origin rpy="0 0 0" xyz="0 0 0"/>
          <geometry>
@@ -297,11 +305,11 @@
 
   <joint name="battery" type="fixed">
     <origin rpy="0 0 0" xyz="-0.007 0 0.0125"/>
-    <parent link="$(arg robot_name)/plate_link"/>
-    <child link="$(arg robot_name)/battery_link"/>
+    <parent link="$(arg robot_name)_plate_link"/>
+    <child link="$(arg robot_name)_battery_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/battery_link">
+  <link name="$(arg robot_name)_battery_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -327,12 +335,12 @@
   <!-- ********************************** Camera Tower **********************************  -->
   <joint name="camera_tower" type="fixed">
     <origin rpy="0 0 0" xyz="-0.023997 -0.000044 0.08823"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/camera_tower_link"/>
+    <parent link="$(arg robot_name)_base_link"/>
+    <child link="$(arg robot_name)_camera_tower_link"/>
   </joint>
 
   <xacro:if value="${arm_type == 'mobile_wx250s'}">
-    <link name="$(arg robot_name)/camera_tower_link">
+    <link name="$(arg robot_name)_camera_tower_link">
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
@@ -355,7 +363,7 @@
   </xacro:if>
 
   <xacro:unless value="${arm_type == 'mobile_wx250s'}">
-    <link name="$(arg robot_name)/camera_tower_link">
+    <link name="$(arg robot_name)_camera_tower_link">
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
@@ -388,8 +396,8 @@
     <xacro:unless value="${arm_type == 'mobile_wx250s'}">
       <origin rpy="0 0 0" xyz="0.047228 0 0.38425"/>
     </xacro:unless>
-    <parent link="$(arg robot_name)/camera_tower_link"/>
-    <child link="$(arg robot_name)/pan_link"/>
+    <parent link="$(arg robot_name)_camera_tower_link"/>
+    <child link="$(arg robot_name)_pan_link"/>
   </joint>
 
   <transmission name="trans_pan">
@@ -402,7 +410,7 @@
     </actuator>
   </transmission>
 
-  <link name="$(arg robot_name)/pan_link">
+  <link name="$(arg robot_name)_pan_link">
     <visual>
       <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
       <geometry>
@@ -427,8 +435,8 @@
     <axis xyz="0 1 0"/>
     <limit effort="2" lower="${-pi/2}" upper="${radians(75)}" velocity="${pi}"/>
     <origin rpy="0 0 0" xyz="0.025034 0 0.019"/>
-    <parent link="$(arg robot_name)/pan_link"/>
-    <child link="$(arg robot_name)/tilt_link"/>
+    <parent link="$(arg robot_name)_pan_link"/>
+    <child link="$(arg robot_name)_tilt_link"/>
   </joint>
 
   <transmission name="trans_tilt">
@@ -441,7 +449,7 @@
     </actuator>
   </transmission>
 
-  <link name="$(arg robot_name)/tilt_link">
+  <link name="$(arg robot_name)_tilt_link">
     <visual>
       <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
       <geometry>
@@ -464,11 +472,11 @@
 
   <joint name="camera" type="fixed">
     <origin rpy="0 0 0" xyz="0.05318 0.0175 0.000009"/>
-    <parent link="$(arg robot_name)/tilt_link"/>
-    <child link="$(arg robot_name)/camera_link"/>
+    <parent link="$(arg robot_name)_tilt_link"/>
+    <child link="$(arg robot_name)_camera_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/camera_link">
+  <link name="$(arg robot_name)_camera_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -502,11 +510,11 @@
       <xacro:unless value="${arm_type == 'mobile_wx250s'}">
         <origin rpy="0 0 0" xyz="-0.074 0 0.38425"/>
       </xacro:unless>
-      <parent link="$(arg robot_name)/camera_tower_link"/>
-      <child link="$(arg robot_name)/lidar_tower_link"/>
+      <parent link="$(arg robot_name)_camera_tower_link"/>
+      <child link="$(arg robot_name)_lidar_tower_link"/>
     </joint>
 
-    <link name="$(arg robot_name)/lidar_tower_link">
+    <link name="$(arg robot_name)_lidar_tower_link">
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
@@ -529,11 +537,11 @@
 
     <joint name="lidar" type="fixed">
       <origin rpy="0 0 ${pi}" xyz="0 0 0.09425"/>
-      <parent link="$(arg robot_name)/lidar_tower_link"/>
-      <child link="$(arg robot_name)/laser_frame_link"/>
+      <parent link="$(arg robot_name)_lidar_tower_link"/>
+      <child link="$(arg robot_name)_laser_frame_link"/>
     </joint>
 
-    <link name="$(arg robot_name)/laser_frame_link">
+    <link name="$(arg robot_name)_laser_frame_link">
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>

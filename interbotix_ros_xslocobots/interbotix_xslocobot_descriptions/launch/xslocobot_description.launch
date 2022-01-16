@@ -25,13 +25,14 @@
                                                          external_urdf_loc:=$(arg external_urdf_loc)
                                                          load_gazebo_configs:=$(arg load_gazebo_configs)"/>
 
-  <param name="$(arg robot_name)/robot_description" command="xacro $(arg model)"/>
+  <!-- <param name="$(arg robot_name)/robot_description" command="xacro $(arg model)"/> -->
+   <param name="robot_description" command="xacro $(arg model)"/>
 
   <node if="$(arg use_joint_pub)"
     name="joint_state_publisher"
     pkg="joint_state_publisher"
-    type="joint_state_publisher"
-    ns="$(arg robot_name)">
+    type="joint_state_publisher">
+    <!-- ns="$(arg robot_name)"> -->
     <param name="rate" value="$(arg rate)"/>
     <rosparam param="source_list" subst_value="True">$(arg source_list)</rosparam>
   </node>
@@ -39,23 +40,23 @@
   <node if="$(arg use_joint_pub_gui)"
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"
-    type="joint_state_publisher_gui"
-    ns="$(arg robot_name)">
+    type="joint_state_publisher_gui">
+    <!-- ns="$(arg robot_name)"> -->
   </node>
 
   <node
     name="robot_state_publisher"
     pkg="robot_state_publisher"
-    type="robot_state_publisher"
-    ns="$(arg robot_name)">
+    type="robot_state_publisher">
+    <!-- ns="$(arg robot_name)"> -->
   </node>
 
   <node if="$(arg use_rviz)"
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-f $(arg rviz_frame) -d $(arg rvizconfig)"
-    ns="$(arg robot_name)">
+    args="-f $(arg rviz_frame) -d $(arg rvizconfig)">
+    <!-- ns="$(arg robot_name)"> -->
     <remap from="/clicked_point" to="clicked_point"/>
     <remap from="/initialpose" to="initialpose"/>
     <remap from="/move_base_simple/goal" to="move_base_simple/goal"/>

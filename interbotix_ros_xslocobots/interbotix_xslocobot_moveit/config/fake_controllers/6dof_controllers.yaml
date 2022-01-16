@@ -1,5 +1,6 @@
 controller_list:
   - name: fake_interbotix_arm_controller
+    type: interpolate
     joints:
       - waist
       - shoulder
@@ -8,5 +9,13 @@ controller_list:
       - wrist_angle
       - wrist_rotate
   - name: fake_interbotix_gripper_controller
+    type: interpolate
     joints:
+      # - right_finger
       - left_finger
+
+initial:  # Define initial robot poses per group
+  - group: interbotix_arm
+    pose: Home
+  - group: interbotix_hand
+    pose: Home

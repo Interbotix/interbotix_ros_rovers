@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="robot_model"                       default=""/>
+  <arg name="robot_model"                       default="locobot_wx250s"/>
   <arg name="robot_name"                        default="locobot"/>
   <arg name="show_lidar"                        default="false"/>
   <arg name="external_urdf_loc"                 default=""/>
@@ -9,7 +9,7 @@
   <arg name="use_gazebo"                        default="false"/>
   <arg name="use_actual"                        default="false"/>
   <arg name="use_fake"                          default="false"/>
-  <arg name="dof"                               default="5"/>
+  <arg name="dof"                               default="6"/>
   <arg name="use_camera"                        default="false"/>
   <arg name="use_moveit_rviz"                   default="true"/>
   <arg name="world_name"                        default="$(find interbotix_xslocobot_gazebo)/worlds/xslocobot_gazebo.world"/>
@@ -45,7 +45,10 @@
     <arg name="source_list"                       value="[move_group/fake_controller_joint_states]"/>
   </include>
 
-  <include file="$(find interbotix_xslocobot_moveit)/launch/move_group.launch" ns="$(arg robot_name)">
+    <!-- If needed, broadcast static tf for robot root -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 world locobot/base_footprint" />
+  <!-- <include file="$(find interbotix_xslocobot_moveit)/launch/move_group.launch" ns="$(arg robot_name)"> -->
+   <include file="$(find interbotix_xslocobot_moveit)/launch/move_group.launch" >
     <arg name="robot_model"                       value="$(arg robot_model)"/>
     <arg name="robot_name"                        value="$(arg robot_name)"/>
     <arg name="show_lidar"                        value="$(arg show_lidar)"/>
@@ -55,10 +58,12 @@
     <arg name="fake_execution"                    value="$(arg use_fake)"/>
     <arg name="publish_monitored_planning_scene"  value="true" />
   </include>
-
-  <include if="$(arg use_moveit_rviz)" file="$(find interbotix_xslocobot_moveit)/launch/moveit_rviz.launch" ns="$(arg robot_name)">
+  <include if="$(arg use_moveit_rviz)" file="$(find interbotix_xslocobot_moveit)/launch/moveit_rviz.launch">
+  <!-- <include if="$(arg use_moveit_rviz)" file="$(find interbotix_xslocobot_moveit)/launch/moveit_rviz.launch" ns="$(arg robot_name)"> -->
     <arg name="robot_name"                        value="$(arg robot_name)"/>
-    <arg name="config"                            value="true"/>
+    <arg name="rviz_config" value=" $(find interbotix_xslocobot_moveit)/launch/moveit.rviz" />
+    <!-- <arg name="config"                            value="true"/> -->
+   
   </include>
 
 </launch>

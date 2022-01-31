@@ -193,22 +193,22 @@
                   <height>480</height>
               </image>
               <clip>
-                  <near>0.01</near>
-                  <far>10</far>
+                  <near>0.4</near>
+                  <far>10.0</far>
               </clip>
           </camera>
           <plugin filename="libgazebo_ros_openni_kinect.so" name="camera_frame_controller">
               <alwaysOn>true</alwaysOn>
               <updateRate>0.0</updateRate>
               <cameraName>camera</cameraName>
-              <imageTopicName>color/image_raw</imageTopicName>
-              <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
-              <depthImageTopicName>aligned_depth_to_color/image_raw</depthImageTopicName>
-              <depthImageCameraInfoTopicName>aligned_depth_to_color/camera_info</depthImageCameraInfoTopicName>
-              <pointCloudTopicName>depth_registered/points</pointCloudTopicName>
-              <frameName>camera_color_optical_frame</frameName>
-              <pointCloudCutoff>10</pointCloudCutoff>
-              <distortionK1>0.00000001</distortionK1>
+              <imageTopicName>rgb/image_raw</imageTopicName>
+              <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
+              <depthImageTopicName>depth/image_raw</depthImageTopicName>
+              <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+              <pointCloudTopicName>depth/color/points</pointCloudTopicName>
+              <frameName>locobot_camera_optical_link</frameName>
+              <pointCloudCutoff>0.2</pointCloudCutoff>
+              <!-- <distortionK1>0.00000001</distortionK1>
               <distortionK2>0.00000001</distortionK2>
               <distortionK3>0.00000001</distortionK3>
               <distortionT1>0.00000001</distortionT1>
@@ -217,7 +217,7 @@
               <Cx>0</Cx>
               <Cy>0</Cy>
               <focalLength>0</focalLength>
-              <hackBaseline>0</hackBaseline>
+              <hackBaseline>0</hackBaseline> -->
           </plugin>
       </sensor>
   </gazebo>

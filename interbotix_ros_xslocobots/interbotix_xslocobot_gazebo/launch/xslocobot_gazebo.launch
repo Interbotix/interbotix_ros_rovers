@@ -24,7 +24,7 @@
   <rosparam file="$(find interbotix_xslocobot_gazebo)/config/locobot_gazebo_controllers.yaml" command="load"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find gazebo_ros)/worlds/xslocobot_gazebo.world"/>
+    <arg name="world_name" value="$(arg world_name)"/>
     <arg name="gui"                               value="$(arg gui)" />
     <arg name="debug"                             value="$(arg debug)" />
     <arg name="paused"                            value="$(arg paused)"/>
@@ -117,8 +117,9 @@
     type="spawn_model"
     respawn="false"
     output="screen"
+    args="-urdf -model $(arg robot_name) -param 
+    robot_description -x 0 -y 0 -z 0 -J tilt 0.8 -J elbow 1.55 -J shoulder -1.1 -J wrist_angle 0.5"/>
+	  <!-- args="-urdf -model $(arg robot_name) -param robot_description"/> -J elbow 1.55 -J shoulder -1.1 -J wrist_angle 0.5 -->
 
-	  args="-urdf -model $(arg robot_name) -param robot_description"/>
- <!-- args="-urdf -model $(arg robot_name) -param robot_description -x 0 -y 0 -z 0 -J elbow -1.5708"/> -->
 </launch>
 

@@ -499,6 +499,13 @@
     </inertial>
   </link>
 
+  <link name="$(arg robot_name)_camera_optical_link"/>
+  <joint name="$(arg robot_name)_camera_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="-${pi/2} 0 -${pi/2}"/>
+      <parent link="$(arg robot_name)_camera_link"/>
+      <child link="$(arg robot_name)_camera_optical_link"/>
+    </joint>
+
   <!-- ********************************** Lidar **********************************  -->
 
   <xacro:if value="$(arg show_lidar)">

@@ -1,28 +1,28 @@
 <?xml version="1.0" ?>
 <sdf version="1.5">
- <world name="default">
-   <!-- A global light source -->
-   <include>
-     <uri>model://sun</uri>
-   </include>
-   <!-- A ground plane -->
-   <include>
-     <uri>model://ground_plane</uri>
-   </include>
-   <!-- <gui fullscreen='0'>
+  <world name="default">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <!-- <gui fullscreen='0'>
       <camera name='user_camera'>
         <pose>3.2122 -1.20133 1.56239 0 0.275643 2.35619</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui> -->
-       <gui fullscreen='0'>
+    <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>0.378043 1.65716 1.32068 0 0.483336 -1.96175</pose>
+        <pose>1.04732 0.964283 1.23562 0 0.727682 -2.522</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
 
- </world>
+  </world>
 </sdf>

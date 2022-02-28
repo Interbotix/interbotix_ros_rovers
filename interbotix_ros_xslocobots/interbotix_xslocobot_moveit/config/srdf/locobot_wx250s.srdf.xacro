@@ -3,7 +3,8 @@
     This is a format for representing semantic information about the robot structure.
     A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
 -->
-<robot name="locobot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="locobot"
+    xmlns:xacro="http://www.ros.org/wiki/xacro">
     <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
     <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
     <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
@@ -15,10 +16,10 @@
 
     <xacro:property name="srdf_loc" value="$(arg external_srdf_loc)"/>
     <group name="interbotix_neck">
-     <chain base_link="$(arg robot_name)_camera_tower_link" tip_link="$(arg robot_name)_camera_link"/>
+        <chain base_link="$(arg robot_name)_camera_tower_link" tip_link="$(arg robot_name)_camera_link"/>
     </group>
     <group name="interbotix_arm">
-     <chain base_link="$(arg robot_name)_arm_base_link" tip_link="$(arg robot_name)_gripper_bar_link"/>
+        <chain base_link="$(arg robot_name)_arm_base_link" tip_link="$(arg robot_name)_gripper_bar_link"/>
         <!-- <joint name="arm_base_link_joint" />
         <joint name="waist" />
         <joint name="shoulder" />
@@ -36,6 +37,10 @@
         <link name="$(arg robot_name)_left_finger_link" />
         <link name="$(arg robot_name)_right_finger_link" />
     </group>
+    <group name = "arm_hand">
+        <group name = "interbotix_arm"/>
+        <group name = "interbotix_hand"/>
+    </group>
     <group_state name="Home" group="interbotix_neck">
         <joint name="tilt" value="0.8" />
         <joint name="pan" value="0" />
@@ -48,6 +53,12 @@
         <joint name="waist" value="0" />
         <joint name="wrist_angle" value="0" />
         <joint name="wrist_rotate" value="0" />
+        <!-- <joint name="elbow" value="1.55" />
+        <joint name="forearm_roll" value="0" />
+        <joint name="shoulder" value="-1.1" />
+        <joint name="waist" value="0" />
+        <joint name="wrist_angle" value="0.5" />
+        <joint name="wrist_rotate" value="0" /> -->
     </group_state>
     <group_state name="Sleep" group="interbotix_arm">
         <joint name="elbow" value="1.55" />
@@ -77,7 +88,7 @@
         <joint name="left_finger" value="0.015" />
         <joint name="right_finger" value="-0.015" />
     </group_state>
-        <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="locobot_base_footprint"/>
+    <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="locobot_base_footprint"/>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="interbotix_hand" parent_link="$(arg robot_name)_gripper_bar_link" group="interbotix_hand" parent_group="interbotix_arm"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
@@ -205,38 +216,38 @@
     <disable_collisions link1="$(arg robot_name)_wheel_left_link" link2="$(arg robot_name)_wheel_right_link" reason="Never" />
 
     <xacro:if value="$(arg show_lidar)">
-      <disable_collisions link1="$(arg robot_name)_arm_base_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_arm_base_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_base_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_base_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_battery_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_battery_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_camera_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_camera_tower_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_camera_tower_link" link2="$(arg robot_name)_lidar_tower_link" reason="Adjacent" />
-      <disable_collisions link1="$(arg robot_name)_caster_back_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_caster_back_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_caster_front_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_caster_front_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_lidar_tower_link" reason="Adjacent" />
-      <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_pan_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_plate_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_shoulder_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_tilt_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_upper_arm_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_wheel_left_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_wheel_right_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_pan_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_plate_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_shoulder_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_tilt_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_upper_arm_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_wheel_left_link" reason="Never" />
-      <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_wheel_right_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_arm_base_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_arm_base_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_base_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_base_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_battery_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_battery_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_camera_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_camera_tower_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_camera_tower_link" link2="$(arg robot_name)_lidar_tower_link" reason="Adjacent" />
+        <disable_collisions link1="$(arg robot_name)_caster_back_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_caster_back_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_caster_front_link" link2="$(arg robot_name)_laser_frame_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_caster_front_link" link2="$(arg robot_name)_lidar_tower_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_lidar_tower_link" reason="Adjacent" />
+        <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_pan_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_plate_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_shoulder_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_tilt_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_upper_arm_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_wheel_left_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_laser_frame_link" link2="$(arg robot_name)_wheel_right_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_pan_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_plate_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_shoulder_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_tilt_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_upper_arm_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_wheel_left_link" reason="Never" />
+        <disable_collisions link1="$(arg robot_name)_lidar_tower_link" link2="$(arg robot_name)_wheel_right_link" reason="Never" />
     </xacro:if>
 
     <xacro:if value="${srdf_loc != ''}">
-      <xacro:include filename="${srdf_loc}"/>
+        <xacro:include filename="${srdf_loc}"/>
     </xacro:if>
 
 </robot>

@@ -22,7 +22,7 @@
   <arg name="recording"                         default="false"/>
   <arg name="use_sim_time"                      default="true"/>
   <arg name="dof"                               default="5"/>
-  <arg name="spawner_configuration"             default="-J tilt 0.2618"/>
+  <arg name="spawner_configuration"             default="-J tilt $(arg camera_tilt_angle)"/>
 
   <arg     if="$(arg use_lidar)" name="rtabmap_default_args" default="$(arg rtabmap_args)
                                                                       --RGBD/NeighborLinkRefining true

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>interbotix_ros_xslocobots_examples</name>
+  <version>0.0.0</version>
+  <description>The interbotix_ros_xslocobots_examples metapackage</description>
+  <maintainer email="trsupport@trossenrobotics.com">Luke Schmitt</maintainer>
+  <license>BSD</license>
+
+  <author email="trsupport@trossenrobotics.com">Luke Schmitt</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>interbotix_ros_xslocobots</exec_depend>
+  <exec_depend>interbotix_xslocobot_joy</exec_depend>
+  <exec_depend>interbotix_xslocobot_landmark_nav</exec_depend>
+  <exec_depend>interbotix_xslocobot_moveit_interface</exec_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

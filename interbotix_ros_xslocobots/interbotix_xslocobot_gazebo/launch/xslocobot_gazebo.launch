@@ -18,6 +18,7 @@
   <arg name="use_position_controllers"          default="false"/>
   <arg name="use_trajectory_controllers"        default="false"/>
   <arg name="dof"                               default="5"/>
+  <arg name="spawner_configuration"             default=""/>
 
   <env name="GAZEBO_RESOURCE_PATH"              value="$(find interbotix_xslocobot_gazebo)"/>
 
@@ -108,6 +109,16 @@
     <arg name="rviz_frame"                        value="$(arg rviz_frame)"/>
   </include>
 
+  <arg
+    name="spawner_configuration_" if="$(eval robot_model == 'locobot_base')"
+    default="$(arg spawner_configuration)"/>
+  <arg
+    name="spawner_configuration_" if="$(eval (dof == 4 or dof == 6) and robot_model != 'locobot_base')"
+    default="$(arg spawner_configuration) -J shoulder -1.1 -J elbow 1.55 -J wrist_angle 0.5"/>
+  <arg
+    name="spawner_configuration_" if="$(eval (dof == 5) and robot_model != 'locobot_base')"
+    default="$(arg spawner_configuration) -J shoulder -1.3 -J elbow 1.55 -J wrist_angle 0.7"/>
+
   <node
     name="urdf_spawner"
     pkg="gazebo_ros"
@@ -115,6 +126,6 @@
     respawn="false"
     output="screen"
     ns="$(arg robot_name)"
-	  args="-urdf -model $(arg robot_name) -param robot_description"/>
+	  args="-urdf -model $(arg robot_name) -param robot_description $(arg spawner_configuration_)"/>
 
 </launch>

@@ -6,7 +6,7 @@
   <maintainer email="trsupport@trossenrobotics.com">Luke Schmitt</maintainer>
   <license>BSD</license>
   <!-- <url type="website">http://wiki.ros.org/interbotix_xslocobot_landmark_nav</url> -->
-  <author email="luke@trossenrobotics.com">Luke Schmitt</author>
+  <author email="trsupport@trossenrobotics.com">Luke Schmitt</author>
 
   <!-- The *depend tags are used to specify dependencies -->
   <!-- Dependencies can be catkin packages or system dependencies -->

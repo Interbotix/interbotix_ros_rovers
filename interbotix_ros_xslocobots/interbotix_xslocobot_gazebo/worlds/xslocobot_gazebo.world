@@ -10,9 +10,9 @@
       <uri>model://ground_plane</uri>
     </include>
     <!-- Trossen Robotics Offices -->
-    <include>
+    <!-- <include>
       <uri>TrossenRoboticsOfficeBuilding</uri>
       <pose>0 2 0 0 0 0</pose>
-    </include>
+    </include> -->
   </world>
 </sdf>

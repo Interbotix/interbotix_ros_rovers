@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<robot name="mobile_wx250s" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="mobile_wx250s"
+  xmlns:xacro="http://ros.org/wiki/xacro">
 
   <joint name="arm_base_link_joint" type="fixed">
     <axis xyz="0 0 0"/>
@@ -189,7 +190,7 @@
     </inertial>
   </link>
 
- <joint name="wrist_angle" type="revolute">
+  <joint name="wrist_angle" type="revolute">
     <axis xyz="0 1 0"/>
     <limit effort="5" lower="${radians(-100)}" upper="${radians(123)}" velocity="${pi}"/>
     <origin rpy="0 0 0" xyz="0.075 0 0"/>
@@ -403,7 +404,7 @@
 
       <joint name="left_finger" type="prismatic">
         <axis xyz="0 1 0"/>
-        <limit effort="5" lower="0.015" upper="0.037" velocity="1"/>
+        <limit effort="5" lower="0.015" upper="0.037" velocity="3.14"/>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <parent link="$(arg robot_name)_fingers_link"/>
         <child link="$(arg robot_name)_left_finger_link"/>
@@ -436,14 +437,14 @@
         </collision>
         <inertial>
           <origin rpy="${pi} ${pi} ${pi/2}" xyz="0.0138160000 0.0000000000 0.0000000000"/>
-           <mass value="0.016246" />
+          <mass value="0.016246" />
           <inertia ixx="0.0000047310" iyy="0.0000015506" izz="0.0000037467" ixy="-0.0000004560" ixz="0.0000000000" iyz="0.0000000000" />
         </inertial>
       </link>
 
       <joint name="right_finger" type="prismatic">
         <axis xyz="0 1 0"/>
-        <limit effort="5" lower="-0.037" upper="-0.015" velocity="1"/>
+        <limit effort="5" lower="-0.037" upper="-0.015" velocity="3.14"/>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <parent link="$(arg robot_name)_fingers_link"/>
         <child link="$(arg robot_name)_right_finger_link"/>

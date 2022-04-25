@@ -60,23 +60,23 @@ arm_controller:
   # constraints:
   #   goal_time: 0.2
   #   waist:
-  #     goal: 0.15
-  #     trajectory: 0.15
+  #     goal: 0.1
+  #     trajectory: 0.1
   #   shoulder:
-  #     goal: 0.15
-  #     trajectory: 0.15
+  #     goal: 0.1
+  #     trajectory: 0.1
   #   elbow:
-  #     goal: 0.15
-  #     trajectory: 0.15
+  #     goal: 0.1
+  #     trajectory: 0.1
   #   forearm_roll:
-  #     goal: 0.15
-  #     trajectory: 0.15
+  #     goal: 0.1
+  #     trajectory: 0.1
   #   wrist_angle:
-  #     goal: 0.15
-  #     trajectory: 0.15
+  #     goal: 0.1
+  #     trajectory: 0.1
   #   wrist_rotate:
-  #     goal: 0.15
-  #     trajectory: 0.15
+  #     goal: 0.1
+  #     trajectory: 0.1
 
 gripper_controller:
   type: effort_controllers/JointTrajectoryController

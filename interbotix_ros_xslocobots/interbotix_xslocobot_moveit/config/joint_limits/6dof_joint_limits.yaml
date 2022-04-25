@@ -17,14 +17,14 @@ joint_limits:
     max_acceleration: 5
   left_finger:
     has_velocity_limits: true
-    max_velocity: 1
+    max_velocity: 3.14
     has_acceleration_limits: true
-    max_acceleration: 0.01
+    max_acceleration: 5
   right_finger:
     has_velocity_limits: true
-    max_velocity: 1
+    max_velocity: 3.14
     has_acceleration_limits: true
-    max_acceleration: 0.01
+    max_acceleration: 5
   shoulder:
     has_velocity_limits: true
     max_velocity: 3.14

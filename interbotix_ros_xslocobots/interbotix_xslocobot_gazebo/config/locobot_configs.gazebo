@@ -2,7 +2,8 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
   <gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <plugin name="gazebo_ros_control"
+      filename="libgazebo_ros_control.so">
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
       <legacyModeNS>true</legacyModeNS>
     </plugin>
@@ -208,9 +209,24 @@
   <!-- This was copied straight from the Pyrobot Gazebo file. The link names were modified based on
      the ones used in the URDFs, but not sure exactly sure how all these plugins work...-->
 
-  <!-- camera -->
+
+  <!-- Adds a dummy link, libgazebo_ros_openni_kinect publishes from frame's z-axis -->
+  <!-- https://github.com/ros-simulation/gazebo_ros_pkgs/issues/243 -->
+  <joint name="camera_depth_joint"
+    type="fixed">
+    <origin rpy="${-pi/2} 0 ${-pi/2}"
+      xyz="0 0 0"/>
+    <parent link="$(arg robot_name)_camera_link"/>
+    <child link="$(arg robot_name)_camera_depth_link"/>
+  </joint>
+  <link name="$(arg robot_name)_camera_depth_link">
+    <origin rpy="0 0 0"
+      xyz="0 0 0"/>
+  </link>
+
   <gazebo reference="$(arg robot_name)_camera_link">
-    <sensor name="camera_frame_sensor" type="depth">
+    <sensor name="camera_frame_sensor"
+      type="depth">
       <always_on>true</always_on>
       <update_rate>30.0</update_rate>
       <camera>
@@ -225,7 +241,8 @@
           <far>10.0</far>
         </clip>
       </camera>
-      <plugin filename="libgazebo_ros_openni_kinect.so" name="camera_frame_controller">
+      <plugin filename="libgazebo_ros_openni_kinect.so"
+        name="camera_frame_controller">
         <alwaysOn>true</alwaysOn>
         <updateRate>0.0</updateRate>
         <cameraName>camera</cameraName>
@@ -290,7 +307,8 @@
   </gazebo>
 
   <gazebo reference="$(arg robot_name)_cliff_sensor_left_link">
-    <sensor name="cliff_sensor_left" type="ray">
+    <sensor name="cliff_sensor_left"
+      type="ray">
       <always_on>true</always_on>
       <update_rate>50</update_rate>
       <visualize>true</visualize>
@@ -315,7 +333,8 @@
   </gazebo>
 
   <gazebo reference="$(arg robot_name)_cliff_sensor_right_link">
-    <sensor name="cliff_sensor_right" type="ray">
+    <sensor name="cliff_sensor_right"
+      type="ray">
       <always_on>true</always_on>
       <update_rate>50</update_rate>
       <visualize>true</visualize>
@@ -340,7 +359,8 @@
   </gazebo>
 
   <gazebo reference="$(arg robot_name)_cliff_sensor_front_link">
-    <sensor name="cliff_sensor_front" type="ray">
+    <sensor name="cliff_sensor_front"
+      type="ray">
       <always_on>true</always_on>
       <update_rate>50</update_rate>
       <visualize>true</visualize>
@@ -367,7 +387,8 @@
   <gazebo reference="$(arg robot_name)_base_link">
     <mu1>0.3</mu1>
     <mu2>0.3</mu2>
-    <sensor type="contact" name="bumpers">
+    <sensor type="contact"
+      name="bumpers">
       <always_on>1</always_on>
       <update_rate>50.0</update_rate>
       <visualize>true</visualize>
@@ -379,7 +400,8 @@
 
 
   <gazebo reference="$(arg robot_name)_gyro_link">
-    <sensor name="imu" type="imu">
+    <sensor name="imu"
+      type="imu">
       <always_on>true</always_on>
       <update_rate>50</update_rate>
       <visualize>false</visualize>
@@ -426,10 +448,11 @@
   </gazebo> -->
 
   <gazebo>
-    <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
+    <plugin filename="libgazebo_ros_diff_drive.so"
+      name="differential_drive_controller">
       <alwaysOn>true</alwaysOn>
       <legacyMode>false</legacyMode>
-      <updateRate>40</updateRate>
+      <updateRate>30</updateRate>
       <leftJoint>wheel_left_joint</leftJoint>
       <rightJoint>wheel_right_joint</rightJoint>
       <wheelSeparation>0.230</wheelSeparation>
@@ -448,7 +471,8 @@
       <publishTf>1</publishTf>
     </plugin>
 
-    <plugin filename="libgazebo_ros_p3d.so" name="p3d_base_controller">
+    <plugin filename="libgazebo_ros_p3d.so"
+      name="p3d_base_controller">
       <alwaysOn>true</alwaysOn>
       <updateRate>100.0</updateRate>
       <bodyName>$(arg robot_name)_base_link</bodyName>
@@ -459,6 +483,41 @@
       <rpyOffsets>0 0 0</rpyOffsets>
       <!--<interface:position name="p3d_base_position"/>-->
     </plugin>
+  </gazebo>
+
+  <!-- RPLIDAR-A2 -->
+  <gazebo reference="$(arg robot_name)_laser_frame_link">
+    <sensor type="ray"
+      name="rplidar">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>30</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>400</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.2</min>
+          <max>16.0</max>
+          <resolution>0.02</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_rplidar_controller"
+        filename="libgazebo_ros_laser.so">
+        <topicName>scan</topicName>
+        <frameName>$(arg robot_name)_laser_frame_link</frameName>
+      </plugin>
+    </sensor>
   </gazebo>
 
 </robot>

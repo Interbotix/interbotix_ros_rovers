@@ -8,11 +8,11 @@ from interbotix_xs_modules.locobot import InterbotixLocobotXS
 
 def main():
     locobot = InterbotixLocobotXS(robot_model="locobot_px100", arm_model="mobile_px100")
-    locobot.arm.close_gripper(2.0)
-    locobot.arm.open_gripper(2.0)
-    locobot.arm.set_gripper_pressure(1.0)
-    locobot.arm.close_gripper(2.0)
-    locobot.arm.open_gripper(2.0)
+    locobot.gripper.close(2.0)
+    locobot.gripper.open(2.0)
+    locobot.gripper.set_pressure(1.0)
+    locobot.gripper.close(2.0)
+    locobot.gripper.open(2.0)
 
 if __name__=='__main__':
     main()

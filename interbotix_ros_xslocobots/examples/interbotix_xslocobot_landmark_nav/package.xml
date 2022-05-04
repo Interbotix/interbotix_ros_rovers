@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
   <name>interbotix_xslocobot_landmark_nav</name>
   <version>0.0.0</version>
   <description>The interbotix_xslocobot_landmark_nav package</description>
   <maintainer email="trsupport@trossenrobotics.com">Luke Schmitt</maintainer>
   <license>BSD</license>
   <!-- <url type="website">http://wiki.ros.org/interbotix_xslocobot_landmark_nav</url> -->
-  <author email="luke@trossenrobotics.com">Luke Schmitt</author>
+  <author email="trsupport@trossenrobotics.com">Luke Schmitt</author>
 
   <!-- The *depend tags are used to specify dependencies -->
   <!-- Dependencies can be catkin packages or system dependencies -->
@@ -29,6 +29,8 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend condition="$ROS_PYTHON_VERSION == 2">python-six</exec_depend>
+  <exec_depend condition="$ROS_PYTHON_VERSION == 3">python3-six</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

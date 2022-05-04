@@ -1,54 +1,83 @@
 <launch>
 
-  <arg name="robot_model"                       default=""/>
-  <arg name="robot_name"                        default="locobot"/>
-  <arg name="arm_model"                         default="$(eval 'mobile_' + arg('robot_model').split('_')[1])"/>
-  <arg name="show_lidar"                        default="false"/>
-  <arg name="show_gripper_bar"                  default="true"/>
-  <arg name="show_gripper_fingers"              default="true"/>
-  <arg name="external_urdf_loc"                 default=""/>
-  <arg name="use_rviz"                          default="false"/>
-  <arg name="rviz_frame"                        default="$(arg robot_name)/base_footprint"/>
-  <arg name="world_name"                        default="$(find interbotix_xslocobot_gazebo)/worlds/xslocobot_gazebo.world"/>
-  <arg name="gui"                               default="true"/>
-  <arg name="debug"                             default="false"/>
-  <arg name="paused"                            default="true"/>
-  <arg name="recording"                         default="false"/>
-  <arg name="use_sim_time"                      default="true"/>
-  <arg name="use_position_controllers"          default="false"/>
-  <arg name="use_trajectory_controllers"        default="false"/>
-  <arg name="dof"                               default="6"/>
+  <arg name="robot_model"
+    default=""/>
+  <arg name="robot_name"
+    default="locobot"/>
+  <arg name="arm_model"
+    default="$(eval 'mobile_' + arg('robot_model').split('_')[1])"/>
+  <arg name="show_lidar"
+    default="false"/>
+  <arg name="show_gripper_bar"
+    default="true"/>
+  <arg name="show_gripper_fingers"
+    default="true"/>
+  <arg name="external_urdf_loc"
+    default=""/>
+  <arg name="use_rviz"
+    default="false"/>
+  <arg name="rviz_frame"
+    default="$(arg robot_name)/base_footprint"/>
+  <arg name="world_name"
+    default="$(find interbotix_xslocobot_gazebo)/worlds/xslocobot_gazebo.world"/>
+  <arg name="gui"
+    default="true"/>
+  <arg name="debug"
+    default="false"/>
+  <arg name="paused"
+    default="true"/>
+  <arg name="recording"
+    default="false"/>
+  <arg name="use_sim_time"
+    default="true"/>
+  <arg name="use_position_controllers"
+    default="false"/>
+  <arg name="use_trajectory_controllers"
+    default="false"/>
+  <arg name="dof"
+    default="6"/>
+  <arg name="spawner_configuration"
+    default=""/>
 
-  <env name="GAZEBO_RESOURCE_PATH"              value="$(find interbotix_xslocobot_gazebo)"/>
+  <env name="GAZEBO_RESOURCE_PATH"
+    value="$(find interbotix_xslocobot_gazebo)"/>
   <!-- ns="$(arg robot_name)" -->
-  <rosparam file="$(find interbotix_xslocobot_gazebo)/config/locobot_gazebo_controllers.yaml" command="load"/>
+  <rosparam file="$(find interbotix_xslocobot_gazebo)/config/locobot_gazebo_controllers.yaml"
+    command="load"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(arg world_name)"/>
-    <arg name="gui"                               value="$(arg gui)" />
-    <arg name="debug"                             value="$(arg debug)" />
-    <arg name="paused"                            value="$(arg paused)"/>
-    <arg name="recording"                         value="$(arg recording)"/>
-    <arg name="use_sim_time"                      value="$(arg use_sim_time)"/>
+    <arg name="world_name"
+      value="$(arg world_name)"/>
+    <arg name="gui"
+      value="$(arg gui)" />
+    <arg name="debug"
+      value="$(arg debug)" />
+    <arg name="paused"
+      value="$(arg paused)"/>
+    <arg name="recording"
+      value="$(arg recording)"/>
+    <arg name="use_sim_time"
+      value="$(arg use_sim_time)"/>
   </include>
 
   <group if="$(eval robot_model != 'locobot_base')">
     <!-- ns="$(arg robot_name)" -->
     <group if="$(arg use_trajectory_controllers)">
-    <!-- ns="$(arg robot_name)" -->
-      <rosparam file="$(find interbotix_xslocobot_gazebo)/config/trajectory_controllers/$(arg arm_model)_trajectory_controllers.yaml" command="load" />
-      <node
-        name="controller_spawner"
+      <!-- ns="$(arg robot_name)" -->
+      <rosparam file="$(find interbotix_xslocobot_gazebo)/config/trajectory_controllers/$(arg arm_model)_trajectory_controllers.yaml"
+        command="load" />
+      <node name="controller_spawner"
         pkg="controller_manager"
         type="controller_manager"
         respawn="false"
         output="screen"
-    
         args="spawn arm_controller gripper_controller pan_controller tilt_controller joint_state_controller"/>
     </group>
 
     <group if="$(arg use_position_controllers)">
-      <rosparam file="$(find interbotix_xslocobot_gazebo)/config/position_controllers/$(arg arm_model)_position_controllers.yaml" command="load" ns="$(arg robot_name)"/>
+      <rosparam file="$(find interbotix_xslocobot_gazebo)/config/position_controllers/$(arg arm_model)_position_controllers.yaml"
+        command="load"
+        ns="$(arg robot_name)"/>
 
       <node if="$(eval dof == 4)"
         name="controller_spawner"
@@ -74,14 +103,13 @@
                     tilt_controller"/>
 
 
-           <!-- ns="$(arg robot_name)" -->
+      <!-- ns="$(arg robot_name)" -->
       <node if="$(eval dof == 6)"
         name="controller_spawner"
         pkg="controller_manager"
         type="controller_manager"
         respawn="false"
         output="screen"
-   
         args="spawn joint_state_controller waist_controller shoulder_controller
                     elbow_controller forearm_roll_controller wrist_angle_controller
                     wrist_rotate_controller left_finger_controller right_finger_controller
@@ -89,37 +117,55 @@
     </group>
 
   </group>
-    <!-- ns="$(arg robot_name)" -->
+  <!-- ns="$(arg robot_name)" -->
   <node unless="$(eval robot_model != 'locobot_base')"
     name="controller_spawner"
     pkg="controller_manager"
     type="controller_manager"
     respawn="false"
     output="screen"
-
     args="spawn pan_controller tilt_controller joint_state_controller"/>
 
   <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
-    <arg name="robot_model"                       value="$(arg robot_model)"/>
-    <arg name="robot_name"                        value="$(arg robot_name)"/>
-    <arg name="show_lidar"                        value="$(arg show_lidar)"/>
-    <arg name="show_gripper_bar"                  value="$(arg show_gripper_bar)"/>
-    <arg name="show_gripper_fingers"              value="$(arg show_gripper_fingers)"/>
-    <arg name="external_urdf_loc"                 value="$(arg external_urdf_loc)"/>
-    <arg name="load_gazebo_configs"               value="true"/>
-    <arg name="use_rviz"                          value="$(arg use_rviz)"/>
-    <arg name="rviz_frame"                        value="$(arg rviz_frame)"/>
+    <arg name="robot_model"
+      value="$(arg robot_model)"/>
+    <arg name="robot_name"
+      value="$(arg robot_name)"/>
+    <arg name="show_lidar"
+      value="$(arg show_lidar)"/>
+    <arg name="show_gripper_bar"
+      value="$(arg show_gripper_bar)"/>
+    <arg name="show_gripper_fingers"
+      value="$(arg show_gripper_fingers)"/>
+    <arg name="external_urdf_loc"
+      value="$(arg external_urdf_loc)"/>
+    <arg name="load_gazebo_configs"
+      value="true"/>
+    <arg name="use_rviz"
+      value="$(arg use_rviz)"/>
+    <arg name="rviz_frame"
+      value="$(arg rviz_frame)"/>
   </include>
-    <!-- ns="$(arg robot_name)" -->
-  <node
-    name="urdf_spawner"
+
+  <arg name="spawner_configuration_"
+    if="$(eval robot_model == 'locobot_base')"
+    default="$(arg spawner_configuration)"/>
+  <arg name="spawner_configuration_"
+    if="$(eval (dof == 4) and robot_model != 'locobot_base')"
+    default="$(arg spawner_configuration) -J shoulder -1.1 -J elbow 1.55 -J wrist_angle 0.5"/>
+  <arg name="spawner_configuration_"
+    if="$(eval (dof == 5) and robot_model != 'locobot_base')"
+    default="$(arg spawner_configuration) -J shoulder -1.3 -J elbow 1.55 -J wrist_angle 0.7"/>
+  <arg name="spawner_configuration_"
+    if="$(eval (dof == 6) and robot_model != 'locobot_base')"
+    default="$(arg spawner_configuration) -x 0 -y 0 -z 0 -J tilt 0.8 -J elbow 1.55 -J shoulder -1.1 -J wrist_angle 0.5"/>
+
+  <node name="urdf_spawner"
     pkg="gazebo_ros"
     type="spawn_model"
     respawn="false"
     output="screen"
-    args="-urdf -model $(arg robot_name) -param 
-    robot_description -x 0 -y 0 -z 0 -J tilt 0.8 -J elbow 1.55 -J shoulder -1.1 -J wrist_angle 0.5"/>
-	  <!-- args="-urdf -model $(arg robot_name) -param robot_description"/> -J elbow 1.55 -J shoulder -1.1 -J wrist_angle 0.5 -->
+    args="-urdf -model $(arg robot_name) -param robot_description $(arg spawner_configuration_)"/>
 
 </launch>
 

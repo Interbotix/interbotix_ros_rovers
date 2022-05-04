@@ -12,7 +12,7 @@ def main():
     locobot.camera.pan(1)
     locobot.camera.tilt(1)
     locobot.camera.pan_tilt_move(-1, -1)
-    locoobot.camera.pan_tilt_go_home()
+    locobot.camera.pan_tilt_go_home()
 
 if __name__=='__main__':
     main()

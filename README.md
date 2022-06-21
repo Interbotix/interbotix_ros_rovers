@@ -2,7 +2,7 @@
 
 ## Overview
 ![rover_repo_structure](images/rover_repo_structure.png)
-Welcome to the *interbotix_ros_rovers* repository! This repo contains custom ROS packages to control the various types of rovers sold at [Interbotix](https://www.trossenrobotics.com/). These ROS packages build upon the ROS driver nodes found in the [interbotix_ros_core](https://github.com/Interbotix/interbotix_ros_core) repository. Support-level software can be found in the [interbotix_ros_toolboxes](https://github.com/Interbotix/interbotix_ros_toolboxes) repository.
+Welcome to the *interbotix_ros_rovers* repository! This repo contains custom ROS packages to control the various types of rovers sold at [Trossen Robotics](https://www.trossenrobotics.com/). These ROS packages build upon the ROS driver nodes found in the [interbotix_ros_core](https://github.com/Interbotix/interbotix_ros_core) repository. Support-level software can be found in the [interbotix_ros_toolboxes](https://github.com/Interbotix/interbotix_ros_toolboxes) repository.
 
 ## Repo Structure
 ```
@@ -22,6 +22,7 @@ GitHub Landing Page: Explains repository structure and contains a single directo
 ├── LICENSE
 └── README.md
 ```
+
 As shown above, there are five main levels to this repository. To clarify some of the terms above, refer to the descriptions below.
 
 - **Rover Type** - Any rover that can use the same *interbotix_XXXXX_control* package is considered to be of the same type. For the most part, this division lies on the type of actuator that makes up the robot. As an example, all the X-Series LoCoBots are considered the same type of rover since they all use various Dynamixel X-Series servos (despite the fact that they come in different sizes, DOF, and motor versions). However, a rover made up of some other manufacturer's servos, or even half made up of Dynamixel servos and half made up of some other manufacturer's servos would be considered a different rover type.

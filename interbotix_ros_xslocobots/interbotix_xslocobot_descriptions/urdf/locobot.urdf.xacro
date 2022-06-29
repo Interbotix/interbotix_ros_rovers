@@ -63,16 +63,6 @@
     <child link="$(arg robot_name)/wheel_left_link"/>
   </joint>
 
-  <transmission name="trans_wheel_left_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="wheel_left_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="wheel_left_joint_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
   <link name="$(arg robot_name)/wheel_left_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -99,16 +89,6 @@
     <parent link="$(arg robot_name)/base_link"/>
     <child link="$(arg robot_name)/wheel_right_link"/>
   </joint>
-
-  <transmission name="trans_wheel_right_joint">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="wheel_right_joint">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="wheel_right_joint_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
 
   <link name="$(arg robot_name)/wheel_right_link">
     <visual>
@@ -392,16 +372,6 @@
     <child link="$(arg robot_name)/pan_link"/>
   </joint>
 
-  <transmission name="trans_pan">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="pan">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="pan_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
   <link name="$(arg robot_name)/pan_link">
     <visual>
       <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
@@ -430,16 +400,6 @@
     <parent link="$(arg robot_name)/pan_link"/>
     <child link="$(arg robot_name)/tilt_link"/>
   </joint>
-
-  <transmission name="trans_tilt">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="tilt">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="tilt_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
 
   <link name="$(arg robot_name)/tilt_link">
     <visual>

@@ -45,21 +45,18 @@ from launch.substitutions import (
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+
 def launch_setup(context, *args, **kwargs):
-    # robot_model_launch_arg = LaunchConfiguration('robot_model')
     robot_name_launch_arg = LaunchConfiguration('robot_name')
-    # arm_model_launch_arg = LaunchConfiguration('arm_model')
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
     rviz_frame_launch_arg = LaunchConfiguration('rviz_frame')
     rvizconfig_launch_arg = LaunchConfiguration('rvizconfig')
-    # show_lidar_launch_arg = LaunchConfiguration('show_lidar')
     use_joint_pub_launch_arg = LaunchConfiguration('use_joint_pub')
     use_joint_pub_gui_launch_arg = LaunchConfiguration('use_joint_pub_gui')
     rate_launch_arg = LaunchConfiguration('rate')
     source_list_launch_arg = LaunchConfiguration('source_list')
     robot_description_launch_arg = LaunchConfiguration('robot_description')
     hardware_type_launch_arg = LaunchConfiguration('hardware_type')
-
 
     # sets use_sim_time parameter to 'true' if using gazebo hardware
     use_sim_time_param = determine_use_sim_time_param(
@@ -84,7 +81,6 @@ def launch_setup(context, *args, **kwargs):
         executable='joint_state_publisher',
         namespace=robot_name_launch_arg,
         parameters=[{
-            'use_sim_time': use_sim_time_param,
             'rate': rate_launch_arg,
             'source_list': source_list_launch_arg,
         }],
@@ -125,7 +121,6 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     declared_arguments = []
-# robot_model
     declared_arguments.append(
         DeclareLaunchArgument(
             'robot_model',
@@ -135,7 +130,6 @@ def generate_launch_description():
             ),
         )
     )
-# robot_name
     declared_arguments.append(
         DeclareLaunchArgument(
             'robot_name',
@@ -145,7 +139,6 @@ def generate_launch_description():
             ),
         )
     )
-# arm_model
     declared_arguments.append(
         DeclareLaunchArgument(
             'arm_model',
@@ -187,22 +180,6 @@ def generate_launch_description():
             description='file path to the config file RViz should load.',
         )
     )
-# show_lidar
-    # include in robot_description
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            'show_lidar',
-            default_value='false',
-            choices=('true', 'false'),
-            description=(
-                'set to `true` if the lidar is installed on the robot; this will load the lidar '
-                'related links to the `robot_description`.'),
-        )
-    )
-# show_gripper_bar
-# show_gripper_fingers
-# external_urdf_loc
-# use_joint_pub
     declared_arguments.append(
         DeclareLaunchArgument(
             'use_joint_pub',
@@ -211,7 +188,6 @@ def generate_launch_description():
             description='if `true`, launches the joint_state_publisher node.'
         )
     )
-# use_joint_pub_gui
     declared_arguments.append(
         DeclareLaunchArgument(
             'use_joint_pub_gui',
@@ -220,7 +196,6 @@ def generate_launch_description():
             description='if `true`, launches the joint_state_publisher GUI.'
         )
     )
-# rate
     declared_arguments.append(
         DeclareLaunchArgument(
             'rate',
@@ -228,7 +203,6 @@ def generate_launch_description():
             description='JointState topic publish rate in Hz.'
         )
     )
-# source_list
     declared_arguments.append(
         DeclareLaunchArgument(
             'source_list',

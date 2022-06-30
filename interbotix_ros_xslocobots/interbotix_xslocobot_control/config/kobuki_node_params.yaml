@@ -1,0 +1,8 @@
+/$(var robot_name):
+  kobuki_ros_node:
+    ros__parameters:
+      acceleration_limiter: true
+      device_port: /dev/kobuki
+      cmd_vel_timeout_sec: 2.0
+      odom_frame: $(var robot_name)/odom
+      base_frame: $(var robot_name)/base_footprint

@@ -1,30 +1,22 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(interbotix_xslocobot_control)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
-
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
+set(ROS_DEPS
   interbotix_xs_sdk
   interbotix_xs_modules
   interbotix_xslocobot_descriptions
-  kobuki_node
   realsense2_camera
   rgbd_launch
   rplidar_ros
 )
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+# Add kobuki_node to dependencies if base_type is kobuki
+if($ENV{INTERBOTIX_XSLOCOBOT_BASE_TYPE} STREQUAL "kobuki")
+  list(APPEND ROS_DEPS "kobuki_node")
+endif()
 
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-catkin_package(
-CATKIN_DEPENDS interbotix_xs_sdk interbotix_xs_modules interbotix_xslocobot_descriptions kobuki_node realsense2_camera rgbd_launch rplidar_ros
+find_package(catkin REQUIRED COMPONENTS
+  ${ROS_DEPS}
 )
+
+catkin_package(CATKIN_DEPENDS ${ROS_DEPS})

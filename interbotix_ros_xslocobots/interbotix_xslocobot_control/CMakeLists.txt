@@ -10,14 +10,15 @@ set(ROS_DEPS
   rplidar_ros
 )
 
-# Add kobuki_node to dependencies if base_type is kobuki
+# Set default base type to 'create3' if not defined
 if(DEFINED ENV{INTERBOTIX_XSLOCOBOT_BASE_TYPE})
-  message(STATUS "Using Base Type '" ENV{INTERBOTIX_XSLOCOBOT_BASE_TYPE} "'.")
+  message(STATUS "Using Base Type '" $ENV{INTERBOTIX_XSLOCOBOT_BASE_TYPE} "'.")
 else()
   message(WARNING "INTERBOTIX_XSLOCOBOT_BASE_TYPE not set. Building using default 'create3'.")
   set(ENV{INTERBOTIX_XSLOCOBOT_BASE_TYPE} "create3")
 endif()
 
+# Add kobuki_node to dependencies if base type is 'kobuki'
 if(ENV{INTERBOTIX_XSLOCOBOT_BASE_TYPE} STREQUAL "kobuki")
   list(APPEND ROS_DEPS "kobuki_node")
 endif()

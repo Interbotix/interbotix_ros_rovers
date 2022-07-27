@@ -3,6 +3,7 @@
   <arg name="robot_model"                       default=""/>
   <arg name="robot_name"                        default="locobot"/>
   <arg name="arm_model"                         default="$(eval 'mobile_' + arg('robot_model').split('_')[1])"/>
+  <arg name="base_type"                         default="$(env INTERBOTIX_XSLOCOBOT_BASE_TYPE)"/> <!-- 'KOBUKI', 'CREATE3' -->
   <arg name="show_lidar"                        default="false"/>
   <arg name="show_gripper_bar"                  default="true"/>
   <arg name="show_gripper_fingers"              default="true"/>
@@ -17,6 +18,7 @@
   <arg name="rvizconfig"                        default="$(find interbotix_xslocobot_descriptions)/rviz/xslocobot_description.rviz" />
   <arg name="model"                             default="$(find interbotix_xslocobot_descriptions)/urdf/locobot.urdf.xacro
                                                          arm_model:=$(arg arm_model)
+                                                         base_type:=$(arg base_type)
                                                          robot_model:=$(arg robot_model)
                                                          robot_name:=$(arg robot_name)
                                                          show_lidar:=$(arg show_lidar)

@@ -7,6 +7,7 @@
   <arg name="external_urdf_loc"                 default=""/>
   <arg name="use_rviz"                          default="false"/>
   <arg name="rviz_frame"                        default="$(arg robot_name)/base_footprint"/>
+  <arg name="base_type"                         default="$(env INTERBOTIX_XSLOCOBOT_BASE_TYPE)"/> <!-- 'KOBUKI', 'CREATE3' -->
   <arg name="use_base"                          default="false"/>
   <arg name="use_dock"                          default="false"/>
   <arg name="use_lidar"                         default="false"/>
@@ -36,6 +37,7 @@
   <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
     <arg name="robot_model"                       value="$(arg robot_model)"/>
     <arg name="robot_name"                        value="$(arg robot_name)"/>
+    <arg name="base_type"                         value="$(arg base_type)"/>
     <arg name="show_lidar"                        value="$(arg show_lidar)"/>
     <arg name="show_gripper_bar"                  value="$(arg show_gripper_bar)"/>
     <arg name="show_gripper_fingers"              value="$(arg show_gripper_fingers)"/>
@@ -58,7 +60,7 @@
     <param name="load_configs"                    value="$(arg load_configs)"/>
   </node>
 
-  <group if="$(arg use_base)" ns="$(arg robot_name)">
+  <group if="$(eval arg('use_base') and arg('base_type') == 'kobuki')" ns="$(arg robot_name)">
     <node
       name="mobile_base_nodelet_manager"
       pkg="nodelet"
@@ -85,9 +87,9 @@
     </node>
 
     <node if="$(arg use_dock)"
-      pkg="nodelet" 
-      type="nodelet" 
-      name="dock_drive" 
+      pkg="nodelet"
+      type="nodelet"
+      name="dock_drive"
       args="load kobuki_auto_docking/AutoDockingNodelet mobile_base_nodelet_manager">
       <rosparam command="load"                      file="$(find kobuki_auto_docking)/param/auto_docking.yaml" />
       <remap from="dock_drive/odom"                 to="mobile_base/odom" />

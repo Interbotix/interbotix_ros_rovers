@@ -88,15 +88,6 @@ Examples:
   ./xslocobot_amd64_install.sh -p ~/custom_ws
     Installs the Interbotix packages under the '~/custom_ws' path."
 
-CREATE3_NETWORK_CONFIG="network:
-  version: 2\n
-  ethernets:\n
-    eno1:\n
-      dhcp4: false\n
-      optional: true\n
-      addresses: [192.168.186.3/24]\n
-"
-
 function help() {
   # print usage
   cat << EOF
@@ -178,7 +169,7 @@ function check_ubuntu_version() {
 
 function install_essential_packages() {
   # Install necessary core packages
-  sudo apt -y install openssh-server curl netplan.io
+  sudo apt -y install openssh-server curl
   if [ $ROS_VERSION_TO_INSTALL == 2 ]; then
     sudo pip3 install transforms3d
   fi
@@ -685,11 +676,20 @@ fi
 
 # configure LoCoBot computer ethernet to use proper network config
 if [[ $BASE_TYPE == 'create3' ]]; then
+  sudo apt -y install netplan.io
+  export CREATE3_NETWORK_CONFIG="network:
+  version: 2
+  ethernets:
+    eno1:
+      dhcp4: false
+      optional: true
+      addresses: [192.168.186.3/24]
+"
   if [ ! -d "/etc/netplan/" ]; then
     sudo mkdir -p /etc/netplan/
   fi
   sudo touch /etc/netplan/99_config.yaml
-  sudo echo -e "$CREATE3_NETWORK_CONFIG" >> /etc/netplan/99_config.yaml
+  sudo bash -c 'echo -e "'"$CREATE3_NETWORK_CONFIG"'" > /etc/netplan/99_config.yaml'
   sudo netplan apply
 fi
 

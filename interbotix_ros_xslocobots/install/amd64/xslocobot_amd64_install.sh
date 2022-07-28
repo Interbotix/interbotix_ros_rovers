@@ -561,9 +561,9 @@ function setup_env_vars() {
     echo 'export ROS_IP=$(echo `hostname -I | cut -d" " -f1`)' >> ~/.bashrc
     echo -e 'if [ -z "$ROS_IP" ]; then\n\texport ROS_IP=127.0.0.1\nfi' >> ~/.bashrc
   if [[ $ROS_VERSION_TO_INSTALL == 1 ]] && [[ $BASE_TYPE == 'create3' ]]; then
-    echo -e "BRIDGE_WS=${BRIDGE_WS}" >> ~/.bashrc
-    echo -e "BRIDGE_MSGS_ROS1_WS=${BRIDGE_MSGS_ROS1_WS}" >> ~/.bashrc
-    echo -e "BRIDGE_MSGS_ROS2_WS=${BRIDGE_MSGS_ROS2_WS}" >> ~/.bashrc
+    echo -e "export BRIDGE_WS=${BRIDGE_WS}" >> ~/.bashrc
+    echo -e "export BRIDGE_MSGS_ROS1_WS=${BRIDGE_MSGS_ROS1_WS}" >> ~/.bashrc
+    echo -e "export BRIDGE_MSGS_ROS2_WS=${BRIDGE_MSGS_ROS2_WS}" >> ~/.bashrc
   fi
   else
     echo "Environment variables already set!"
@@ -638,7 +638,7 @@ echo -e "\n\n"
 sleep 4
 start_time="$(date -u +%s)"
 
-echo "# Interbotix Configurations" >> ~/.bashrc
+echo -e "\n# Interbotix Configurations" >> ~/.bashrc
 
 export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}
 
@@ -647,6 +647,27 @@ sudo apt update && sudo apt -y upgrade
 sudo apt -y autoremove
 
 install_essential_packages
+
+# configure LoCoBot computer ethernet to use proper network config for Create3
+if [[ $BASE_TYPE == 'create3' ]]; then
+  sudo apt -y install netplan.io
+  export CREATE3_NETWORK_CONFIG="network:
+  version: 2
+  ethernets:
+    eno1:
+      dhcp4: false
+      optional: true
+      addresses: [192.168.186.3/24]
+"
+  if [ ! -f "/etc/netplan/99_config.yaml" ]; then
+    if [ ! -d "/etc/netplan/" ]; then
+      sudo mkdir -p /etc/netplan/
+    fi
+    sudo touch /etc/netplan/99_config.yaml
+    sudo bash -c 'echo -e "'"$CREATE3_NETWORK_CONFIG"'" > /etc/netplan/99_config.yaml'
+    sudo netplan apply
+  fi
+fi
 
 mkdir -p $INSTALL_PATH/src
 
@@ -672,25 +693,6 @@ elif [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
   install_locobot_ros2
 else
   failed "Something went wrong."
-fi
-
-# configure LoCoBot computer ethernet to use proper network config
-if [[ $BASE_TYPE == 'create3' ]]; then
-  sudo apt -y install netplan.io
-  export CREATE3_NETWORK_CONFIG="network:
-  version: 2
-  ethernets:
-    eno1:
-      dhcp4: false
-      optional: true
-      addresses: [192.168.186.3/24]
-"
-  if [ ! -d "/etc/netplan/" ]; then
-    sudo mkdir -p /etc/netplan/
-  fi
-  sudo touch /etc/netplan/99_config.yaml
-  sudo bash -c 'echo -e "'"$CREATE3_NETWORK_CONFIG"'" > /etc/netplan/99_config.yaml'
-  sudo netplan apply
 fi
 
 shopt -u extglob

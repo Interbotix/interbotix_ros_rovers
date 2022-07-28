@@ -100,6 +100,10 @@
     </node>
   </group>
 
+  <group if="$(eval arg('use_base') and arg('base_type') == 'create3')">
+    <node name="dynamic_bridge" pkg="interbotix_xslocobot_control" type="startup_dynamic_bridge.sh" />
+  </group>
+
   <node if="$(arg use_lidar)"
 	  name="rplidarNode"
 	  pkg="rplidar_ros"

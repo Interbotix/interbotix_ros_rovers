@@ -101,7 +101,15 @@
   </group>
 
   <group if="$(eval arg('use_base') and arg('base_type') == 'create3')">
-    <node name="dynamic_bridge" pkg="interbotix_xslocobot_control" type="startup_dynamic_bridge.sh" />
+    <node
+      name="dynamic_bridge"
+      pkg="interbotix_xslocobot_control"
+      type="startup_dynamic_bridge.sh" />
+    <node
+      name="create3_default_params"
+      pkg="interbotix_xslocobot_control"
+      type="startup_create3_default_params.sh"
+      args="$(arg robot_name)" />
   </group>
 
   <node if="$(arg use_lidar)"

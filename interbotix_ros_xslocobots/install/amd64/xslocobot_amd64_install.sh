@@ -382,12 +382,13 @@ function install_locobot_ros1() {
   if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/devel/setup.bash && rospack list | grep -q interbotix_ ; then
     echo "Interbotix LoCoBot ROS packages already installed!"
   else
+    source ~/.bashrc
     echo -e "${GRN}Installing ROS packages for the Interbotix LoCoBot...${OFF}"
     cd $INSTALL_PATH/src
     git clone https://github.com/Interbotix/interbotix_ros_core.git -b $ROS_DISTRO_TO_INSTALL
     # TODO(lsinterbotix): change this back to ROS_DISTRO_TO_INSTALL on release
     git clone https://github.com/Interbotix/interbotix_ros_rovers.git -b devel-temp
-    git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b $ROS_DISTRO_TO_INSTALL
+    git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b devel-temp
     rm interbotix_ros_core/interbotix_ros_xseries/CATKIN_IGNORE
     rm interbotix_ros_toolboxes/interbotix_xs_toolbox/CATKIN_IGNORE
     rm interbotix_ros_toolboxes/interbotix_perception_toolbox/CATKIN_IGNORE
@@ -544,6 +545,7 @@ function install_create3_ros1() {
   else
     failed "Something went wrong when building ros1_bridge. ros1_bridge dynamic_bridge can't find irobot_create_msgs."
   fi
+  echo -e "source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash" >> ~/.bashrc
 }
 
 function install_create3_ros2() {

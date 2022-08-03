@@ -2,8 +2,8 @@
 #include <sensor_msgs/Joy.h>
 #include "interbotix_xs_msgs/LocobotJoy.h"
 
-static const double MAX_BASE_X = 0.7;         // Max translational motion that the Kobuki base can do is 0.7 m/s
-static const double MAX_BASE_THETA = 3.14;    // Max rotational motion that the Kobuki base can do is 3.14 rad/s
+static const double MAX_BASE_X = 0.7;         // Max translational motion that the base can do is 0.7 m/s
+static const double MAX_BASE_THETA = 3.14;    // Max rotational motion that the base can do is 3.14 rad/s
 
 // PS3 Controller button mappings
 static const std::map<std::string, int> ps3 = {{"GRIPPER_PWM_DEC", 0}, // buttons start here

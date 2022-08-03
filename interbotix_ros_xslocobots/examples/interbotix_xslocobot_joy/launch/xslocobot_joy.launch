@@ -5,6 +5,7 @@
   <arg name="use_rviz"                          default="false"/>
   <arg name="rviz_frame"                        default="$(arg robot_name)/odom"/>
   <arg name="use_base"                          default="true"/>
+  <arg name="base_type"                         default="$(env INTERBOTIX_XSLOCOBOT_BASE_TYPE)"/>
   <arg name="use_lidar"                         default="false"/>
   <arg name="show_lidar"                        default="$(arg use_lidar)"/>
   <arg name="use_camera"                        default="false"/>
@@ -26,6 +27,7 @@
     <arg name="use_rviz"                          value="$(arg use_rviz)"/>
     <arg name="rviz_frame"                        value="$(arg rviz_frame)"/>
     <arg name="use_base"                          value="$(arg use_base)"/>
+    <arg name="base_type"                         value="$(arg base_type)"/>
     <arg name="use_lidar"                         value="$(arg use_lidar)"/>
     <arg name="show_lidar"                        value="$(arg show_lidar)"/>
     <arg name="use_camera"                        value="$(arg use_camera)"/>
@@ -61,6 +63,7 @@
     ns="$(arg robot_name)">
     <param name="robot_model"                     value="$(arg robot_model)"/>
     <param name="use_base"                        value="$(arg use_base)"/>
+    <param name="base_type"                       value="$(arg base_type)"/>
   </node>
 
 </launch>

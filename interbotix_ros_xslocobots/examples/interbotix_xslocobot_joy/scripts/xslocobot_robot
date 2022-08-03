@@ -1,12 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import copy
+import sys
 import rospy
 import threading
 import numpy as np
 from interbotix_xs_msgs.msg import LocobotJoy
 from interbotix_common_modules import angle_manipulation as ang
-from interbotix_xs_modules.locobot import InterbotixLocobotXS
+from interbotix_xs_modules.locobot import InterbotixLocobotCreate3XS, InterbotixLocobotKobukiXS
 
 class LocobotRobot(object):
     def __init__(self):
@@ -18,10 +19,25 @@ class LocobotRobot(object):
         self.rate = rospy.Rate(self.current_loop_rate)
         self.use_base = rospy.get_param("~use_base")
         robot_model = rospy.get_param("~robot_model")
+        base_type = rospy.get_param("~base_type")
         robot_name = rospy.get_namespace().strip("/")
         self.arm_model = "mobile_" + robot_model.split("_")[1]
         if self.arm_model == "mobile_base": self.arm_model = None
-        self.locobot = InterbotixLocobotXS(robot_model, self.arm_model, robot_name=robot_name, init_node=False)
+        if base_type == 'kobuki':
+            self.locobot = InterbotixLocobotKobukiXS(
+                robot_model=robot_model,
+                arm_model=self.arm_model,
+                robot_name=robot_name,
+                init_node=False)
+        elif base_type == 'create3':
+            self.locobot = InterbotixLocobotCreate3XS(
+                robot_model=robot_model,
+                arm_model=self.arm_model,
+                robot_name=robot_name,
+                init_node=False)
+        else:
+            rospy.logerr("Base Type must be 'kobuki' or 'create3', was '" + base_type + "'.")
+            sys.exit(1)
         if self.arm_model is not None:
             self.rotate_step = 0.04
             self.translate_step = 0.01
@@ -76,7 +92,10 @@ class LocobotRobot(object):
 
         # check base_reset_odom_cmd
         if (msg.base_reset_odom_cmd == LocobotJoy.RESET_ODOM and self.use_base):
-            self.locobot.base.reset_odom()
+            if self.base_type == 'kobuki':
+                self.locobot.base.reset_odom()
+            elif self.base_type == 'create3':
+                rospy.loginfo("Can't reset odometry using a Create3 base.")
 
         if self.arm_model is None:  return
 
@@ -118,7 +137,7 @@ class LocobotRobot(object):
 
             self.locobot.camera.pan_tilt_move(cam_positions[0], cam_positions[1], 0.2, 0.1, 0.2, 0.1, False)
 
-        # check Kobuki related commands
+        # check base related commands
         if self.use_base:
             self.locobot.base.command_velocity(msg.base_x_cmd, msg.base_theta_cmd)
 

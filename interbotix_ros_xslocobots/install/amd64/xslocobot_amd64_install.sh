@@ -382,7 +382,6 @@ function install_locobot_ros1() {
   if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/devel/setup.bash && rospack list | grep -q interbotix_ ; then
     echo "Interbotix LoCoBot ROS packages already installed!"
   else
-    source ~/.bashrc
     echo -e "${GRN}Installing ROS packages for the Interbotix LoCoBot...${OFF}"
     cd $INSTALL_PATH/src
     git clone https://github.com/Interbotix/interbotix_ros_core.git -b $ROS_DISTRO_TO_INSTALL
@@ -398,6 +397,7 @@ function install_locobot_ros1() {
     sudo udevadm control --reload-rules && sudo udevadm trigger
     cd $INSTALL_PATH
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
+    source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash
     if catkin_make; then
       echo -e "${GRN}${BOLD}Interbotix LoCoBot ROS packages built successfully!${NORM}${OFF}"
       echo "source $INSTALL_PATH/devel/setup.bash" >> ~/.bashrc
@@ -545,6 +545,9 @@ function install_create3_ros1() {
   else
     failed "Something went wrong when building ros1_bridge. ros1_bridge dynamic_bridge can't find irobot_create_msgs."
   fi
+  echo -e "export BRIDGE_WS=${BRIDGE_WS}" >> ~/.bashrc
+  echo -e "export BRIDGE_MSGS_ROS1_WS=${BRIDGE_MSGS_ROS1_WS}" >> ~/.bashrc
+  echo -e "export BRIDGE_MSGS_ROS2_WS=${BRIDGE_MSGS_ROS2_WS}" >> ~/.bashrc
   echo -e "source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash" >> ~/.bashrc
 }
 
@@ -562,11 +565,6 @@ function setup_env_vars() {
     echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}" >> ~/.bashrc
     echo 'export ROS_IP=$(echo `hostname -I | cut -d" " -f1`)' >> ~/.bashrc
     echo -e 'if [ -z "$ROS_IP" ]; then\n\texport ROS_IP=127.0.0.1\nfi' >> ~/.bashrc
-  if [[ $ROS_VERSION_TO_INSTALL == 1 ]] && [[ $BASE_TYPE == 'create3' ]]; then
-    echo -e "export BRIDGE_WS=${BRIDGE_WS}" >> ~/.bashrc
-    echo -e "export BRIDGE_MSGS_ROS1_WS=${BRIDGE_MSGS_ROS1_WS}" >> ~/.bashrc
-    echo -e "export BRIDGE_MSGS_ROS2_WS=${BRIDGE_MSGS_ROS2_WS}" >> ~/.bashrc
-  fi
   else
     echo "Environment variables already set!"
   fi
@@ -681,7 +679,6 @@ if [[ $ROS_VERSION_TO_INSTALL == 1 ]]; then
     install_kobuki_ros1
   elif [[ $BASE_TYPE == 'create3' ]]; then
     install_create3_ros1
-    source ~/.bashrc
   fi
   install_locobot_ros1
 elif [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then

@@ -33,6 +33,7 @@
   <arg name="mode_configs" default="$(find interbotix_xslocobot_control)/config/modes_$(arg mode_type).yaml"/>
 
   <param name="$(arg robot_name)/use_base"      value="$(arg use_base)"/>
+  <param name="$(arg robot_name)/base_type"     value="$(arg base_type)"/>
 
   <include file="$(find interbotix_xslocobot_descriptions)/launch/xslocobot_description.launch">
     <arg name="robot_model"                       value="$(arg robot_model)"/>

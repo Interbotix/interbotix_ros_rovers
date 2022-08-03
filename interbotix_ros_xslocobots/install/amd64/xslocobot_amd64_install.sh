@@ -396,6 +396,8 @@ function install_locobot_ros1() {
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
     cd $INSTALL_PATH
+    source $APRILTAG_WS/install_isolated/setup.bash
+    source $REALSENSE_WS/devel/setup.bash
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash
     if catkin_make; then
@@ -409,7 +411,7 @@ function install_locobot_ros1() {
 }
 
 function install_locobot_ros2() {
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/install/setup.bash && ros2 pkg list | grep -q interbotix_ ; then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/install/setup.bash && ros2 pkg list | grep -q interbotix_; then
     echo "Interbotix LoCoBot ROS packages already installed!"
   else
     echo -e "${GRN}Installing ROS 2 packages for the Interbotix LoCoBot...${OFF}"

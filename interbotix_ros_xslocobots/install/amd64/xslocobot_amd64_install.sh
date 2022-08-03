@@ -632,6 +632,8 @@ echo ""
 echo -e "${GRN}${BOLD}            Starting installation!            ${NORM}${OFF}"
 echo -e "${GRN}${BOLD}   This process may take around 15 Minutes!   ${NORM}${OFF}"
 echo ""
+echo -e "${GRN}${BOLD}      Be ready reenter password if needed.    ${NORM}${OFF}"
+echo ""
 echo -e "${GRN}${BOLD}**********************************************${NORM}${OFF}"
 echo -e "\n\n"
 
@@ -641,6 +643,11 @@ start_time="$(date -u +%s)"
 echo -e "\n# Interbotix Configurations" >> ~/.bashrc
 
 export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}
+
+# Configure Ubuntu repositories to allow restricted, universe, and multiverse
+sudo add-apt-repository universe
+sudo add-apt-repository multiverse
+sudo add-apt-repository restricted
 
 # Update the system
 sudo apt update && sudo apt -y upgrade

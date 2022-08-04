@@ -8,4 +8,4 @@
   . $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash &&   \
   . $BRIDGE_MSGS_ROS2_WS/install/setup.bash &&            \
   . $BRIDGE_WS/install/local_setup.bash &&                \
-  ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
+  ros2 run ros1_bridge parameter_bridge

@@ -102,10 +102,11 @@
   </group>
 
   <group if="$(eval arg('use_base') and arg('base_type') == 'create3')">
+    <rosparam command="load" file="$(find interbotix_xslocobot_control)/config/bridge.yaml" />
     <node
-      name="dynamic_bridge"
+      name="parameter_bridge"
       pkg="interbotix_xslocobot_control"
-      type="startup_dynamic_bridge.sh" />
+      type="startup_bridge.sh" />
     <node
       name="create3_default_params"
       pkg="interbotix_xslocobot_control"

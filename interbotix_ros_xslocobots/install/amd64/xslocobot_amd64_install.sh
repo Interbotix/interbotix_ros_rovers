@@ -4,6 +4,8 @@
 #
 # Install the Interbotix X-Series LoCoBot packages and their dependencies.
 
+set -e
+
 OFF='\033[0m'
 RED='\033[0;31m'
 GRN='\033[0;32m'

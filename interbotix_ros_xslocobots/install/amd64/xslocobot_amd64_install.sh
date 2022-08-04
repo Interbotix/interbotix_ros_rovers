@@ -245,7 +245,7 @@ function install_perception_ros1() {
   fi
 
   # Step 2B: Install realsense2 ROS Wrapper
-  if [ ! -d "$REALSENSE_WS/src" ]; then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $REALSENSE_WS/devel/setup.bash && rospack list | grep -q realsense;then
     echo -e "${GRN}Installing RealSense ROS Wrapper...${OFF}"
     mkdir -p $REALSENSE_WS/src
     cd $REALSENSE_WS/src
@@ -264,7 +264,7 @@ function install_perception_ros1() {
   source $REALSENSE_WS/devel/setup.bash
 
   # Step 3: Install apriltag ROS Wrapper
-  if [ ! -d "$APRILTAG_WS/src" ]; then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $APRILTAG_WS/devel/setup.bash && rospack list | grep -q apriltag;then
     echo -e "${GRN}Installing Apriltag ROS Wrapper...${NORM}${OFF}"
     mkdir -p $APRILTAG_WS/src
     cd $APRILTAG_WS/src
@@ -339,7 +339,7 @@ function install_perception_ros2() {
   fi
 
   # Step 2B: Install realsense2 ROS Wrapper
-  if [ ! -d "$REALSENSE_WS/src" ]; then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $REALSENSE_WS/install/setup.bash && ros2 pkg list | grep -q realsense;then
     echo "${GRN}Installing RealSense ROS Wrapper...${OFF}"
     mkdir -p $REALSENSE_WS/src
     cd $REALSENSE_WS/src
@@ -358,7 +358,7 @@ function install_perception_ros2() {
   source $REALSENSE_WS/install/setup.bash
 
   # Step 3: Install apriltag ROS Wrapper
-  if [ ! -d "$APRILTAG_WS/src" ]; then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $APRILTAG_WS/install/setup.bash && ros2 pkg list | grep -q apriltag; then
     echo -e "${GRN}${BOLD}Installing Apriltag ROS Wrapper...${NORM}${OFF}"
     mkdir -p $APRILTAG_WS/src
     cd $APRILTAG_WS/src
@@ -379,7 +379,7 @@ function install_perception_ros2() {
 }
 
 function install_locobot_ros1() {
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/devel/setup.bash && rospack list | grep -q interbotix_ ; then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/devel/setup.bash && rospack list | grep -q interbotix_; then
     echo "Interbotix LoCoBot ROS packages already installed!"
   else
     echo -e "${GRN}Installing ROS packages for the Interbotix LoCoBot...${OFF}"
@@ -411,7 +411,7 @@ function install_locobot_ros1() {
 }
 
 function install_locobot_ros2() {
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/install/setup.bash && ros2 pkg list | grep -q interbotix_; then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/install/setup.bash && ros2 pkg list | grep -q interbotix_;then
     echo "Interbotix LoCoBot ROS packages already installed!"
   else
     echo -e "${GRN}Installing ROS 2 packages for the Interbotix LoCoBot...${OFF}"

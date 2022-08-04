@@ -399,7 +399,7 @@ function install_locobot_ros1() {
     sudo udevadm control --reload-rules && sudo udevadm trigger
     cd $INSTALL_PATH
     source $APRILTAG_WS/install_isolated/setup.bash
-    source $REALSENSE_WS/devel/setup.bash
+    source $REALSENSE_WS/install/setup.bash
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash
     if catkin_make; then

@@ -213,79 +213,6 @@ function install_ros1() {
   source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash
 }
 
-function install_perception_ros1() {
-  # Step 2: Install Realsense packages
-
-  # Step 2A: Install librealsense2
-  if [ $(dpkg-query -W -f='${Status}' librealsense2 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    echo -e "${GRN}Installing librealsense2...${OFF}"
-    sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-    sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -sc) main" -u
-    if [ $UBUNTU_VERSION == "18.04" ]; then
-      version="2.48.0-0~realsense0.4975"
-    elif [ $UBUNTU_VERSION == "20.04" ]; then
-      version="2.48.0-0~realsense0.4976"
-    fi
-
-    sudo apt -y install                   \
-      librealsense2-udev-rules=${version} \
-      librealsense2-dkms                  \
-      librealsense2=${version}            \
-      librealsense2-gl=${version}         \
-      librealsense2-gl-dev=${version}     \
-      librealsense2-gl-dbg=${version}     \
-      librealsense2-net=${version}        \
-      librealsense2-net-dev=${version}    \
-      librealsense2-net-dbg=${version}    \
-      librealsense2-utils=${version}      \
-      librealsense2-dev=${version}        \
-      librealsense2-dbg=${version}
-    sudo apt-mark hold librealsense2*
-    sudo apt -y install ros-$ROS_DISTRO_TO_INSTALL-ddynamic-reconfigure
-  else
-    echo "librealsense2 already installed!"
-  fi
-
-  # Step 2B: Install realsense2 ROS Wrapper
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $REALSENSE_WS/devel/setup.bash && rospack list | grep -q realsense;then
-    echo -e "${GRN}Installing RealSense ROS Wrapper...${OFF}"
-    mkdir -p $REALSENSE_WS/src
-    cd $REALSENSE_WS/src
-    git clone https://github.com/IntelRealSense/realsense-ros.git -b 2.3.1
-    cd $REALSENSE_WS
-    catkin_make clean
-    if catkin_make install && catkin_make -DCATKIN_ENABLE_TESTING=False -DCMAKE_BUILD_TYPE=Release; then
-      echo -e "${GRN}${BOLD}Realsense ROS Wrapper built successfully!${NORM}${OFF}"
-      echo "source $REALSENSE_WS/devel/setup.bash" >> ~/.bashrc
-    else
-      failed "Failed to build Realsense ROS Wrapper."
-    fi
-  else
-    echo "RealSense ROS Wrapper already installed!"
-  fi
-  source $REALSENSE_WS/devel/setup.bash
-
-  # Step 3: Install apriltag ROS Wrapper
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $APRILTAG_WS/devel/setup.bash && rospack list | grep -q apriltag;then
-    echo -e "${GRN}Installing Apriltag ROS Wrapper...${NORM}${OFF}"
-    mkdir -p $APRILTAG_WS/src
-    cd $APRILTAG_WS/src
-    git clone https://github.com/AprilRobotics/apriltag.git
-    git clone https://github.com/AprilRobotics/apriltag_ros.git
-    cd $APRILTAG_WS
-    rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
-    if catkin_make_isolated; then
-      echo -e "${GRN}${BOLD}Apriltag ROS Wrapper built successfully!${NORM}${OFF}"
-      echo "source $APRILTAG_WS/devel_isolated/setup.bash" >> ~/.bashrc
-    else
-      failed "Failed to build Apriltag ROS Wrapper."
-    fi
-  else
-    echo "Apriltag ROS Wrapper already installed!"
-  fi
-  source $APRILTAG_WS/devel_isolated/setup.bash
-}
-
 function install_ros2() {
   # Installs ROS 2
   if [ $(dpkg-query -W -f='${Status}' ros-$ROS_DISTRO_TO_INSTALL-desktop 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
@@ -398,8 +325,6 @@ function install_locobot_ros1() {
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
     cd $INSTALL_PATH
-    source $APRILTAG_WS/install_isolated/setup.bash
-    source $REALSENSE_WS/install/setup.bash
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash
     if catkin_make; then
@@ -634,7 +559,7 @@ echo -e "\n\n"
 echo -e "${GRN}${BOLD}**********************************************${NORM}${OFF}"
 echo ""
 echo -e "${GRN}${BOLD}            Starting installation!            ${NORM}${OFF}"
-echo -e "${GRN}${BOLD}   This process may take around 15 Minutes!   ${NORM}${OFF}"
+echo -e "${GRN}${BOLD}   This process may take around 30 Minutes!   ${NORM}${OFF}"
 echo ""
 echo -e "${GRN}${BOLD}      Be ready reenter password if needed.    ${NORM}${OFF}"
 echo ""
@@ -685,7 +610,6 @@ mkdir -p $INSTALL_PATH/src
 shopt -s extglob
 if [[ $ROS_VERSION_TO_INSTALL == 1 ]]; then
   install_ros1
-  install_perception_ros1
   if [[ $BASE_TYPE == 'kobuki' ]]; then
     install_kobuki_ros1
   elif [[ $BASE_TYPE == 'create3' ]]; then

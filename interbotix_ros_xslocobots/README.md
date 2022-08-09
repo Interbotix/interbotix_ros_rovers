@@ -24,7 +24,7 @@ Refer [here](https://github.com/Interbotix/interbotix_ros_core#code-structure) t
 ##### Hardware Layer
 All LoCoBots contain arms and pan/tilt mechanisms made up of [X-Series DYNAMIXEL servos](https://www.trossenrobotics.com/robot-servos). Each servo has two 3-pin JST ports that allows it to be daisy chained with other servos using 3-pin cables. The 'root' DYNAMIXELs (i.e. the 'waist' and 'pan' motors) then connect to the [XM/XL motor power hub](https://www.trossenrobotics.com/3-pin-x-series-power-hub.aspx). Besides for providing 12V to the motors from the barrel jack, the hub also connects to the 3-pin JST port on the [U2D2](https://www.trossenrobotics.com/dynamixel-u2d2.aspx). This device acts as a communication interface between a computer (connected via microUSB cable) and the motors - converting USB/TTL signals back and forth.
 
-Besides for the DYNAMIXEL servo, there is another type of actuator present on the LoCoBot that drives the Kobuki base. This is shown on the bottom left of the diagram above. Two of these actuators exist to drive the two wheels on the base.
+Besides for the DYNAMIXEL servo, there is another type of actuator present on the LoCoBot that drives the base. This is shown on the bottom left of the diagram above. Two of these actuators exist to drive the two wheels on the base.
 
 On the right side of this layer, there are three sensors. All LoCoBots come with the [RealSense D435 camera](https://www.intelrealsense.com/depth-camera-d435/) used to perform depth and color sensing. Additionally, there is the [A2M8 RPLidar](https://www.slamtec.com/en/Lidar/A2) navigation scanner which can be added on if desired. Finally, a joystick controller can be used to control the robot.
 

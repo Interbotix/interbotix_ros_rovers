@@ -608,6 +608,7 @@ fi
 mkdir -p $INSTALL_PATH/src
 
 shopt -s extglob
+
 if [[ $ROS_VERSION_TO_INSTALL == 1 ]]; then
   install_ros1
   if [[ $BASE_TYPE == 'kobuki' ]]; then
@@ -617,6 +618,7 @@ if [[ $ROS_VERSION_TO_INSTALL == 1 ]]; then
   fi
   install_locobot_ros1
 elif [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
+  failed "ROS 2 is not yet supported on the LoCoBot platform."
   install_ros2
   install_perception_ros2
   if [[ $BASE_TYPE == 'kobuki' ]]; then

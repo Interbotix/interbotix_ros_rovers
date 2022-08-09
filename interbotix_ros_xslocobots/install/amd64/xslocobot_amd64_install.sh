@@ -28,7 +28,6 @@ FOCAL_VALID_DISTROS=('noetic' 'galactic')
 
 VALID_BASE_TYPES=('kobuki' 'create3')
 
-BASE_TYPE=create3
 NONINTERACTIVE=false
 DISTRO_SET_FROM_CL=false
 INSTALL_PATH=~/interbotix_ws
@@ -87,7 +86,7 @@ Examples:
   ./xslocobot_amd64_install.sh ${BOLD}-d galactic -n${NORM}
     Install ROS 2 Galactic and all packages and dependencies.
 
-  ./xslocobot_amd64_install.sh -p ~/custom_ws
+  ./xslocobot_amd64_install.sh ${BOLD}-p ~/custom_ws${NORM}
     Installs the Interbotix packages under the '~/custom_ws' path."
 
 function help() {
@@ -135,6 +134,9 @@ function validate_distro() {
 }
 
 function validate_base_type() {
+  if [ -z "$BASE_TYPE" ]; then
+    failed "You must specify a base type using the '-b' flag followed by one of: "${VALID_BASE_TYPES[@]}""
+  fi
   if contains_element $BASE_TYPE "${VALID_BASE_TYPES[@]}"; then
     :
   else

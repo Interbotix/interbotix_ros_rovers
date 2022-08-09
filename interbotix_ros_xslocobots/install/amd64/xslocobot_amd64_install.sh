@@ -314,9 +314,8 @@ function install_locobot_ros1() {
     echo -e "${GRN}Installing ROS packages for the Interbotix LoCoBot...${OFF}"
     cd $INSTALL_PATH/src
     git clone https://github.com/Interbotix/interbotix_ros_core.git -b $ROS_DISTRO_TO_INSTALL
-    # TODO(lsinterbotix): change this back to ROS_DISTRO_TO_INSTALL on release
-    git clone https://github.com/Interbotix/interbotix_ros_rovers.git -b devel-temp
-    git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b devel-temp
+    git clone https://github.com/Interbotix/interbotix_ros_rovers.git -b $ROS_DISTRO_TO_INSTALL
+    git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b $ROS_DISTRO_TO_INSTALL
     rm interbotix_ros_core/interbotix_ros_xseries/CATKIN_IGNORE
     rm interbotix_ros_toolboxes/interbotix_xs_toolbox/CATKIN_IGNORE
     rm interbotix_ros_toolboxes/interbotix_perception_toolbox/CATKIN_IGNORE

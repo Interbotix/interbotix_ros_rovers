@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
 import six
-import yaml
 import rospy
 import rospkg
 from interbotix_xs_modules.locobot import InterbotixLocobotXS as Locobot
-from interbotix_landmark_modules.landmark import Landmark, LandmarkCollection
+from interbotix_landmark_modules.landmark import LandmarkCollection
 
 # Update this value with your model
 MODEL = "px100"
@@ -13,12 +12,12 @@ MODEL = "px100"
 class NavigationInerface(object):
     landmarks = LandmarkCollection(
         ros_on=True)
-    
+
     def __init__(self):
         self.active_lm = None
         self.tags = []
         self.locobot = Locobot(
-            robot_model="locobot_"+MODEL, 
+            robot_model="locobot_"+MODEL,
             use_move_base_action=True)
         r = rospkg.RosPack()
         pkg_path = r.get_path("interbotix_xslocobot_landmark_nav")
@@ -44,7 +43,7 @@ class NavigationInerface(object):
                             self.landmarks.data[self.active_lm].get_label()))
                     break
                 else:
-                    print("%s is not in the list of landmarks. Choose again." 
+                    print("'%s' is not in the list of landmarks. Choose again."
                         % self.active_lm)
             x, y, yaw = self.landmarks.data[self.active_lm].get_mb_goal()
 
@@ -65,7 +64,7 @@ class NavigationInerface(object):
             if len(self.set_lms) == 0:
                 print("No landmarks are set. Did your robot see any landmarks?")
                 exit()
-            print("Loaded landmarks from " + self.lm_config_filepath)
+            print("Loaded landmarks from '" + self.lm_config_filepath  + "'.")
             self.landmarks.pub_markers(self.landmarks.get_set_tags())
             self.landmarks.pub_tfs(self.landmarks.get_set_tags())
         else:

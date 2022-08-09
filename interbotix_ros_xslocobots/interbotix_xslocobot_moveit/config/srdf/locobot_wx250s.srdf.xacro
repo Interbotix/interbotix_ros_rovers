@@ -59,15 +59,15 @@
     </group_state>
     <group_state name="Home" group="interbotix_gripper">
         <joint name="left_finger" value="0.0195" />
-        <joint name="right_finger" value="0" />
+        <joint name="right_finger" value="-0.0195" />
     </group_state>
     <group_state name="Open" group="interbotix_gripper">
         <joint name="left_finger" value="0.037" />
-        <joint name="right_finger" value="0" />
+        <joint name="right_finger" value="-0.037" />
     </group_state>
     <group_state name="Closed" group="interbotix_gripper">
         <joint name="left_finger" value="0.015" />
-        <joint name="right_finger" value="0" />
+        <joint name="right_finger" value="-0.015" />
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="interbotix_gripper" parent_link="$(arg robot_name)/ee_gripper_link" group="interbotix_gripper" />

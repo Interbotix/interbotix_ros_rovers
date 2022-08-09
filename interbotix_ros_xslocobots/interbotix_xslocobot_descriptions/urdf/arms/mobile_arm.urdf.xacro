@@ -23,7 +23,7 @@
 
       <joint name="arm_stand_link_joint" type="fixed">
         <axis xyz="0 0 0"/>
-        <origin rpy="0 0 0" xyz="0.111126 0 0.0095"/> <!-- TODO -->
+        <origin rpy="0 0 0" xyz="0.092002 0 0.007763"/>
         <parent link="$(arg robot_name)/plate_link"/>
         <child link="$(arg robot_name)/arm_stand_link"/>
       </joint>
@@ -51,7 +51,7 @@
 
       <joint name="arm_base_link_joint" type="fixed">
         <axis xyz="0 0 0"/>
-        <origin rpy="0 0 0" xyz="0 0 0.0095"/> <!-- TODO -->
+        <origin rpy="0 0 0" xyz="0 0 0.023"/>
         <parent link="$(arg robot_name)/arm_stand_link"/>
         <child link="$(arg robot_name)/arm_base_link"/>
       </joint>

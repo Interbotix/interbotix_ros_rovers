@@ -1,29 +1,22 @@
 <?xml version="1.0"?>
-<robot name="mobile_px100" xmlns:xacro="http://ros.org/wiki/xacro">
-
-  <joint name="arm_base_link_joint" type="fixed">
-    <axis xyz="0 0 0"/>
-    <origin rpy="0 0 0" xyz="0.111126 0 0.0095"/>
-    <parent link="$(arg robot_name)/plate_link"/>
-    <child link="$(arg robot_name)/arm_base_link"/>
-  </joint>
+<robot name="mobile_wx250s" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <link name="$(arg robot_name)/arm_base_link">
     <visual>
-      <origin rpy="0 0 ${-pi/2}" xyz="0 0 0"/>
+      <origin rpy="${pi/2} 0 ${pi/2}" xyz="-0.095773 0 -0.10565023"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_1_base.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_1_base.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="interbotix_black"/>
     </visual>
     <collision>
-      <origin rpy="0 0 ${-pi/2}" xyz="0 0 0"/>
+      <origin rpy="${pi/2} 0 ${pi/2}" xyz="-0.095773 0 -0.10565023"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_1_base.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_1_base.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 ${-pi/2}" xyz="-0.0026290000 -0.0000479121 0.0212180000"/>
+      <origin rpy="${pi/2} 0 ${pi/2}" xyz="-0.0001350000 -0.0000266286 0.0338755000"/>
       <mass value="0.379673" />
       <inertia ixx="0.0004351000" iyy="0.0004452000" izz="0.0005731000" ixy="0.0000000707" ixz="0.0000000266" iyz="-0.0000022881" />
     </inertial>
@@ -31,8 +24,8 @@
 
   <joint name="waist" type="revolute">
     <axis xyz="0 0 1"/>
-    <limit effort="1" lower="${-pi + pi_offset}" upper="${pi - pi_offset}" velocity="${pi}"/>
-    <origin rpy="0 0 0" xyz="0 0 0.04293"/>
+    <limit effort="10" lower="${-pi + pi_offset}" upper="${pi - pi_offset}" velocity="${pi}"/>
+    <origin rpy="0 0 0" xyz="0 0 0.066175"/>
     <parent link="$(arg robot_name)/arm_base_link"/>
     <child link="$(arg robot_name)/shoulder_link"/>
     <dynamics friction="0.1"/>
@@ -50,29 +43,29 @@
 
   <link name="$(arg robot_name)/shoulder_link">
     <visual>
-      <origin rpy="0 0 ${pi/2}" xyz="0 0 -0.0022"/>
+      <origin rpy="0 0 ${pi/2}" xyz="0 0 -0.003"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_2_shoulder.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_2_shoulder.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="interbotix_black"/>
     </visual>
     <collision>
-      <origin rpy="0 0 ${pi/2}" xyz="0 0 -0.0022"/>
+      <origin rpy="0 0 ${pi/2}" xyz="0 0 -0.003"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_2_shoulder.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_2_shoulder.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 ${pi/2}" xyz="0.0000111169 -0.0003605640 0.0284598000"/>
-      <mass value="0.072587" />
-      <inertia ixx="0.0000231000" iyy="0.0000253500" izz="0.0000144200" ixy="0.0000000003" ixz="0.0000001606" iyz="-0.0000000206" />
+      <origin rpy="0 0 ${pi/2}" xyz="0.0000223482 0.0000414609 0.0066287000"/>
+      <mass value="0.480879" />
+      <inertia ixx="0.0003790000" iyy="0.0005557000" izz="0.0005889000" ixy="0.0000000022" ixz="-0.0000003561" iyz="0.0000012245" />
     </inertial>
   </link>
 
   <joint name="shoulder" type="revolute">
     <axis xyz="0 1 0"/>
-    <limit effort="2" lower="${radians(-111)}" upper="${radians(107)}" velocity="${pi}"/>
-    <origin rpy="0 0 0" xyz="0 0 0.04225"/>
+    <limit effort="20" lower="${radians(-108)}" upper="${radians(114)}" velocity="${pi}"/>
+    <origin rpy="0 0 0" xyz="0 0 0.03865"/>
     <parent link="$(arg robot_name)/shoulder_link"/>
     <child link="$(arg robot_name)/upper_arm_link"/>
     <dynamics friction="0.1"/>
@@ -92,29 +85,29 @@
     <visual>
       <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_3_upper_arm.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_3_upper_arm.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="interbotix_black"/>
     </visual>
     <collision>
       <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_3_upper_arm.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_3_upper_arm.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 ${pi/2}" xyz="0.0161976963 -0.0002929352 0.0877230000"/>
-      <mass value="0.082923" />
-      <inertia ixx="0.0000800600" iyy="0.0000745900" izz="0.0000368500" ixy="-0.0000002144" ixz="0.0000002982" iyz="0.0000165700" />
+      <origin rpy="0 0 ${pi/2}" xyz="0.0171605000 0.0000002725 0.1913230000"/>
+      <mass value="0.430811" />
+      <inertia ixx="0.0034630000" iyy="0.0035870000" izz="0.0004566000" ixy="-0.0000000001" ixz="-0.0000000002" iyz="0.0004272000" />
     </inertial>
   </link>
 
   <joint name="elbow" type="revolute">
     <axis xyz="0 1 0"/>
-    <limit effort="2" lower="${radians(-121)}" upper="${radians(92)}" velocity="${pi}"/>
-    <origin rpy="0 0 0" xyz="0.035 0 0.1"/>
+    <limit effort="15" lower="${radians(-123)}" upper="${radians(92)}" velocity="${pi}"/>
+    <origin rpy="0 0 0" xyz="0.04975 0 0.25"/>
     <parent link="$(arg robot_name)/upper_arm_link"/>
-    <child link="$(arg robot_name)/forearm_link"/>
+    <child link="$(arg robot_name)/upper_forearm_link"/>
     <dynamics friction="0.1"/>
   </joint>
 
@@ -128,33 +121,73 @@
     </actuator>
   </transmission>
 
-  <link name="$(arg robot_name)/forearm_link">
+  <link name="$(arg robot_name)/upper_forearm_link">
     <visual>
-      <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_4_forearm.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_4_upper_forearm.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="interbotix_black"/>
     </visual>
     <collision>
-      <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_4_forearm.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_4_upper_forearm.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 ${pi/2}" xyz="0.0773720000 -0.0003324882 0.0000000000"/>
-      <mass value="0.073058" />
-      <inertia ixx="0.0000533800" iyy="0.0000165300" izz="0.0000603500" ixy="-0.0000003073" ixz="0.0000000000" iyz="0.0000000000" />
+      <origin rpy="0 0 0" xyz="0.1079630000 0.0001158760 0"/>
+      <mass value="0.234589" />
+      <inertia ixx="0.0000397100" iyy="0.0008878000" izz="0.0008880000" ixy="0.0000023528" ixz="0" iyz="0" />
     </inertial>
   </link>
 
-  <joint name="wrist_angle" type="revolute">
+  <joint name="forearm_roll" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort="2" lower="${-pi + pi_offset}" upper="${pi - pi_offset}" velocity="${pi}"/>
+    <origin rpy="0 0 0" xyz="0.175 0 0"/>
+    <parent link="$(arg robot_name)/upper_forearm_link"/>
+    <child link="$(arg robot_name)/lower_forearm_link"/>
+    <dynamics friction="0.1"/>
+  </joint>
+
+  <transmission name="trans_forearm_roll">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="forearm_roll">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="forearm_roll_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="$(arg robot_name)/lower_forearm_link">
+    <visual>
+      <origin rpy="${pi} 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_5_lower_forearm.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="interbotix_black"/>
+    </visual>
+    <collision>
+      <origin rpy="${pi} 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_5_lower_forearm.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="${pi} 0 0" xyz="0.0374395000 0.0052225200 0"/>
+      <mass value="0.220991" />
+      <inertia ixx="0.0000636900" iyy="0.0001677000" izz="0.0001834000" ixy="-0.0000229200" ixz="0" iyz="0" />
+    </inertial>
+  </link>
+
+ <joint name="wrist_angle" type="revolute">
     <axis xyz="0 1 0"/>
-    <limit effort="1" lower="${radians(-100)}" upper="${radians(123)}"  velocity="${pi}"/>
-    <origin rpy="0 0 0" xyz="0.1 0 0"/>
-    <parent link="$(arg robot_name)/forearm_link"/>
-    <child link="$(arg robot_name)/gripper_link"/>
+    <limit effort="5" lower="${radians(-100)}" upper="${radians(123)}" velocity="${pi}"/>
+    <origin rpy="0 0 0" xyz="0.075 0 0"/>
+    <parent link="$(arg robot_name)/lower_forearm_link"/>
+    <child link="$(arg robot_name)/wrist_link"/>
     <dynamics friction="0.1"/>
   </joint>
 
@@ -168,30 +201,70 @@
     </actuator>
   </transmission>
 
-  <link name="$(arg robot_name)/gripper_link">
+  <link name="$(arg robot_name)/wrist_link">
     <visual>
       <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_5_gripper.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_6_wrist.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="interbotix_black"/>
     </visual>
     <collision>
       <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_5_gripper.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_6_wrist.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 ${pi/2}" xyz="0.0446910000 0.0000000000 0.0113540000"/>
-      <mass value="0.069929" />
-      <inertia ixx="0.0000226800" iyy="0.0000204400" izz="0.0000197400" ixy="0.0000000000" ixz="0.0000000000" iyz="0.0000008485" />
+      <origin rpy="0 0 ${pi/2}" xyz="0.0423600000 -0.0000106630 0.0105770000"/>
+      <mass value="0.084957" />
+      <inertia ixx="0.0000308200" iyy="0.0000282200" izz="0.0000315200" ixy="0.0000000191" ixz="0.0000000023" iyz="0.0000025481" />
+    </inertial>
+  </link>
+
+  <joint name="wrist_rotate" type="revolute">
+    <axis xyz="1 0 0"/>
+    <limit effort="1" lower="${-pi + pi_offset}" upper="${pi - pi_offset}" velocity="${pi}"/>
+    <origin rpy="0 0 0" xyz="0.065 0 0"/>
+    <parent link="$(arg robot_name)/wrist_link"/>
+    <child link="$(arg robot_name)/gripper_link"/>
+    <dynamics friction="0.1"/>
+  </joint>
+
+  <transmission name="trans_wrist_rotate">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="wrist_rotate">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="wrist_rotate_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <link name="$(arg robot_name)/gripper_link">
+    <visual>
+      <origin rpy="0 0 ${pi/2}" xyz="-0.02 0 0"/>
+      <geometry>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_7_gripper.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="interbotix_black"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 ${pi/2}" xyz="-0.02 0 0"/>
+      <geometry>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_7_gripper.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 ${pi/2}" xyz="0.0216310000 0.0000002516 0.0114100000"/>
+      <mass value="0.072885" />
+      <inertia ixx="0.0000253700" iyy="0.0000183600" izz="0.0000167400" ixy="0.0000000000" ixz="0.0000000000" iyz="0.0000004340" />
     </inertial>
   </link>
 
   <joint name="ee_arm" type="fixed">
     <axis xyz="1 0 0"/>
-    <origin rpy="0 0 0" xyz="0.063 0 0"/>
+    <origin rpy="0 0 0" xyz="0.043 0 0"/>
     <parent link="$(arg robot_name)/gripper_link"/>
     <child link="$(arg robot_name)/ee_arm_link"/>
   </joint>
@@ -226,18 +299,18 @@
     <visual>
       <origin rpy="0 0 ${pi/2}" xyz="-0.0685 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_6_gripper_prop.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_8_gripper_prop.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="interbotix_black"/>
     </visual>
     <collision>
       <origin rpy="0 0 ${pi/2}" xyz="-0.0685 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_6_gripper_prop.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_8_gripper_prop.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
-      <origin rpy="0 0 ${pi/2}" xyz="0.0008460000 -0.0000019330 0.0000420000"/>
+      <origin rpy="0 0 ${pi/2}" xyz="0.0008460000 -0.0000016817 0.0000420000"/>
       <mass value="0.00434" />
       <inertia ixx="0.0000005923" iyy="0.0000011156" izz="0.0000005743" ixy="0.0000000000" ixz="0.0000003195" iyz="-0.0000000004" />
     </inertial>
@@ -254,14 +327,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_9_ar_tag.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_11_ar_tag.stl" scale="0.001 0.001 0.001"/>
       </geometry>
       <material name="interbotix_black"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_9_ar_tag.stl" scale="0.001 0.001 0.001"/>
+        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_11_ar_tag.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </collision>
     <inertial>
@@ -286,18 +359,18 @@
       <visual>
         <origin rpy="0 0 ${pi/2}" xyz="-0.063 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_7_gripper_bar.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_9_gripper_bar.stl" scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="interbotix_black"/>
       </visual>
       <collision>
         <origin rpy="0 0 ${pi/2}" xyz="-0.063 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_7_gripper_bar.stl" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_9_gripper_bar.stl" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
       <inertial>
-        <origin rpy="0 0 ${pi/2}" xyz="0.0096870000 0.0000005660 0.0049620000"/>
+        <origin rpy="0 0 ${pi/2}" xyz="0.0096870000 0.0000008177 0.0049620000"/>
         <mass value="0.034199" />
         <inertia ixx="0.0000074125" iyy="0.0000284300" izz="0.0000286000" ixy="-0.0000000008" ixz="-0.0000000006" iyz="-0.0000013889" />
       </inertial>
@@ -344,14 +417,14 @@
         <visual>
           <origin rpy="${pi} ${pi} 0" xyz="0 0.005 0"/>
           <geometry>
-            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_8_gripper_finger.stl" scale="0.001 0.001 0.001"/>
+            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_10_gripper_finger.stl" scale="0.001 0.001 0.001"/>
           </geometry>
           <material name="interbotix_black"/>
         </visual>
         <collision>
           <origin rpy="${pi} ${pi} 0" xyz="0 0.005 0"/>
           <geometry>
-            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_8_gripper_finger.stl" scale="0.001 0.001 0.001"/>
+            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_10_gripper_finger.stl" scale="0.001 0.001 0.001"/>
           </geometry>
         </collision>
         <inertial>
@@ -387,14 +460,14 @@
         <visual>
           <origin rpy="0 ${pi} 0" xyz="0 -0.005 0"/>
           <geometry>
-            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_8_gripper_finger.stl" scale="0.001 0.001 0.001"/>
+            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_10_gripper_finger.stl" scale="0.001 0.001 0.001"/>
           </geometry>
           <material name="interbotix_black"/>
         </visual>
         <collision>
           <origin rpy="0 ${pi} 0" xyz="0 -0.005 0"/>
           <geometry>
-            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_px100_meshes/mobile_px100_8_gripper_finger.stl" scale="0.001 0.001 0.001"/>
+            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/mobile_wx250s_meshes/mobile_wx250s_10_gripper_finger.stl" scale="0.001 0.001 0.001"/>
           </geometry>
         </collision>
         <inertial>

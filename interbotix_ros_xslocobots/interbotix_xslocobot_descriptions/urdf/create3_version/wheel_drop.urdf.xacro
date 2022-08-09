@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 <xacro:macro name="wheel_drop" params="name gazebo parent_link *origin" >
-  <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3/common_properties.urdf.xacro"/>
+  <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/common_properties.urdf.xacro"/>
 
   <xacro:property name="detection_threshold" value="${3*cm2m}"/>
 
@@ -16,7 +16,7 @@
     <xacro:property name="spring_damping"       value="50"/>
     <xacro:property name="spring_friction"      value="0.1"/>
   </xacro:if>
-  
+
   <xacro:property name="wd_size" value="${5*cm2m}"/>
   <xacro:property name="wd_mass" value="0.05"/>
 

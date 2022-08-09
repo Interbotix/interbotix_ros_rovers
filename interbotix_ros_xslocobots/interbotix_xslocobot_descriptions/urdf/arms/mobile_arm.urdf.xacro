@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="mobile_arm">
+
+    <xacro:if value="${base_type == 'kobuki'}">
+
+      <joint name="arm_base_link_joint" type="fixed">
+        <axis xyz="0 0 0"/>
+        <xacro:if value="${arm_type == 'mobile_px100'}">
+          <origin rpy="0 0 0" xyz="0.111126 0 0.0095"/>
+        </xacro:if> <!-- arm_type == 'mobile_px100' -->
+        <xacro:if value="${arm_type != 'mobile_px100'}">
+          <origin rpy="0 0 0" xyz="0.097277 0 0.0095"/>
+        </xacro:if> <!-- arm_type != 'mobile_px100' -->
+        <parent link="$(arg robot_name)/plate_link"/>
+        <child link="$(arg robot_name)/arm_base_link"/>
+      </joint>
+
+    </xacro:if> <!-- base_type == 'kobuki' -->
+
+    <xacro:if value="${base_type == 'create3'}">
+
+      <joint name="arm_stand_link_joint" type="fixed">
+        <axis xyz="0 0 0"/>
+        <origin rpy="0 0 0" xyz="0.111126 0 0.0095"/> <!-- TODO -->
+        <parent link="$(arg robot_name)/plate_link"/>
+        <child link="$(arg robot_name)/arm_stand_link"/>
+      </joint>
+
+      <link name="$(arg robot_name)/arm_stand_link">
+        <visual>
+          <origin rpy="0 0 0" xyz="0 0 0"/>
+          <geometry>
+            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/create3_version/locobot_arm_stand.stl" scale="1 1 1"/>
+          </geometry>
+          <material name="interbotix_black"/>
+        </visual>
+        <collision>
+          <origin rpy="0 0 0" xyz="0 0 0"/>
+          <geometry>
+            <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/create3_version/locobot_arm_stand.stl" scale="1 1 1"/>
+          </geometry>
+        </collision>
+        <inertial>
+          <origin rpy="0 0 0" xyz="-6.03E-04 0 1.93E-02"/>
+          <mass value="0.134" />
+          <inertia ixx="2.87E-04" iyy="1.25E-04" izz="4.04E-04" ixy="-2.90E-11" ixz="1.80E-07" iyz="6.27E-10" />
+        </inertial>
+      </link>
+
+      <joint name="arm_base_link_joint" type="fixed">
+        <axis xyz="0 0 0"/>
+        <origin rpy="0 0 0" xyz="0 0 0.0095"/> <!-- TODO -->
+        <parent link="$(arg robot_name)/arm_stand_link"/>
+        <child link="$(arg robot_name)/arm_base_link"/>
+      </joint>
+
+    </xacro:if> <!-- base_type == 'create3' -->
+
+    <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/arms/$(arg arm_model).urdf.xacro"/>
+
+  </xacro:macro>
+
+</robot>

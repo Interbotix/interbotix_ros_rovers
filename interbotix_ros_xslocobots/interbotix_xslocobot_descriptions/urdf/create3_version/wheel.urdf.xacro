@@ -44,7 +44,7 @@
     <material>Gazebo/DarkGrey</material>
   </gazebo>
 
-  <xacro:if value="${gazebo == 'classic'}">
+  <!-- <xacro:if value="${gazebo == 'classic'}">
     <ros2_control name="${wheel_link_name}_controller" type="system">
       <hardware>
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
@@ -55,9 +55,9 @@
         <command_interface name="velocity" />
       </joint>
     </ros2_control>
-  </xacro:if>
+  </xacro:if> -->
 
-  <xacro:if value="${gazebo == 'ignition'}">
+  <!-- <xacro:if value="${gazebo == 'ignition'}">
     <ros2_control name="${wheel_link_name}_controller" type="system">
       <hardware>
         <plugin>ign_ros2_control/IgnitionSystem</plugin>
@@ -68,7 +68,7 @@
         <command_interface name="velocity" />
       </joint>
     </ros2_control>
-  </xacro:if>
+  </xacro:if> -->
 
 </xacro:macro>
 </robot>

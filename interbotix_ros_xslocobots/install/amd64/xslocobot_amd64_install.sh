@@ -491,6 +491,7 @@ function setup_env_vars() {
   # Setup Environment Variables
   if [ -z "$ROS_IP" ]; then
     echo "Setting up Environment Variables..."
+    echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
     echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}" >> ~/.bashrc
     echo 'export ROS_IP=$(echo `hostname -I | cut -d" " -f1`)' >> ~/.bashrc
     echo -e 'if [ -z "$ROS_IP" ]; then\n\texport ROS_IP=127.0.0.1\nfi' >> ~/.bashrc

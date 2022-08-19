@@ -54,7 +54,7 @@ Options:
                   the Interbotix workspace directory will default to '~/interbotix_ws'.
 
   -b BASE_TYPE    Sets the base type for the robot, either 'kobuki' or 'create3'. If not specified,
-                  the default of 'create3' will be used. Note that the Create3 is not compatible with
+                  the default of 'create3' will be used. Note that the Create 3 is not compatible with
                   Ubuntu 18.04 or ROS 1 Melodic.
 
   -n              Install all packages and dependencies without prompting. This is useful if
@@ -412,9 +412,9 @@ function install_kobuki_ros2() {
 }
 
 function install_create3_ros1() {
-  # Install packages required to run the Create3 using ROS 1, including ros1_bridge.
+  # Install packages required to run the Create 3 using ROS 1, including ros1_bridge.
   # We can only install Galactic due to hardware constraints - The intersection of compatibility
-  # between ros1_bridge and the Create3 is galactic & noetic
+  # between ros1_bridge and the Create 3 is galactic & noetic
   # TODO(lsinterbotix) only run this if messages can't be found, otherwise we rebuild ros1_bridge
   cd $INSTALL_PATH/src
   git clone https://github.com/Interbotix/create3_sim_ros1.git -b ros1
@@ -425,7 +425,7 @@ function install_create3_ros1() {
   install_ros2
   ROS_DISTRO_TO_INSTALL=$TEMP_ROS_DISTRO_TO_INSTALL # reset ROS distro to one originally specified
 
-  # Need to build both ROS 1 and ROS 2 version of the Create3 messages
+  # Need to build both ROS 1 and ROS 2 version of the Create 3 messages
   # ROS 1
   mkdir -p $BRIDGE_MSGS_ROS1_WS/src
   cd $BRIDGE_MSGS_ROS1_WS/src
@@ -481,7 +481,7 @@ function install_create3_ros1() {
 }
 
 function install_create3_ros2() {
-  # Install LoCoBot packages for the Create3 base
+  # Install LoCoBot packages for the Create 3 base
   cd $INSTALL_PATH/src
   git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b $ROS_DISTRO_TO_INSTALL
   git clone https://github.com/iRobotEducation/create3_sim.git -b $ROS_DISTRO_TO_INSTALL
@@ -527,7 +527,7 @@ UBUNTU_VERSION="$(lsb_release -rs)"
 if [ "$DISTRO_SET_FROM_CL" = false ]; then
   if [ $UBUNTU_VERSION == "18.04" ]; then
     if [ $BASE_TYPE == "create3" ]; then
-      failed "The iRobot Create3 base is incompatible with Ubuntu 18.04 and ROS 1 Melodic."
+      failed "The iRobot Create 3 base is incompatible with Ubuntu 18.04 and ROS 1 Melodic."
     fi
     ROS_DISTRO_TO_INSTALL="melodic"
   elif [ $UBUNTU_VERSION == "20.04" ]; then
@@ -585,7 +585,7 @@ sudo apt -y autoremove
 
 install_essential_packages
 
-# configure LoCoBot computer ethernet to use proper network config for Create3
+# configure LoCoBot computer ethernet to use proper network config for Create 3
 if [[ $BASE_TYPE == 'create3' ]]; then
   sudo apt -y install netplan.io
   export CREATE3_NETWORK_CONFIG="network:
@@ -603,6 +603,7 @@ if [[ $BASE_TYPE == 'create3' ]]; then
     sudo touch /etc/netplan/99_config.yaml
     sudo bash -c 'echo -e "'"$CREATE3_NETWORK_CONFIG"'" > /etc/netplan/99_config.yaml'
     sudo netplan apply
+    sleep 10
   fi
 fi
 

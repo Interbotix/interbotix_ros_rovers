@@ -107,11 +107,6 @@
       name="parameter_bridge"
       pkg="interbotix_xslocobot_control"
       type="startup_bridge.sh" />
-    <node
-      name="create3_default_params"
-      pkg="interbotix_xslocobot_control"
-      type="startup_create3_default_params.sh"
-      args="$(arg robot_name)" />
   </group>
 
   <node if="$(arg use_lidar)"

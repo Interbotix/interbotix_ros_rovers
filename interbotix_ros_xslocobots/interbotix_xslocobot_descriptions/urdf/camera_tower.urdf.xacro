@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="camera_tower" params="*origin *inertial">
+
+    <joint name="camera_tower" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="$(arg robot_name)/base_link"/>
+      <child link="$(arg robot_name)/camera_tower_link"/>
+    </joint>
+
+    <link name="$(arg robot_name)/camera_tower_link">
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/${base_type}_version/locobot_camera_tower_${camera_tower_size}.stl" scale="${mesh_scale}"/>
+        </geometry>
+        <material name="interbotix_black"/>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/${base_type}_version/locobot_camera_tower_${camera_tower_size}_simple.stl" scale="${mesh_scale}"/>
+        </geometry>
+      </collision>
+      <xacro:insert_block name="inertial"/>
+    </link>
+
+  </xacro:macro>
+
+</robot>

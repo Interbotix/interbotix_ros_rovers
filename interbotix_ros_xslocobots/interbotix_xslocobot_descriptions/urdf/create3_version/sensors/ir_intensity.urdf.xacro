@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find irobot_create_description)/urdf/common_properties.urdf.xacro"/>
+
+  <xacro:macro name="ir_intensity"
+               params="name gazebo parent:=base_link
+                       update_rate:=62.0 fov:=${10*deg2rad}
+                       min_range:=${25*mm2m} max_range:=${200*mm2m}
+                       visualize:=false *origin" >
+
+    <xacro:property name="link_name" value="ir_intensity_${name}"/>
+
+    <joint name="${link_name}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="$(arg robot_name)/${parent}"/>
+      <child link="$(arg robot_name)/${link_name}"/>
+    </joint>
+
+    <link name="$(arg robot_name)/${link_name}">
+      <xacro:inertial_dummy/>
+    </link>
+
+    <gazebo reference="$(arg robot_name)/${link_name}_joint">
+      <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/${link_name}">
+      <xacro:ray_sensor sensor_name="${link_name}" gazebo="${gazebo}" 
+                      update_rate="${update_rate}" visualize="${visualize}" 
+                      h_samples="5" h_res="1.0" h_min_angle="-${fov/2}" h_max_angle="${fov/2}"
+                      v_samples="5" v_res="1.0" v_min_angle="-${fov/2}" v_max_angle="${fov/2}" 
+                      r_min="${min_range}" r_max="${max_range}" r_res="1.0">
+          <plugin filename="libgazebo_ros_create_ir_intensity_sensor.so" name="${link_name}">
+            <ros>
+              <namespace>/</namespace>
+              <remapping>~/out:=_internal/${link_name}</remapping>
+            </ros>
+          </plugin>
+      </xacro:ray_sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

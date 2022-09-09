@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<robot name="standard_dock" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find irobot_create_description)/urdf/common_properties.urdf.xacro"/>
+  <xacro:include filename="$(find irobot_create_description)/urdf/dock/ir_emitter.urdf.xacro"/>
+
+  <!-- Gazebo version -->
+  <xacro:arg name="gazebo"         default="classic" />
+
+  <xacro:property name="z_offset"  value="${4.6*mm2m}"/>
+  <xacro:property name="link_name" value="std_dock_link"/>
+
+  <xacro:arg name="visualize_rays" default="false"/>
+
+  <link name="${link_name}">
+    <visual>
+      <origin xyz="0 0 ${z_offset}"/>
+      <geometry>
+        <mesh filename="package://irobot_create_description/meshes/dock/visual.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <!-- Using a simple box as collision model -->
+      <origin xyz="-0.045 0 0.05"/>
+      <geometry>
+        <box size="0.04 0.13 0.1"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_dummy />
+  </link>
+
+  <!-- Parameters for IR emitters -->
+  <xacro:property name="buoy_x" value="${-6*cm2m}"/>
+  <xacro:property name="buoy_z" value="${0.065 - z_offset}"/>
+
+  <xacro:property name="halo_name"        value="halo"/>
+  <xacro:property name="green_buoy_name"  value="green_buoy"/>
+  <xacro:property name="red_buoy_name"    value="red_buoy"/>
+  <xacro:property name="yellow_buoy_name" value="yellow_buoy"/>
+
+  <xacro:property name="buoy_lateral_angle_yaw" value="${10*deg2rad}"/>
+  <xacro:property name="buoy_lateral_aperture"  value="${30*deg2rad}"/>
+
+  <!-- Green IR emitter -->
+  <xacro:ir_emitter name="${green_buoy_name}"
+                    parent="${link_name}"
+                    gazebo="$(arg gazebo)"
+                    aperture="${buoy_lateral_aperture}"
+                    range="1.0"
+                    visualize="$(arg visualize_rays)">
+    <origin xyz="${buoy_x} 0 ${buoy_z}"
+            rpy="0 0 ${- buoy_lateral_angle_yaw}"/>
+  </xacro:ir_emitter>
+
+  <!-- Red IR emitter -->
+  <xacro:ir_emitter name="${red_buoy_name}"
+                    parent="${link_name}"
+                    gazebo="$(arg gazebo)"
+                    aperture="${buoy_lateral_aperture}"
+                    range="1.0"
+                    visualize="$(arg visualize_rays)">
+    <origin xyz="${buoy_x} 0 ${buoy_z}"
+            rpy="0 0 ${buoy_lateral_angle_yaw}"/>
+  </xacro:ir_emitter>
+
+  <!-- Yellow IR emitter -->
+  <xacro:ir_emitter name="${yellow_buoy_name}"
+                    parent="${link_name}"
+                    gazebo="$(arg gazebo)"
+                    aperture="${10*deg2rad}"
+                    range="1.0"
+                    visualize="$(arg visualize_rays)">
+    <origin xyz="${buoy_x} 0 ${buoy_z}"/>
+  </xacro:ir_emitter>
+
+  <!-- Halo IR emitter -->
+  <xacro:ir_emitter name="${halo_name}"
+                    parent="${link_name}"
+                    gazebo="$(arg gazebo)"
+                    aperture="360"
+                    range="0.6096"
+                    visualize="$(arg visualize_rays)">
+    <origin xyz="${buoy_x} 0 ${0.095 - z_offset}"/>
+  </xacro:ir_emitter>
+
+  <xacro:if value="${'$(arg gazebo)' == 'classic'}">
+    <gazebo>
+      <static>true</static>
+      <!-- Ground truth pose-->
+      <plugin name="gazebo_ros_p3d_dock" filename="libgazebo_ros_p3d.so">
+        <ros>
+          <namespace>/</namespace>
+          <remapping>odom:=sim_ground_truth_dock_pose</remapping>
+        </ros>
+        <body_name>${link_name}</body_name>
+        <frame_name>world</frame_name>
+        <update_rate>1</update_rate>
+        <xyz_offset>0 0 0</xyz_offset>
+        <rpy_offset>0.0 0.0 0.0</rpy_offset>
+        <gaussian_noise>0.0</gaussian_noise>
+      </plugin>
+    </gazebo>
+  </xacro:if>
+
+  <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
+    <gazebo>
+      <static>true</static>
+      <!-- Ground truth pose-->
+      <plugin filename="libignition-gazebo-pose-publisher-system.so" name="ignition::gazebo::systems::PosePublisher">
+        <publish_link_pose>true</publish_link_pose>
+        <publish_nested_model_pose>true</publish_nested_model_pose>   
+        <use_pose_vector_msg>true</use_pose_vector_msg>   
+        <update_frequency>62</update_frequency>
+      </plugin>
+    </gazebo>
+  </xacro:if>
+
+</robot>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="ir_emitter" params="name parent:=base_link *origin
+                                         gazebo
+                                         range
+                                         aperture
+                                         update_rate:=1.0
+                                         min_range:=${7*cm2m}
+                                         visualize:=false" >
+
+    <!-- Physical link properties -->
+    <xacro:property name="mass" value="0.15" />
+    <xacro:property name="x"    value="0.014" />
+    <xacro:property name="y"    value="0.02" />
+    <xacro:property name="z"    value="0.008" />
+
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+    </joint>
+
+    <link name="${name}_link">
+      <xacro:inertial_cuboid mass="${mass}" x="${x}" y="${y}" z="${z}" />
+    </link>
+
+    <!-- This ray is not attached to any plugin, it is only used for aesthetic and debugging purposes
+    only when the visualize flag is set. No need for high update rates. -->
+    <xacro:if value="${visualize}">
+      <gazebo reference="${name}_link">
+        <xacro:ray_sensor sensor_name="${name}" gazebo="${gazebo}" 
+                      update_rate="${update_rate}" visualize="${visualize}" 
+                      h_samples="50" h_res="1.0" h_min_angle="-${aperture/2}" h_max_angle="${aperture/2}" 
+                      r_min="${min_range}" r_max="${range}" r_res="0.01">
+                      <plugin name="dummy" filename="dummyfile"></plugin>
+        </xacro:ray_sensor>
+      </gazebo>
+    </xacro:if>
+
+    <gazebo reference="${name}_joint" >
+      <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+
+  </xacro:macro>
+</robot>

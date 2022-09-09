@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:macro name="caster" params="name parent_link *origin">
+  <xacro:include filename="$(find irobot_create_description)/urdf/common_properties.urdf.xacro"/>
+
+  <xacro:property name="radius" value="${1*cm2m}" />
+  <xacro:property name="mass"   value="0.01"/>
+
+  <joint name="${name}_joint" type="fixed">
+    <parent link="$(arg robot_name)/${parent_link}"/>
+    <child link="$(arg robot_name)/${name}_link"/>
+    <xacro:insert_block name="origin"/>
+  </joint>
+  <link name="$(arg robot_name)/${name}_link">
+    <visual>
+      <geometry>
+        <sphere radius="${radius}"/>
+      </geometry>
+      <!-- Give black color to caster in Rviz -->
+      <xacro:insert_block name="material_black"/>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="${radius}"/>
+      </geometry>
+    </collision>
+    <xacro:inertial_sphere mass="${mass}" radius="${radius}"/>
+  </link>
+
+  <gazebo reference="${name}_joint">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
+  <gazebo reference="${name}_link">
+    <material>Gazebo/DarkGrey</material>
+    <mu1>0.1</mu1>
+    <mu2>0.1</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+  </gazebo>
+
+</xacro:macro>
+</robot>

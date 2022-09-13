@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="bump_caster" params="*origin">
+
+    <joint name="bump_caster" type="fixed">
+        <axis xyz="0 0 0"/>
+        <xacro:insert_block name="origin"/>
+        <parent link="$(arg robot_name)/base_link"/>
+        <child link="$(arg robot_name)/bump_caster_link"/>
+    </joint>
+
+    <link name="$(arg robot_name)/bump_caster_link">
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/create3_version/bump_caster.stl"/>
+        </geometry>
+        <material name="interbotix_black"/>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/create3_version/bump_caster.stl"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0.003407"/>
+        <mass value="0.0055"/>
+        <inertia ixx="3.69E-07" ixy="0" ixz="0" iyy="2.96E-07" iyz="0" izz="6.12E-07"/>
+      </inertial>
+    </link>
+
+    <gazebo reference="bump_caster_link">
+      <material>Gazebo/DarkGrey</material>
+      <mu1>0.1</mu1>
+      <mu2>0.1</mu2>
+      <kp>1000000.0</kp>
+      <kd>1.0</kd>
+    </gazebo>
+
+  </xacro:macro>
+</robot>

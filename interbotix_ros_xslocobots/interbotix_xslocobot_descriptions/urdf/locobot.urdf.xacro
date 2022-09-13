@@ -16,10 +16,6 @@
   <xacro:property name="urdf_loc"         value="$(arg external_urdf_loc)"/>
   <xacro:property name="pi_offset"        value="0.00001"/>
 
-  <xacro:if value="$(arg load_gazebo_configs)">
-    <xacro:include filename="$(find interbotix_xslocobot_gazebo)/config/locobot_configs.gazebo"/>
-  </xacro:if>
-
   <xacro:if value="${urdf_loc != ''}">
     <xacro:include filename="${urdf_loc}"/>
   </xacro:if>

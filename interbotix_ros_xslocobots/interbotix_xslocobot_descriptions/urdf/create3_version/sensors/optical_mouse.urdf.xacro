@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="optical_mouse" params="name:=mouse gazebo parent_link:=base_link update_rate:=62 *origin" >
+  <xacro:macro name="optical_mouse" params="name:=mouse parent_link:=base_link update_rate:=62 *origin" >
 
     <joint name="$(arg robot_name)/${name}_joint" type="fixed">
       <xacro:insert_block name="origin"/>
@@ -13,7 +13,8 @@
       <xacro:inertial_dummy />
     </link>
 
-    <xacro:if value="${gazebo == 'classic'}">
+    <!-- Disabled for ROS 1 -->
+    <!-- <xacro:if value="${gazebo == 'classic'}">
       <gazebo>
         <plugin name="$(arg robot_name)/${name}_plugin" filename="libgazebo_ros_create_optical_mouse.so">
             <ros>
@@ -24,8 +25,8 @@
           <link_name>${name}</link_name>
         </plugin>
       </gazebo>
-    </xacro:if>
-    
+    </xacro:if> -->
+
     <gazebo reference="$(arg robot_name)/${name}_joint" >
       <preserveFixedJoint>true</preserveFixedJoint>
     </gazebo>

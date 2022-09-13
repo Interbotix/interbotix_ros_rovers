@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="wheel" params="name gazebo parent_link *origin">
+<xacro:macro name="wheel" params="name parent_link *origin">
 
   <xacro:property name="mass"   value="0.2" />
   <xacro:property name="radius" value="${3.575*cm2m}" />
@@ -43,6 +43,16 @@
     <maxVel>1.0</maxVel>
     <material>Gazebo/DarkGrey</material>
   </gazebo>
+
+  <!-- <transmission name="trans_${wheel_joint_name}">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${wheel_joint_name}">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${wheel_joint_name}_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission> -->
 
   <!-- <xacro:if value="${gazebo == 'classic'}">
     <ros2_control name="${wheel_link_name}_controller" type="system">

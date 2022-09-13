@@ -26,6 +26,10 @@
       <xacro:insert_block name="inertial"/>
     </link>
 
+    <gazebo reference="$(arg robot_name)/plate_link">
+      <material>Custom/Interbotix</material>
+    </gazebo>
+
   </xacro:macro>
 
 </robot>

@@ -3,7 +3,6 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:macro name="ir_opcode_receivers" params="name:=ir_omni
-                                                  gazebo
                                                   robot_model_name
                                                   dock_model_name
                                                   emitter_link_name
@@ -36,9 +35,9 @@
     <xacro:if value="${visualize}">
       <!-- Sensor 0 visualization -->
       <gazebo reference="${receiver_link_name}">
-        <xacro:ray_sensor sensor_name="sensor_0" gazebo="${gazebo}" 
-                      update_rate="1" visualize="${visualize}" 
-                      h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_0_fov/2}" h_max_angle="${sensor_0_fov/2}" 
+        <xacro:ray_sensor sensor_name="sensor_0"
+                      update_rate="1" visualize="${visualize}"
+                      h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_0_fov/2}" h_max_angle="${sensor_0_fov/2}"
                       r_min="${min_range}" r_max="${sensor_0_range}" r_res="0.01">
                       <plugin name="dummy" filename="dummyfile"></plugin>
         </xacro:ray_sensor>
@@ -46,16 +45,17 @@
 
       <!-- Sensor 1 visualization -->
       <gazebo reference="${receiver_link_name}">
-        <xacro:ray_sensor sensor_name="sensor_1" gazebo="${gazebo}" 
-                      update_rate="1" visualize="${visualize}" 
-                      h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_1_fov/2}" h_max_angle="${sensor_1_fov/2}" 
+        <xacro:ray_sensor sensor_name="sensor_1"
+                      update_rate="1" visualize="${visualize}"
+                      h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_1_fov/2}" h_max_angle="${sensor_1_fov/2}"
                       r_min="${min_range}" r_max="${sensor_1_range}" r_res="0.01">
                       <plugin name="dummy" filename="dummyfile"></plugin>
         </xacro:ray_sensor>
       </gazebo>
     </xacro:if>
 
-    <xacro:if value="${gazebo == 'classic'}">
+    <!-- Disabled for ROS 1 -->
+    <!-- <xacro:if value="${gazebo == 'classic'}">
       <gazebo>
         <plugin name="${name}_plugin" filename="libgazebo_ros_create_ir_opcode.so">
           <ros>
@@ -73,7 +73,7 @@
           <sensor_1_range>${sensor_1_range}</sensor_1_range>
         </plugin>
       </gazebo>
-    </xacro:if>
+    </xacro:if> -->
 
     <gazebo reference="${joint_name}" >
       <preserveFixedJoint>true</preserveFixedJoint>

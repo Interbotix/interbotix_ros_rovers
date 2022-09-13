@@ -60,6 +60,111 @@
 
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/arms/$(arg arm_model).urdf.xacro"/>
 
+    <gazebo reference="$(arg robot_name)/arm_base_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/shoulder_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+      <self_collide>true</self_collide>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/upper_arm_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+      <self_collide>true</self_collide>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/forearm_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+      <self_collide>true</self_collide>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/upper_forearm_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+      <self_collide>true</self_collide>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/lower_forearm_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+      <self_collide>true</self_collide>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/wrist_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+      <self_collide>true</self_collide>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/gripper_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/ar_tag_link">
+      <material>Custom/Interbotix</material>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/gripper_prop_link">
+      <dampingFactor>0.01</dampingFactor>
+      <material>Custom/Interbotix</material>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/gripper_bar_link">
+      <material>Custom/Interbotix</material>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/left_finger_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/right_finger_link">
+      <material>Custom/Interbotix</material>
+      <dampingFactor>0.01</dampingFactor>
+    </gazebo>
+
+    <gazebo reference="$(arg robot_name)/arm_cradle_link">
+      <material>Custom/Interbotix</material>
+    </gazebo>
+
+    <gazebo reference="arm_base_link_joint">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
+    <gazebo reference="plate">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
+    <gazebo reference="ar_tag">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
+    <gazebo reference="ee_arm">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
+    <gazebo reference="gripper_bar">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
+    <gazebo reference="ee_bar">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
+    <gazebo reference="ee_gripper">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
+    <gazebo reference="arm_cradle">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
   </xacro:macro>
 
 </robot>

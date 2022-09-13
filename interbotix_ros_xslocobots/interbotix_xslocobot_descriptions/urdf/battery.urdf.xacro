@@ -9,6 +9,10 @@
       <child link="$(arg robot_name)/battery_link"/>
     </joint>
 
+    <gazebo reference="battery">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
+
     <link name="$(arg robot_name)/battery_link">
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -31,6 +35,10 @@
         <inertia ixx="0.004312" ixy="0" ixz="0" iyy="0.001908" iyz="0" izz="0.006017"/>
       </inertial>
     </link>
+
+    <gazebo reference="$(arg robot_name)/battery_link">
+      <material>Gazebo/Grey</material>
+    </gazebo>
 
   </xacro:macro>
 

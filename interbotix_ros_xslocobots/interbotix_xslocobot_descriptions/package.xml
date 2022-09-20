@@ -10,11 +10,14 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>interbotix_xs_modules</depend>
+  <exec_depend>interbotix_xs_rviz</exec_depend>
   <depend>joint_state_publisher</depend>
   <depend>joint_state_publisher_gui</depend>
   <depend>robot_state_publisher</depend>
   <depend>rviz</depend>
   <depend>xacro</depend>
+  <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == kobuki">kobuki_description</depend>
+  <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == create3">irobot_create_description</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

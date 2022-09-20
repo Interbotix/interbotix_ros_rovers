@@ -25,8 +25,8 @@
   <xacro:property name="wd_joint_name" value="${wd_link_name}_joint"/>
 
   <joint name="${wd_joint_name}" type="prismatic">
-    <parent link="$(arg robot_name)/${parent_link}"/>
-    <child link="$(arg robot_name)/${wd_link_name}"/>
+    <parent link="${parent_link}"/>
+    <child link="${wd_link_name}"/>
     <xacro:insert_block name="origin"/>
     <axis xyz="0 1 0"/>
     <limit lower="0" upper="${detection_threshold}" effort="0" velocity="0"/>
@@ -44,7 +44,7 @@
     <springReference>${detection_threshold}</springReference>
   </gazebo>
 
-  <link name="$(arg robot_name)/${wd_link_name}">
+  <link name="${wd_link_name}">
     <xacro:inertial_cuboid mass="${wd_mass}" x="${wd_size}" y="${wd_size}" z="${wd_size}"/>
   </link>
 

@@ -8,11 +8,11 @@ functional, while the 4 remaining ones are created as dummy links. -->
   <xacro:property name="joint_name" value="${name}_joint"/>
 
   <joint name="${joint_name}" type="fixed">
-    <parent link="$(arg robot_name)/${parent_link}"/>
-    <child link="$(arg robot_name)/${link_name}"/>
+    <parent link="${parent_link}"/>
+    <child link="${link_name}"/>
     <xacro:insert_block name="origin"/>
   </joint>
-  <link name="$(arg robot_name)/${link_name}"/>
+  <link name="${link_name}"/>
 </xacro:macro>
 
 <xacro:macro name="bumper" params="name:=bump_front_center parent_link:=base_link update_rate:=62.0 gazebo visual_mesh collision_mesh
@@ -21,11 +21,11 @@ functional, while the 4 remaining ones are created as dummy links. -->
   <xacro:property name="joint_name" value="${name}_joint"/>
 
   <joint name="${joint_name}" type="fixed">
-    <parent link="$(arg robot_name)/${parent_link}"/>
-    <child link="$(arg robot_name)/${link_name}"/>
+    <parent link="${parent_link}"/>
+    <child link="${link_name}"/>
     <xacro:insert_block name="origin"/>
   </joint>
-  <link name="$(arg robot_name)/${link_name}">
+  <link name="${link_name}">
     <visual>
       <geometry>
         <mesh filename="${visual_mesh}"/>
@@ -39,7 +39,7 @@ functional, while the 4 remaining ones are created as dummy links. -->
     <xacro:insert_block name="inertial"/>
   </link>
 
-  <gazebo reference="$(arg robot_name)/${name}" >
+  <gazebo reference="${name}" >
     <mu1>0.1</mu1>
     <mu2>0.1</mu2>
     <maxVel>0.01</maxVel>

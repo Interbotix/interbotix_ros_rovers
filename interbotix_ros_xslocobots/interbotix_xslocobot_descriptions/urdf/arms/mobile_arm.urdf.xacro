@@ -13,8 +13,8 @@
         <xacro:if value="${arm_type != 'mobile_px100'}">
           <origin rpy="0 0 0" xyz="0.097277 0 0.0095"/>
         </xacro:if> <!-- arm_type != 'mobile_px100' -->
-        <parent link="$(arg robot_name)/plate_link"/>
-        <child link="$(arg robot_name)/arm_base_link"/>
+        <parent link="plate_link"/>
+        <child link="arm_base_link"/>
       </joint>
 
     </xacro:if> <!-- base_type == 'kobuki' -->
@@ -24,11 +24,11 @@
       <joint name="arm_stand_link_joint" type="fixed">
         <axis xyz="0 0 0"/>
         <origin rpy="0 0 0" xyz="0.092002 0 0.007763"/>
-        <parent link="$(arg robot_name)/plate_link"/>
-        <child link="$(arg robot_name)/arm_stand_link"/>
+        <parent link="plate_link"/>
+        <child link="arm_stand_link"/>
       </joint>
 
-      <link name="$(arg robot_name)/arm_stand_link">
+      <link name="arm_stand_link">
         <visual>
           <origin rpy="0 0 0" xyz="0 0 0"/>
           <geometry>
@@ -52,8 +52,8 @@
       <joint name="arm_base_link_joint" type="fixed">
         <axis xyz="0 0 0"/>
         <origin rpy="0 0 0" xyz="0 0 0.023"/>
-        <parent link="$(arg robot_name)/arm_stand_link"/>
-        <child link="$(arg robot_name)/arm_base_link"/>
+        <parent link="arm_stand_link"/>
+        <child link="arm_base_link"/>
       </joint>
 
     </xacro:if> <!-- base_type == 'create3' -->

@@ -21,13 +21,13 @@
     <xacro:property name="joint_name" value="${name}_joint" />
     <xacro:property name="receiver_link_name" value="${name}" />
 
-    <joint name="$(arg robot_name)/${joint_name}" type="fixed">
+    <joint name="${joint_name}" type="fixed">
       <xacro:insert_block name="origin" />
-      <parent link="$(arg robot_name)/${parent}"/>
-      <child link="$(arg robot_name)/${receiver_link_name}"/>
+      <parent link="${parent}"/>
+      <child link="${receiver_link_name}"/>
     </joint>
 
-    <link name="$(arg robot_name)/${receiver_link_name}">
+    <link name="${receiver_link_name}">
       <xacro:inertial_dummy />
     </link>
 
@@ -36,9 +36,9 @@
     <xacro:if value="${visualize}">
       <!-- Sensor 0 visualization -->
       <gazebo reference="${receiver_link_name}">
-        <xacro:ray_sensor sensor_name="sensor_0" gazebo="${gazebo}" 
-                      update_rate="1" visualize="${visualize}" 
-                      h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_0_fov/2}" h_max_angle="${sensor_0_fov/2}" 
+        <xacro:ray_sensor sensor_name="sensor_0" gazebo="${gazebo}"
+                      update_rate="1" visualize="${visualize}"
+                      h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_0_fov/2}" h_max_angle="${sensor_0_fov/2}"
                       r_min="${min_range}" r_max="${sensor_0_range}" r_res="0.01">
                       <plugin name="dummy" filename="dummyfile"></plugin>
         </xacro:ray_sensor>
@@ -46,9 +46,9 @@
 
       <!-- Sensor 1 visualization -->
       <gazebo reference="${receiver_link_name}">
-        <xacro:ray_sensor sensor_name="sensor_1" gazebo="${gazebo}" 
-                      update_rate="1" visualize="${visualize}" 
-                      h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_1_fov/2}" h_max_angle="${sensor_1_fov/2}" 
+        <xacro:ray_sensor sensor_name="sensor_1" gazebo="${gazebo}"
+                      update_rate="1" visualize="${visualize}"
+                      h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_1_fov/2}" h_max_angle="${sensor_1_fov/2}"
                       r_min="${min_range}" r_max="${sensor_1_range}" r_res="0.01">
                       <plugin name="dummy" filename="dummyfile"></plugin>
         </xacro:ray_sensor>

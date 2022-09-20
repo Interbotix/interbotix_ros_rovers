@@ -11,13 +11,13 @@
   <xacro:property name="wheel_joint_name" value="${wheel_link_name}_joint"/>
 
   <joint name="${wheel_joint_name}" type="continuous">
-    <parent link="$(arg robot_name)/${parent_link}"/>
-    <child link="$(arg robot_name)/${wheel_link_name}"/>
+    <parent link="${parent_link}"/>
+    <child link="${wheel_link_name}"/>
     <xacro:insert_block name="origin"/>
     <axis xyz="0 0 1"/>
   </joint>
 
-  <link name="$(arg robot_name)/${wheel_link_name}">
+  <link name="${wheel_link_name}">
     <visual>
       <geometry>
         <cylinder length="${width}" radius="${radius}"/>
@@ -44,7 +44,7 @@
     <material>Gazebo/DarkGrey</material>
   </gazebo>
 
-  <!-- <xacro:if value="${gazebo == 'classic'}">
+  <xacro:if value="${gazebo == 'classic'}">
     <ros2_control name="${wheel_link_name}_controller" type="system">
       <hardware>
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
@@ -55,9 +55,9 @@
         <command_interface name="velocity" />
       </joint>
     </ros2_control>
-  </xacro:if> -->
+  </xacro:if>
 
-  <!-- <xacro:if value="${gazebo == 'ignition'}">
+  <xacro:if value="${gazebo == 'ignition'}">
     <ros2_control name="${wheel_link_name}_controller" type="system">
       <hardware>
         <plugin>ign_ros2_control/IgnitionSystem</plugin>
@@ -68,7 +68,7 @@
         <command_interface name="velocity" />
       </joint>
     </ros2_control>
-  </xacro:if> -->
+  </xacro:if>
 
 </xacro:macro>
 </robot>

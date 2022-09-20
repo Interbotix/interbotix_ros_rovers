@@ -15,8 +15,6 @@
       THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
       IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     -->
-    <!-- It has been modified to include the robot_name as a prefix to the links -->
-    <!-- It currently does not allow for simulation in either Gazebo (formerly Ignition) or Gazebo Class -->
 
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/bumper.urdf.xacro" />
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/button.urdf.xacro" />
@@ -69,8 +67,8 @@
 
     <joint name="base_joint" type="fixed">
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <parent link="$(arg robot_name)/base_footprint"/>
-      <child link="$(arg robot_name)/base_link"/>
+      <parent link="base_footprint"/>
+      <child link="base_link"/>
     </joint>
 
     <!-- Docking properties -->
@@ -80,7 +78,7 @@
     <xacro:property name="emitter_link_name" value="halo_link"/>
     <xacro:arg name="visualize_rays" default="false"/>
     <!-- Create 3 base definition-->
-    <link name="$(arg robot_name)/base_link">
+    <link name="base_link">
       <visual>
         <origin xyz="0 0 ${body_z_offset + base_link_z_offset}" rpy="0 0 ${pi/2}"/>
         <geometry>
@@ -137,21 +135,21 @@
       <origin xyz="0.050613 0.043673 ${0.0202 + base_link_z_offset}"/>
     </xacro:imu_sensor>
 
-    <!-- <xacro:if value="${'$(arg gazebo)' == 'classic'}">
+    <xacro:if value="${'$(arg gazebo)' == 'classic'}">
       <gazebo>
         <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
           <parameters> $(find irobot_create_control)/config/control.yaml </parameters>
         </plugin>
       </gazebo>
-    </xacro:if> -->
+    </xacro:if>
 
-    <!-- <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
+    <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
       <gazebo>
         <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
           <parameters> $(find irobot_create_control)/config/control.yaml </parameters>
         </plugin>
       </gazebo>
-    </xacro:if> -->
+    </xacro:if>
 
     <!-- Mouse -->
     <xacro:optical_mouse gazebo="$(arg gazebo)">

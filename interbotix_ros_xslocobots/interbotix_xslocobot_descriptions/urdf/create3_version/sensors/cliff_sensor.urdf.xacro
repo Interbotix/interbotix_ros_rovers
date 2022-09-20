@@ -16,18 +16,18 @@
 
   <joint name="${sensor_name}_joint" type="fixed">
     <xacro:insert_block name="origin"/>
-    <parent link="$(arg robot_name)/${parent}"/>
-    <child link="$(arg robot_name)/${sensor_name}"/>
+    <parent link="${parent}"/>
+    <child link="${sensor_name}"/>
   </joint>
 
-  <link name="$(arg robot_name)/${sensor_name}">
+  <link name="${sensor_name}">
     <xacro:inertial_dummy/>
   </link>
 
   <gazebo reference="${sensor_name}">
-    <xacro:ray_sensor sensor_name="${sensor_name}" gazebo="${gazebo}" 
-                      update_rate="${update_rate}" visualize="${visualize}" 
-                      h_samples="${samples}" h_res="1.0" h_min_angle="-${fov_rad/2}" h_max_angle="${fov_rad/2}" 
+    <xacro:ray_sensor sensor_name="${sensor_name}" gazebo="${gazebo}"
+                      update_rate="${update_rate}" visualize="${visualize}"
+                      h_samples="${samples}" h_res="1.0" h_min_angle="-${fov_rad/2}" h_max_angle="${fov_rad/2}"
                       r_min="${min_range}" r_max="${max_range}" r_res="1.0">
       <plugin name="${sensor_name}" filename="libgazebo_ros_create_cliff_sensor.so">
         <ros>

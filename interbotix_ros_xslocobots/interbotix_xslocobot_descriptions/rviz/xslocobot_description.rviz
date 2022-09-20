@@ -48,81 +48,157 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        locobot/base_footprint:
+        base_footprint:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        locobot/base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        locobot/battery_link:
+        base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot/camera_link:
+        battery_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot/camera_tower_link:
+        bump_front_center:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot/caster_back_link:
+        bump_front_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        bump_front_right:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        bump_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        bump_right:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        button_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        button_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        button_power:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot/caster_front_link:
+        camera_tower_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot/cliff_sensor_front_link:
+        cliff_front_left:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        locobot/cliff_sensor_left_link:
+        cliff_front_right:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        locobot/cliff_sensor_right_link:
+        cliff_side_left:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        locobot/gyro_link:
+        cliff_side_right:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        locobot/pan_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        locobot/plate_link:
+        front_caster_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot/tilt_link:
+        imu_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ir_intensity_front_center_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ir_intensity_front_center_right:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ir_intensity_front_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ir_intensity_front_right:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ir_intensity_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ir_intensity_right:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ir_intensity_side_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ir_omni:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot/wheel_left_link:
+        mouse:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        pan_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        locobot/wheel_right_link:
+        plate_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
+        right_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        tilt_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_drop_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        wheel_drop_right:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
@@ -133,76 +209,150 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        locobot/base_footprint:
+        base_footprint:
           Value: true
-        locobot/base_link:
+        base_link:
           Value: true
-        locobot/battery_link:
+        battery_link:
           Value: true
-        locobot/camera_link:
+        bump_front_center:
           Value: true
-        locobot/camera_tower_link:
+        bump_front_left:
           Value: true
-        locobot/caster_back_link:
+        bump_front_right:
           Value: true
-        locobot/caster_front_link:
+        bump_left:
           Value: true
-        locobot/cliff_sensor_front_link:
+        bump_right:
           Value: true
-        locobot/cliff_sensor_left_link:
+        button_1:
           Value: true
-        locobot/cliff_sensor_right_link:
+        button_2:
           Value: true
-        locobot/gyro_link:
+        button_power:
           Value: true
-        locobot/pan_link:
+        camera_link:
           Value: true
-        locobot/plate_link:
+        camera_tower_link:
           Value: true
-        locobot/tilt_link:
+        cliff_front_left:
           Value: true
-        locobot/wheel_left_link:
+        cliff_front_right:
           Value: true
-        locobot/wheel_right_link:
+        cliff_side_left:
           Value: true
-      Marker Scale: 0.15
+        cliff_side_right:
+          Value: true
+        front_caster_link:
+          Value: true
+        imu_link:
+          Value: true
+        ir_intensity_front_center_left:
+          Value: true
+        ir_intensity_front_center_right:
+          Value: true
+        ir_intensity_front_left:
+          Value: true
+        ir_intensity_front_right:
+          Value: true
+        ir_intensity_left:
+          Value: true
+        ir_intensity_right:
+          Value: true
+        ir_intensity_side_left:
+          Value: true
+        ir_omni:
+          Value: true
+        left_wheel:
+          Value: true
+        mouse:
+          Value: true
+        pan_link:
+          Value: true
+        plate_link:
+          Value: true
+        right_wheel:
+          Value: true
+        tilt_link:
+          Value: true
+        wheel_drop_left:
+          Value: true
+        wheel_drop_right:
+          Value: true
+      Marker Scale: 0.15000000596046448
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        locobot/base_footprint:
-          locobot/base_link:
-            locobot/camera_tower_link:
-              locobot/pan_link:
-                locobot/tilt_link:
-                  locobot/camera_link:
+        base_footprint:
+          base_link:
+            bump_front_center:
+              {}
+            bump_front_left:
+              {}
+            bump_front_right:
+              {}
+            bump_left:
+              {}
+            bump_right:
+              {}
+            button_1:
+              {}
+            button_2:
+              {}
+            button_power:
+              {}
+            camera_tower_link:
+              pan_link:
+                tilt_link:
+                  camera_link:
                     {}
-            locobot/caster_back_link:
+            cliff_front_left:
               {}
-            locobot/caster_front_link:
+            cliff_front_right:
               {}
-            locobot/cliff_sensor_front_link:
+            cliff_side_left:
               {}
-            locobot/cliff_sensor_left_link:
+            cliff_side_right:
               {}
-            locobot/cliff_sensor_right_link:
+            front_caster_link:
               {}
-            locobot/gyro_link:
+            imu_link:
               {}
-            locobot/plate_link:
-              locobot/battery_link:
+            ir_intensity_front_center_left:
+              {}
+            ir_intensity_front_center_right:
+              {}
+            ir_intensity_front_left:
+              {}
+            ir_intensity_front_right:
+              {}
+            ir_intensity_left:
+              {}
+            ir_intensity_right:
+              {}
+            ir_intensity_side_left:
+              {}
+            ir_omni:
+              {}
+            mouse:
+              {}
+            plate_link:
+              battery_link:
                 {}
-            locobot/wheel_left_link:
-              {}
-            locobot/wheel_right_link:
-              {}
+            wheel_drop_left:
+              left_wheel:
+                {}
+            wheel_drop_right:
+              right_wheel:
+                {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 0; 176; 240
-    Fixed Frame: locobot/base_footprint
+    Fixed Frame: base_footprint
     Frame Rate: 30
   Name: root
   Tools:

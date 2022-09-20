@@ -8,11 +8,11 @@
   <xacro:property name="mass"   value="0.01"/>
 
   <joint name="${name}_joint" type="fixed">
-    <parent link="$(arg robot_name)/${parent_link}"/>
-    <child link="$(arg robot_name)/${name}_link"/>
+    <parent link="${parent_link}"/>
+    <child link="${name}_link"/>
     <xacro:insert_block name="origin"/>
   </joint>
-  <link name="$(arg robot_name)/${name}_link">
+  <link name="${name}_link">
     <visual>
       <geometry>
         <sphere radius="${radius}"/>

@@ -2,7 +2,6 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
   <!-- Much of the following Kobuki description is taken from https://github.com/yujinrobot/kobuki/blob/23748ed3dfb082831ca8eaaef1a0b08588dbcb65/kobuki_description/urdf/kobuki.urdf.xacro -->
-  <!-- It has been modified to include the robot_name as a prefix to the links -->
   <!-- The kobuki_description package is distributed under the 3-Clause BSD License, but no license file was found in the package. -->
   <!-- The license from the kobuki_node package is given from https://github.com/yujinrobot/kobuki/blob/8f2fa7b9e5e98c503ba468602c3a5dd9be68fc26/kobuki_node/LICENSE below: -->
   <!--
@@ -42,11 +41,11 @@
 
   <joint name="base_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0.0102"/>
-    <parent link="$(arg robot_name)/base_footprint"/>
-    <child link="$(arg robot_name)/base_link"/>
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/base_link">
+  <link name="base_link">
     <visual>
       <origin rpy="0 0 0" xyz="0.001 0 0.05199"/>
       <geometry>
@@ -69,8 +68,8 @@
   <joint name="wheel_left_joint" type="continuous">
     <axis xyz="0 0 1"/>
     <origin rpy="-1.57079632679 0 0" xyz="0.00 0.115 0.0250"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/wheel_left_link"/>
+    <parent link="base_link"/>
+    <child link="wheel_left_link"/>
   </joint>
 
   <transmission name="trans_wheel_left_joint">
@@ -83,7 +82,7 @@
     </actuator>
   </transmission>
 
-  <link name="$(arg robot_name)/wheel_left_link">
+  <link name="wheel_left_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -106,8 +105,8 @@
   <joint name="wheel_right_joint" type="continuous">
     <axis xyz="0 0 1"/>
     <origin rpy="-1.57079632679 0 0" xyz="0.00 -0.115 0.0250"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/wheel_right_link"/>
+    <parent link="base_link"/>
+    <child link="wheel_right_link"/>
   </joint>
 
   <transmission name="trans_wheel_right_joint">
@@ -120,7 +119,7 @@
     </actuator>
   </transmission>
 
-  <link name="$(arg robot_name)/wheel_right_link">
+  <link name="wheel_right_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -142,11 +141,11 @@
 
   <joint name="caster_front_joint" type="fixed">
     <origin rpy="-1.57079632679 0 0" xyz="0.115 0.0 0.007"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/caster_front_link"/>
+    <parent link="base_link"/>
+    <child link="caster_front_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/caster_front_link">
+  <link name="caster_front_link">
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -162,11 +161,11 @@
 
   <joint name="caster_back_joint" type="fixed">
     <origin rpy="-1.57079632679 0 0" xyz="-0.135 0.0 0.009"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/caster_back_link"/>
+    <parent link="base_link"/>
+    <child link="caster_back_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/caster_back_link">
+  <link name="caster_back_link">
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -182,11 +181,11 @@
 
   <joint name="gyro_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.056 0.062 0.0202"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/gyro_link"/>
+    <parent link="base_link"/>
+    <child link="gyro_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/gyro_link">
+  <link name="gyro_link">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.001"/>
@@ -196,11 +195,11 @@
 
   <joint name="cliff_sensor_left_joint" type="fixed">
     <origin rpy="0 1.57079632679 0" xyz="0.08734 0.13601 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_left_link"/>
+    <parent link="base_link"/>
+    <child link="cliff_sensor_left_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/cliff_sensor_left_link">
+  <link name="cliff_sensor_left_link">
     <inertial>
       <mass value="0.0001"/>
       <origin xyz="0 0 0"/>
@@ -210,11 +209,11 @@
 
   <joint name="cliff_sensor_right_joint" type="fixed">
     <origin rpy="0 1.57079632679 0" xyz="0.085 -0.13601 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_right_link"/>
+    <parent link="base_link"/>
+    <child link="cliff_sensor_right_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/cliff_sensor_right_link">
+  <link name="cliff_sensor_right_link">
     <inertial>
       <origin xyz="0 0 0"/>
       <mass value="0.0001"/>
@@ -224,11 +223,11 @@
 
   <joint name="cliff_sensor_front_joint" type="fixed">
     <origin rpy="0 1.57079632679 0" xyz="0.156 0.00 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_front_link"/>
+    <parent link="base_link"/>
+    <child link="cliff_sensor_front_link"/>
   </joint>
 
-  <link name="$(arg robot_name)/cliff_sensor_front_link">
+  <link name="cliff_sensor_front_link">
     <inertial>
       <mass value="0.0001"/>
       <origin xyz="0 0 0"/>

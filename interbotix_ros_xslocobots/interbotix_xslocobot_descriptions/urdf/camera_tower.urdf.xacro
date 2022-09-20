@@ -5,11 +5,11 @@
 
     <joint name="camera_tower" type="fixed">
       <xacro:insert_block name="origin"/>
-      <parent link="$(arg robot_name)/base_link"/>
-      <child link="$(arg robot_name)/camera_tower_link"/>
+      <parent link="base_link"/>
+      <child link="camera_tower_link"/>
     </joint>
 
-    <link name="$(arg robot_name)/camera_tower_link">
+    <link name="camera_tower_link">
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>

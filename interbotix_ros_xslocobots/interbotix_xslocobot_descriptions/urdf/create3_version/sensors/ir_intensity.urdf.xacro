@@ -12,23 +12,23 @@
 
     <joint name="${link_name}_joint" type="fixed">
       <xacro:insert_block name="origin" />
-      <parent link="$(arg robot_name)/${parent}"/>
-      <child link="$(arg robot_name)/${link_name}"/>
+      <parent link="${parent}"/>
+      <child link="${link_name}"/>
     </joint>
 
-    <link name="$(arg robot_name)/${link_name}">
+    <link name="${link_name}">
       <xacro:inertial_dummy/>
     </link>
 
-    <gazebo reference="$(arg robot_name)/${link_name}_joint">
+    <gazebo reference="${link_name}_joint">
       <preserveFixedJoint>true</preserveFixedJoint>
     </gazebo>
 
-    <gazebo reference="$(arg robot_name)/${link_name}">
-      <xacro:ray_sensor sensor_name="${link_name}" gazebo="${gazebo}" 
-                      update_rate="${update_rate}" visualize="${visualize}" 
+    <gazebo reference="${link_name}">
+      <xacro:ray_sensor sensor_name="${link_name}" gazebo="${gazebo}"
+                      update_rate="${update_rate}" visualize="${visualize}"
                       h_samples="5" h_res="1.0" h_min_angle="-${fov/2}" h_max_angle="${fov/2}"
-                      v_samples="5" v_res="1.0" v_min_angle="-${fov/2}" v_max_angle="${fov/2}" 
+                      v_samples="5" v_res="1.0" v_min_angle="-${fov/2}" v_max_angle="${fov/2}"
                       r_min="${min_range}" r_max="${max_range}" r_res="1.0">
           <plugin filename="libgazebo_ros_create_ir_intensity_sensor.so" name="${link_name}">
             <ros>

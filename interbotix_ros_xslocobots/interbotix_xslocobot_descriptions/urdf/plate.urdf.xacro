@@ -5,11 +5,11 @@
 
     <joint name="plate" type="fixed">
       <xacro:insert_block name="origin"/>
-      <parent link="$(arg robot_name)/base_link"/>
-      <child link="$(arg robot_name)/plate_link"/>
+      <parent link="base_link"/>
+      <child link="plate_link"/>
     </joint>
 
-    <link name="$(arg robot_name)/plate_link">
+    <link name="plate_link">
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>

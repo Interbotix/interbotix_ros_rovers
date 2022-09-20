@@ -1,18 +1,19 @@
 <?xml version="1.0" ?>
 <robot name="locobot" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:arg name="arm_model" default=""/>
-  <xacro:arg name="robot_model" default=""/>
-  <xacro:arg name="robot_name" default=""/>
-  <xacro:arg name="show_lidar" default="true"/>
-  <xacro:arg name="show_gripper_bar" default="true"/>
-  <xacro:arg name="show_gripper_fingers" default="true"/>
-  <xacro:arg name="external_urdf_loc" default=""/>
-  <xacro:arg name="load_gazebo_configs" default="false"/>
+  <xacro:arg name="arm_model"             default=""/>
+  <xacro:arg name="robot_model"           default=""/>
+  <xacro:arg name="base_model"            default=""/>
+  <xacro:arg name="show_lidar"            default="true"/>
+  <xacro:arg name="show_gripper_bar"      default="true"/>
+  <xacro:arg name="show_gripper_fingers"  default="true"/>
+  <xacro:arg name="external_urdf_loc"     default=""/>
+  <xacro:arg name="load_gazebo_configs"   default="false"/>
 
-  <xacro:property name="arm_type" value="$(arg arm_model)"/>
-  <xacro:property name="urdf_loc" value="$(arg external_urdf_loc)"/>
-  <xacro:property name="pi_offset" value="0.00001"/>
+  <xacro:property name="arm_type"         value="$(arg arm_model)"/>
+  <xacro:property name="base_type"        value="$(arg base_model)"/>
+  <xacro:property name="urdf_loc"         value="$(arg external_urdf_loc)"/>
+  <xacro:property name="pi_offset"        value="0.00001"/>
 
   <xacro:if value="$(arg load_gazebo_configs)">
     <xacro:include filename="$(find interbotix_xslocobot_gazebo)/config/locobot_configs.gazebo"/>
@@ -26,494 +27,252 @@
     <texture filename="package://interbotix_xslocobot_descriptions/meshes/interbotix_black.png"/>
   </material>
 
-    <!-- ********************************** Kobuki ********************************** -->
+  <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/plate.urdf.xacro" />
+  <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/lidar.urdf.xacro" />
+  <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/battery.urdf.xacro" />
+  <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/arm_cradle.urdf.xacro" />
+  <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/camera_tower.urdf.xacro" />
+  <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/pan_and_tilt.urdf.xacro" />
 
-  <link name="$(arg robot_name)/base_footprint"/>
+  <link name="base_footprint"/>
 
-  <joint name="base_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 0.0102"/>
-    <parent link="$(arg robot_name)/base_footprint"/>
-    <child link="$(arg robot_name)/base_link"/>
-  </joint>
+  <xacro:if value="${arm_type == 'mobile_wx250s'}">
+    <xacro:property name="camera_tower_size" value="large"/>
+  </xacro:if>
+  <xacro:unless value="${arm_type == 'mobile_wx250s'}">
+    <xacro:property name="camera_tower_size" value="small"/>
+  </xacro:unless>
 
-  <link name="$(arg robot_name)/base_link">
-    <visual>
-      <origin rpy="0 0 0" xyz="0.001 0 0.05199"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_main_body.dae"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0.0 0 0.05949"/>
-      <geometry>
-        <cylinder length="0.10938" radius="0.178"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0.01 0 0"/>
-      <mass value="2.4"/>
-      <inertia ixx="0.019995" ixy="0.0" ixz="0.0" iyy="0.019995" iyz="0.0" izz="0.03675"/>
-    </inertial>
-  </link>
+  <xacro:if value="${base_type == 'kobuki'}">
+    <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/kobuki_version/locobot_kobuki.urdf.xacro"/>
+    <xacro:property name="mesh_scale" value="0.001 0.001 0.001"/>
+  </xacro:if> <!-- kobuki -->
 
-  <joint name="wheel_left_joint" type="continuous">
-    <axis xyz="0 0 1"/>
-    <origin rpy="-1.57079632679 0 0" xyz="0.00 0.115 0.0250"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/wheel_left_link"/>
-  </joint>
+  <xacro:if value="${base_type == 'create3'}">
+    <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/locobot_create3.urdf.xacro"/>
+    <xacro:property name="mesh_scale" value="1 1 1"/>
+  </xacro:if> <!-- create3 -->
 
-  <link name="$(arg robot_name)/wheel_left_link">
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_wheel.dae"/>
-      </geometry>
-    </visual>
-    <collision>
-      <geometry>
-        <cylinder length="0.0206" radius="0.0352"/>
-      </geometry>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-    </collision>
-    <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="0.01"/>
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
-    </inertial>
-  </link>
+  <!-- ********************************** Plate **********************************  -->
 
-  <joint name="wheel_right_joint" type="continuous">
-    <axis xyz="0 0 1"/>
-    <origin rpy="-1.57079632679 0 0" xyz="0.00 -0.115 0.0250"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/wheel_right_link"/>
-  </joint>
+  <xacro:if value="${base_type == 'kobuki'}">
 
-  <link name="$(arg robot_name)/wheel_right_link">
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_wheel.dae"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <cylinder length="0.0206" radius="0.0350"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="0.01"/>
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
-    </inertial>
-  </link>
+    <xacro:plate>
+      <origin rpy="0 0 0" xyz="0.0 0 0.08825"/>
+      <inertial>
+        <origin rpy="0 0 0" xyz="0.050816 0 0.00475"/>
+        <mass value="0.571995"/>
+        <inertia ixx="0.003115" ixy="0" ixz="0" iyy="0.001813" iyz="0" izz="0.004919"/>
+      </inertial>
+    </xacro:plate>
 
-  <joint name="caster_front_joint" type="fixed">
-    <origin rpy="-1.57079632679 0 0" xyz="0.115 0.0 0.007"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/caster_front_link"/>
-  </joint>
+  </xacro:if> <!-- base_type == 'kobuki' -->
 
-  <link name="$(arg robot_name)/caster_front_link">
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <cylinder length="0.0176" radius="0.017"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="0.01"/>
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
-    </inertial>
-  </link>
+  <xacro:if value="${base_type == 'create3'}">
 
-  <joint name="caster_back_joint" type="fixed">
-    <origin rpy="-1.57079632679 0 0" xyz="-0.135 0.0 0.009"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/caster_back_link"/>
-  </joint>
+    <xacro:plate>
+      <origin rpy="0 0 0" xyz="0 0 0.0934"/>
+      <inertial>
+        <origin rpy="0 0 0" xyz="-0.005869 0 4.67E-03"/>
+        <mass value="0.807674"/>
+        <inertia ixx="5.27E-03" ixy="0" ixz="0" iyy="3.27E-03" iyz="0" izz="8.54E-03"/>
+      </inertial>
+    </xacro:plate>
 
-  <link name="$(arg robot_name)/caster_back_link">
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <cylinder length="0.0176" radius="0.017"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="0.01"/>
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
-    </inertial>
-  </link>
+  </xacro:if> <!-- base_type == 'create3' -->
 
-  <joint name="gyro_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0.056 0.062 0.0202"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/gyro_link"/>
-  </joint>
-
-  <link name="$(arg robot_name)/gyro_link">
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.001"/>
-      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
-    </inertial>
-  </link>
-
-  <joint name="cliff_sensor_left_joint" type="fixed">
-    <origin rpy="0 1.57079632679 0" xyz="0.08734 0.13601 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_left_link"/>
-  </joint>
-
-  <link name="$(arg robot_name)/cliff_sensor_left_link">
-    <inertial>
-      <mass value="0.0001"/>
-      <origin xyz="0 0 0"/>
-      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
-    </inertial>
-  </link>
-
-  <joint name="cliff_sensor_right_joint" type="fixed">
-    <origin rpy="0 1.57079632679 0" xyz="0.085 -0.13601 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_right_link"/>
-  </joint>
-
-  <link name="$(arg robot_name)/cliff_sensor_right_link">
-    <inertial>
-      <origin xyz="0 0 0"/>
-      <mass value="0.0001"/>
-      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
-    </inertial>
-  </link>
-
-  <joint name="cliff_sensor_front_joint" type="fixed">
-    <origin rpy="0 1.57079632679 0" xyz="0.156 0.00 0.0214"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/cliff_sensor_front_link"/>
-  </joint>
-
-  <link name="$(arg robot_name)/cliff_sensor_front_link">
-    <inertial>
-      <mass value="0.0001"/>
-      <origin xyz="0 0 0"/>
-      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001"/>
-    </inertial>
-  </link>
-
-    <!-- ********************************** Bottom Plate and Arm ********************************** -->
-
-  <joint name="plate" type="fixed">
-    <origin rpy="0 0 0" xyz="0.0 0 0.08825"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/plate_link"/>
-  </joint>
-
-  <link name="$(arg robot_name)/plate_link">
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_base_plate.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="interbotix_black"/>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_base_plate.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0.050816 0 0.00475"/>
-      <mass value="0.571995"/>
-      <inertia ixx="0.003115" ixy="0" ixz="0" iyy="0.001813" iyz="0" izz="0.004919"/>
-    </inertial>
-  </link>
+  <!-- ********************************** Arm ********************************** -->
 
   <xacro:if value="${arm_type != 'mobile_base'}">
 
-    <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/$(arg arm_model).urdf.xacro"/>
+    <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/arms/mobile_arm.urdf.xacro"/>
+
+    <xacro:mobile_arm/>
 
     <xacro:if value="${arm_type == 'mobile_wx200'}">
 
-      <joint name="arm_cradle" type="fixed">
-         <axis xyz="0 0 0"/>
-         <origin rpy="0 0 0" xyz="0.0215 0 0.1195"/>
-         <parent link="$(arg robot_name)/camera_tower_link"/>
-         <child link="$(arg robot_name)/arm_cradle_link"/>
-      </joint>
+      <xacro:if value="${base_type == 'kobuki'}">
 
-     <link name="$(arg robot_name)/arm_cradle_link">
-       <visual>
-         <origin rpy="0 0 0" xyz="0 0 0"/>
-         <geometry>
-           <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_arm_cradle.stl" scale="0.001 0.001 0.001"/>
-         </geometry>
-         <material name="interbotix_black"/>
-       </visual>
-       <collision>
-         <origin rpy="0 0 0" xyz="0 0 0"/>
-         <geometry>
-           <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_arm_cradle.stl" scale="0.001 0.001 0.001"/>
-         </geometry>
-       </collision>
-       <inertial>
-         <origin rpy="0 0 0" xyz="0.0014389900 0 0.0098387400"/>
-         <mass value="0.017626"/>
-         <inertia ixx="0.0000046575" ixy="0" ixz="0.0000000748" iyy="0.0000018629" iyz="0" izz="0.0000046198"/>
-       </inertial>
-     </link>
+        <xacro:arm_cradle>
+          <origin rpy="0 0 0" xyz="0.0215 0 0.1195"/>
+        </xacro:arm_cradle>
 
-    </xacro:if>
+      </xacro:if> <!-- base_type == 'kobuki' -->
 
-  </xacro:if>
+      <xacro:if value="${base_type == 'create3'}">
+
+        <xacro:arm_cradle>
+          <origin rpy="0 0 0" xyz="0.037943 0 0.139"/>
+        </xacro:arm_cradle>
+
+      </xacro:if> <!-- base_type == 'create3' -->
+
+    </xacro:if> <!-- arm_type == 'mobile_wx200' -->
+
+  </xacro:if> <!-- arm_type != 'mobile_base' -->
 
   <!-- ********************************** Battery **********************************  -->
 
-  <joint name="battery" type="fixed">
-    <origin rpy="0 0 0" xyz="-0.007 0 0.0125"/>
-    <parent link="$(arg robot_name)/plate_link"/>
-    <child link="$(arg robot_name)/battery_link"/>
-  </joint>
+  <xacro:if value="${base_type == 'kobuki'}">
+    <xacro:battery>
+      <origin rpy="0 0 0" xyz="-0.007 0 0.0125"/>
+    </xacro:battery>
+  </xacro:if> <!-- base_type == 'kobuki' -->
 
-  <link name="$(arg robot_name)/battery_link">
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_battery.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="">
-        <color rgba="0.5 0.5 0.5 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_battery.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0.016"/>
-      <mass value="1.194"/>
-      <inertia ixx="0.004312" ixy="0" ixz="0" iyy="0.001908" iyz="0" izz="0.006017"/>
-    </inertial>
-  </link>
+  <xacro:if value="${base_type == 'create3'}">
+    <xacro:battery>
+      <origin rpy="0 0 0" xyz="-0.0345 0 0.010763"/>
+    </xacro:battery>
+  </xacro:if> <!-- base_type == 'create3' -->
 
   <!-- ********************************** Camera Tower **********************************  -->
-  <joint name="camera_tower" type="fixed">
-    <origin rpy="0 0 0" xyz="-0.023997 -0.000044 0.08823"/>
-    <parent link="$(arg robot_name)/base_link"/>
-    <child link="$(arg robot_name)/camera_tower_link"/>
-  </joint>
 
-  <xacro:if value="${arm_type == 'mobile_wx250s'}">
-    <link name="$(arg robot_name)/camera_tower_link">
-      <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera_tower_large.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="interbotix_black"/>
-      </visual>
-      <collision>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera_tower_large_simple.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-      </collision>
-      <inertial>
-        <origin rpy="0 0 0" xyz="-0.0372211000 -0.0026114300 0.1744600000"/>
-        <mass value="2.366224"/>
-        <inertia ixx="0.0628500000" ixy="0.0002152000" ixz="0.0065630000" iyy="0.0546000000" iyz="-0.0004738000" izz="0.0179300000"/>
-      </inertial>
-    </link>
-  </xacro:if>
+  <xacro:if value="${base_type == 'kobuki'}">
 
-  <xacro:unless value="${arm_type == 'mobile_wx250s'}">
-    <link name="$(arg robot_name)/camera_tower_link">
-      <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera_tower_small.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="interbotix_black"/>
-      </visual>
-      <collision>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera_tower_small_simple.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-      </collision>
-      <inertial>
-        <origin rpy="0 0 0" xyz="-0.0357703000 -0.0027068600 0.1560470000"/>
-        <mass value="2.282808"/>
-        <inertia ixx="0.0461600000" ixy="0.0002062000" ixz="0.0052560000" iyy="0.0384200000" iyz="-0.0003600000" izz="0.0169600000"/>
-      </inertial>
-    </link>
-  </xacro:unless>
+    <xacro:if value="${camera_tower_size == 'large'}">
+
+      <xacro:camera_tower>
+        <origin rpy="0 0 0" xyz="-0.023997 -0.000044 0.08823"/>
+        <inertial>
+          <origin rpy="0 0 0" xyz="-0.0372211000 -0.0026114300 0.1744600000"/>
+          <mass value="2.366224"/>
+          <inertia ixx="0.0628500000" ixy="0.0002152000" ixz="0.0065630000" iyy="0.0546000000" iyz="-0.0004738000" izz="0.0179300000"/>
+        </inertial>
+      </xacro:camera_tower>
+
+    </xacro:if> <!-- base_type == 'kobuki' && camera_tower_size == 'large' -->
+
+    <xacro:if value="${camera_tower_size == 'small'}">
+
+      <xacro:camera_tower>
+        <origin rpy="0 0 0" xyz="-0.023997 -0.000044 0.08823"/>
+        <inertial>
+          <origin rpy="0 0 0" xyz="-0.0357703000 -0.0027068600 0.1560470000"/>
+          <mass value="2.282808"/>
+          <inertia ixx="0.0461600000" ixy="0.0002062000" ixz="0.0052560000" iyy="0.0384200000" iyz="-0.0003600000" izz="0.0169600000"/>
+        </inertial>
+      </xacro:camera_tower>
+
+    </xacro:if> <!-- base_type == 'kobuki' && camera_tower_size == 'small' -->
+
+  </xacro:if> <!-- base_type == 'kobuki' -->
+
+  <xacro:if value="${base_type == 'create3'}">
+
+    <xacro:if value="${camera_tower_size == 'large'}">
+
+      <xacro:camera_tower>
+        <origin rpy="0 0 0" xyz="-0.048271 0 0.10087"/>
+        <inertial>
+          <origin rpy="0 0 0" xyz="-0.025958 -0.003319 0.205872"/>
+          <mass value="2.514064"/>
+          <inertia ixx="7.61E-02" ixy="1.47E-04" ixz="7.04E-03" iyy="6.71E-02" iyz="-9.41E-04" izz="1.95E-02"/>
+        </inertial>
+      </xacro:camera_tower>
+
+    </xacro:if> <!-- base_type == 'create3' && camera_tower_size == 'large' -->
+
+    <xacro:if value="${camera_tower_size == 'small'}">
+
+      <xacro:camera_tower>
+        <origin rpy="0 0 0" xyz="-0.048271 0 0.10087"/>
+        <inertial>
+          <origin rpy="0 0 0" xyz="-0.024689 -0.003432 0.185408"/>
+          <mass value="2.430647"/>
+          <inertia ixx="5.63E-02" ixy="1.37E-04" ixz="5.75E-03" iyy="4.78E-02" iyz="-7.70E-04" izz="1.86E-02"/>
+        </inertial>
+      </xacro:camera_tower>
+
+    </xacro:if> <!-- base_type == 'create3' && camera_tower_size == 'small' -->
+
+  </xacro:if> <!-- base_type == 'create3' -->
 
   <!-- ********************************** Pan & Tilt **********************************  -->
 
-  <joint name="pan" type="revolute">
-    <axis xyz="0 0 1"/>
-    <limit effort="2" lower="${-pi/2}" upper="${pi/2}" velocity="${pi}"/>
-    <xacro:if value="${arm_type == 'mobile_wx250s'}">
-      <origin rpy="0 0 0" xyz="0.047228 0 0.44425"/>
-    </xacro:if>
-    <xacro:unless value="${arm_type == 'mobile_wx250s'}">
-      <origin rpy="0 0 0" xyz="0.047228 0 0.38425"/>
-    </xacro:unless>
-    <parent link="$(arg robot_name)/camera_tower_link"/>
-    <child link="$(arg robot_name)/pan_link"/>
-  </joint>
+  <xacro:if value="${base_type == 'kobuki'}">
 
-  <link name="$(arg robot_name)/pan_link">
-    <visual>
-      <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_pan.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="interbotix_black"/>
-    </visual>
-    <collision>
-      <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_pan.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 ${pi/2}" xyz="0.012 0.000496 0.018504"/>
-      <mass value="0.098997"/>
-      <inertia ixx="0.0000276300" ixy="0.0000000418" ixz="0.0000005145" iyy="0.0000204300" iyz="-0.0000000421" izz="0.0000276300"/>
-    </inertial>
-  </link>
+    <xacro:if value="${camera_tower_size == 'large'}">
 
-  <joint name="tilt" type="revolute">
-    <axis xyz="0 1 0"/>
-    <limit effort="2" lower="${-pi/2}" upper="${radians(75)}" velocity="${pi}"/>
-    <origin rpy="0 0 0" xyz="0.025034 0 0.019"/>
-    <parent link="$(arg robot_name)/pan_link"/>
-    <child link="$(arg robot_name)/tilt_link"/>
-  </joint>
+      <xacro:pan_and_tilt>
+        <origin rpy="0 0 0" xyz="0.047228 0 0.44425"/>
+      </xacro:pan_and_tilt>
 
-  <link name="$(arg robot_name)/tilt_link">
-    <visual>
-      <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_tilt.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="interbotix_black"/>
-    </visual>
-    <collision>
-      <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_tilt.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 ${pi/2}" xyz="0.0237737000 -0.0000016331 0.0000077432"/>
-      <mass value="0.019845"/>
-      <inertia ixx="0.0000021677" ixy="0.0000000000" ixz="0.0000000001" iyy="0.0000063634" iyz="0.0000000003" izz="0.0000066157"/>
-    </inertial>
-  </link>
+    </xacro:if> <!-- base_type == 'kobuki' && camera_tower_size == 'large' -->
 
-  <joint name="camera" type="fixed">
-    <origin rpy="0 0 0" xyz="0.05318 0.0175 0.000009"/>
-    <parent link="$(arg robot_name)/tilt_link"/>
-    <child link="$(arg robot_name)/camera_link"/>
-  </joint>
+    <xacro:if value="${camera_tower_size == 'small'}">
 
-  <link name="$(arg robot_name)/camera_link">
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-      <material name="">
-        <color rgba="0.55 0.55 0.55 1"/>
-      </material>
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry>
-        <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera.stl" scale="0.001 0.001 0.001"/>
-      </geometry>
-    </collision>
-    <inertial>
-      <origin rpy="0 0 0" xyz="-0.008972 -0.015818 0.000003"/>
-      <mass value="0.072"/>
-      <inertia ixx="0.0000465400" ixy="0.0000003028" ixz="0.0000000245" iyy="0.0000069128" iyz="0.0000000248" izz="0.0000468600"/>
-    </inertial>
-  </link>
+      <xacro:pan_and_tilt>
+        <origin rpy="0 0 0" xyz="0.047228 0 0.38425"/>
+      </xacro:pan_and_tilt>
+
+    </xacro:if> <!-- base_type == 'kobuki' && camera_tower_size == 'small' -->
+
+  </xacro:if> <!-- base_type == 'kobuki' -->
+
+  <xacro:if value="${base_type == 'create3'}">
+
+    <xacro:if value="${camera_tower_size == 'large'}">
+
+      <xacro:pan_and_tilt>
+        <origin rpy="0 0 0" xyz="0.061228 0 0.462"/>
+      </xacro:pan_and_tilt>
+
+    </xacro:if> <!-- base_type == 'create3' && camera_tower_size == 'large' -->
+
+    <xacro:if value="${camera_tower_size == 'small'}">
+
+      <xacro:pan_and_tilt>
+        <origin rpy="0 0 0" xyz="0.061228 0 0.402"/>
+      </xacro:pan_and_tilt>
+
+    </xacro:if> <!-- base_type == 'create3' && camera_tower_size == 'small' -->
+
+  </xacro:if> <!-- base_type == 'create3' -->
 
   <!-- ********************************** Lidar **********************************  -->
 
   <xacro:if value="$(arg show_lidar)">
 
-    <joint name="lidar_tower" type="fixed">
-      <xacro:if value="${arm_type == 'mobile_wx250s'}">
-        <origin rpy="0 0 0" xyz="-0.074 0 0.44425"/>
-      </xacro:if>
-      <xacro:unless value="${arm_type == 'mobile_wx250s'}">
-        <origin rpy="0 0 0" xyz="-0.074 0 0.38425"/>
-      </xacro:unless>
-      <parent link="$(arg robot_name)/camera_tower_link"/>
-      <child link="$(arg robot_name)/lidar_tower_link"/>
-    </joint>
+    <xacro:if value="${base_type == 'kobuki'}">
 
-    <link name="$(arg robot_name)/lidar_tower_link">
-      <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_lidar_tower.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="interbotix_black"/>
-      </visual>
-      <collision>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_lidar_tower_simple.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-      </collision>
-      <inertial>
-        <origin rpy="0 0 0" xyz="-0.0074822400 -0.0000196881 0.0507957000"/>
-        <mass value="0.155485"/>
-        <inertia ixx="0.0007642000" ixy="-0.0000001357" ixz="0.0000134700" iyy="0.0001285000" iyz="0.0000000354" izz="0.0007840000"/>
-      </inertial>
-    </link>
+      <xacro:if value="${camera_tower_size == 'large'}">
 
-    <joint name="lidar" type="fixed">
-      <origin rpy="0 0 ${pi}" xyz="0 0 0.09425"/>
-      <parent link="$(arg robot_name)/lidar_tower_link"/>
-      <child link="$(arg robot_name)/laser_frame_link"/>
-    </joint>
+        <xacro:lidar>
+          <origin rpy="0 0 0" xyz="-0.074 0 0.44425"/>
+        </xacro:lidar>
 
-    <link name="$(arg robot_name)/laser_frame_link">
-      <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
-        <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_lidar.stl" scale="0.001 0.001 0.001"/>
-        </geometry>
-        <material name="interbotix_black"/>
-      </visual>
-      <collision>
-        <origin rpy="0 0 0" xyz="0 0 -0.0091"/>
-        <geometry>
-          <cylinder length="0.0408" radius="0.03785"/>
-        </geometry>
-      </collision>
-      <inertial>
-        <origin rpy="0 0 0" xyz="0.0007379970 0 -0.0103809000"/>
-        <mass value="0.196"/>
-        <inertia ixx="0.0000907500" ixy="0.0000000001" ixz="-0.0000014234" iyy="0.0000877600" iyz="0" izz="0.0001268000"/>
-      </inertial>
-    </link>
+      </xacro:if> <!-- base_type == 'kobuki' && camera_tower_size == 'large' -->
 
-  </xacro:if>
+      <xacro:if value="${camera_tower_size == 'small'}">
+
+        <xacro:lidar>
+          <origin rpy="0 0 0" xyz="-0.074 0 0.38425"/>
+        </xacro:lidar>
+
+      </xacro:if> <!-- base_type == 'kobuki' && camera_tower_size == 'small' -->
+
+    </xacro:if> <!-- base_type == 'kobuki' -->
+
+    <xacro:if value="${base_type == 'create3'}">
+
+      <xacro:if value="${camera_tower_size == 'large'}">
+
+        <xacro:lidar>
+          <origin rpy="0 0 0" xyz="-0.066095 0 0.462"/>
+        </xacro:lidar>
+
+      </xacro:if> <!-- base_type == 'create3' && camera_tower_size == 'large' -->
+
+      <xacro:if value="${camera_tower_size == 'small'}">
+
+        <xacro:lidar>
+          <origin rpy="0 0 0" xyz="-0.066095 0 0.402"/>
+        </xacro:lidar>
+
+      </xacro:if> <!-- base_type == 'create3' && camera_tower_size == 'small' -->
+
+    </xacro:if> <!-- base_type == 'create3' -->
+
+  </xacro:if> <!-- show_lidar -->
 
 </robot>

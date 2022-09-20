@@ -47,8 +47,8 @@
     <xacro:inertial_cuboid mass="0.01" x="0.01" y="0.01" z="0.01"/>
   </xacro:macro>
 
-  <xacro:macro name="ray_sensor" 
-    params="sensor_name gazebo update_rate visualize 
+  <xacro:macro name="ray_sensor"
+    params="sensor_name gazebo update_rate visualize
             h_samples h_res h_min_angle h_max_angle
             v_samples:=1 v_res:=1 v_min_angle:=0 v_max_angle:=0
             r_min r_max r_res *plugin">

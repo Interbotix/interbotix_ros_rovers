@@ -7,8 +7,8 @@
       <axis xyz="0 0 1"/>
       <limit effort="2" lower="${-pi/2}" upper="${pi/2}" velocity="${pi}"/>
       <xacro:insert_block name="origin"/>
-      <parent link="$(arg robot_name)/camera_tower_link"/>
-      <child link="$(arg robot_name)/pan_link"/>
+      <parent link="camera_tower_link"/>
+      <child link="pan_link"/>
     </joint>
 
     <transmission name="trans_pan">
@@ -21,7 +21,7 @@
       </actuator>
     </transmission>
 
-    <link name="$(arg robot_name)/pan_link">
+    <link name="pan_link">
       <visual>
         <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
         <geometry>
@@ -46,8 +46,8 @@
       <axis xyz="0 1 0"/>
       <limit effort="2" lower="${-pi/2}" upper="${radians(75)}" velocity="${pi}"/>
       <origin rpy="0 0 0" xyz="0.025034 0 0.019"/>
-      <parent link="$(arg robot_name)/pan_link"/>
-      <child link="$(arg robot_name)/tilt_link"/>
+      <parent link="pan_link"/>
+      <child link="tilt_link"/>
     </joint>
 
     <transmission name="trans_tilt">
@@ -60,7 +60,7 @@
       </actuator>
     </transmission>
 
-    <link name="$(arg robot_name)/tilt_link">
+    <link name="tilt_link">
       <visual>
         <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
         <geometry>
@@ -83,11 +83,11 @@
 
     <joint name="camera" type="fixed">
       <origin rpy="0 0 0" xyz="0.05318 0.0175 0.000009"/>
-      <parent link="$(arg robot_name)/tilt_link"/>
-      <child link="$(arg robot_name)/camera_link"/>
+      <parent link="tilt_link"/>
+      <child link="camera_link"/>
     </joint>
 
-    <link name="$(arg robot_name)/camera_link">
+    <link name="camera_link">
       <visual>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>

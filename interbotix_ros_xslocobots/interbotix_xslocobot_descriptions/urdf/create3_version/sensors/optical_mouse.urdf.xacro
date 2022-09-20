@@ -3,19 +3,19 @@
 
   <xacro:macro name="optical_mouse" params="name:=mouse gazebo parent_link:=base_link update_rate:=62 *origin" >
 
-    <joint name="$(arg robot_name)/${name}_joint" type="fixed">
+    <joint name="${name}_joint" type="fixed">
       <xacro:insert_block name="origin"/>
-      <parent link="$(arg robot_name)/${parent_link}"/>
-      <child link="$(arg robot_name)/${name}"/>
+      <parent link="${parent_link}"/>
+      <child link="${name}"/>
     </joint>
 
-    <link name="$(arg robot_name)/${name}">
+    <link name="${name}">
       <xacro:inertial_dummy />
     </link>
 
     <xacro:if value="${gazebo == 'classic'}">
       <gazebo>
-        <plugin name="$(arg robot_name)/${name}_plugin" filename="libgazebo_ros_create_optical_mouse.so">
+        <plugin name="${name}_plugin" filename="libgazebo_ros_create_optical_mouse.so">
             <ros>
               <namespace>/</namespace>
               <remapping>~/out:=${name}</remapping>
@@ -25,8 +25,8 @@
         </plugin>
       </gazebo>
     </xacro:if>
-    
-    <gazebo reference="$(arg robot_name)/${name}_joint" >
+
+    <gazebo reference="${name}_joint" >
       <preserveFixedJoint>true</preserveFixedJoint>
     </gazebo>
   </xacro:macro>

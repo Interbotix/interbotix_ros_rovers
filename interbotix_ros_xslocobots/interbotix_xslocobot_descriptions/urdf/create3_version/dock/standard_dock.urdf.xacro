@@ -82,7 +82,7 @@
     <origin xyz="${buoy_x} 0 ${0.095 - z_offset}"/>
   </xacro:ir_emitter>
 
-  <xacro:if value="${'$(arg gazebo)' == 'classic'}">
+  <xacro:if value="${hardware_type == 'gz_classic'}">
     <gazebo>
       <static>true</static>
       <!-- Ground truth pose-->
@@ -101,7 +101,7 @@
     </gazebo>
   </xacro:if>
 
-  <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
+  <xacro:if value="${hardware_type == 'gz_ignition'}">
     <gazebo>
       <static>true</static>
       <!-- Ground truth pose-->

@@ -5,26 +5,44 @@
 
     <joint name="plate" type="fixed">
       <xacro:insert_block name="origin"/>
-      <parent link="base_link"/>
-      <child link="plate_link"/>
+      <parent
+        link="base_link"/>
+      <child
+        link="plate_link"/>
     </joint>
 
     <link name="plate_link">
       <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin
+          rpy="0 0 0"
+          xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/${base_type}_version/locobot_base_plate.stl" scale="${mesh_scale}"/>
+          <mesh
+            filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/${base_type}_version/locobot_base_plate.stl"
+            scale="${mesh_scale}"/>
         </geometry>
         <material name="interbotix_black"/>
       </visual>
       <collision>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin
+          rpy="0 0 0"
+          xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/${base_type}_version/locobot_base_plate.stl" scale="${mesh_scale}"/>
+          <mesh
+            filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/${base_type}_version/locobot_base_plate.stl"
+            scale="${mesh_scale}"/>
         </geometry>
       </collision>
       <xacro:insert_block name="inertial"/>
     </link>
+
+    <gazebo reference="plate_link">
+      <material>Custom/Interbotix</material>
+    </gazebo>
+
+    <gazebo reference="plate">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
 
   </xacro:macro>
 

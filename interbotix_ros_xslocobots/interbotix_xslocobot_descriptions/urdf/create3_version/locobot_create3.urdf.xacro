@@ -37,10 +37,10 @@
     <xacro:property name="body_radius"             value="${16.4*cm2m}" />
     <xacro:property name="body_length"             value="${6*cm2m}" />
 
-    <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
+    <xacro:if value="${hardware_type == 'gz_ignition'}">
       <xacro:property name="body_cog_x_offset"       value="${2.28*cm2m}" />
     </xacro:if>
-    <xacro:if value="${'$(arg gazebo)' == 'classic'}">
+    <xacro:if value="${hardware_type in ('gz_classic', 'actual', 'fake')}">
       <xacro:property name="body_cog_x_offset"       value="${0*cm2m}" />
     </xacro:if>
 
@@ -53,10 +53,10 @@
     <xacro:property name="distance_between_wheels" value="${23.3*cm2m}" />
 
     <xacro:property name="caster_position_x"       value="${12.5*cm2m}" />
-    <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
+    <xacro:if value="${hardware_type == 'gz_ignition'}">
       <xacro:property name="caster_position_z"       value="${-5.03*cm2m}" />
     </xacro:if>
-    <xacro:if value="${'$(arg gazebo)' == 'classic'}">
+    <xacro:if value="${hardware_type in ('gz_classic', 'actual', 'fake')}">
       <xacro:property name="caster_position_z"       value="${-5.2*cm2m}" />
     </xacro:if>
 
@@ -96,7 +96,7 @@
       </xacro:inertial_cylinder_with_pose>
     </link>
 
-    <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
+    <xacro:if value="${hardware_type == 'gz_ignition'}">
       <gazebo reference="base_link">
         <xacro:material_darkgray/>
       </gazebo>
@@ -135,7 +135,7 @@
       <origin xyz="0.050613 0.043673 ${0.0202 + base_link_z_offset}"/>
     </xacro:imu_sensor>
 
-    <xacro:if value="${'$(arg gazebo)' == 'classic'}">
+    <xacro:if value="${hardware_type == 'gz_classic'}">
       <gazebo>
         <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
           <parameters> $(find irobot_create_control)/config/control.yaml </parameters>
@@ -143,7 +143,7 @@
       </gazebo>
     </xacro:if>
 
-    <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
+    <xacro:if value="${hardware_type == 'gz_ignition'}">
       <gazebo>
         <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
           <parameters> $(find irobot_create_control)/config/control.yaml </parameters>
@@ -252,7 +252,7 @@
     </xacro:ir_opcode_receivers>
 
     <!-- Plugins -->
-    <xacro:if value="${'$(arg gazebo)' == 'classic'}">
+    <xacro:if value="${hardware_type == 'gz_classic'}">
       <!-- Ground truth pose -->
       <gazebo>
         <plugin name="gazebo_ros_p3d_robot" filename="libgazebo_ros_p3d.so">
@@ -285,7 +285,7 @@
       </gazebo>
     </xacro:if>
 
-    <xacro:if value="${'$(arg gazebo)' == 'ignition'}">
+    <xacro:if value="${hardware_type == 'gz_ignition'}">
       <gazebo>
         <plugin filename="libignition-gazebo-pose-publisher-system.so" name="ignition::gazebo::systems::PosePublisher">
           <publish_link_pose>true</publish_link_pose>

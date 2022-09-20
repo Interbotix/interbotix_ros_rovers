@@ -5,13 +5,13 @@
 
   <xacro:property name="detection_threshold" value="${3*cm2m}"/>
 
-  <xacro:if value="${gazebo == 'classic'}">
+  <xacro:if value="${hardware_type in ('gz_classic', 'actual', 'fake')}">
     <xacro:property name="spring_stiffness_nm"  value="400"/>
     <xacro:property name="spring_damping"       value="50"/>
     <xacro:property name="spring_friction"      value="0.1"/>
   </xacro:if>
 
-  <xacro:if value="${gazebo == 'ignition'}">
+  <xacro:if value="${hardware_type == 'gz_ignition'}">
     <xacro:property name="spring_stiffness_nm"  value="450"/>
     <xacro:property name="spring_damping"       value="50"/>
     <xacro:property name="spring_friction"      value="0.1"/>
@@ -48,7 +48,7 @@
     <xacro:inertial_cuboid mass="${wd_mass}" x="${wd_size}" y="${wd_size}" z="${wd_size}"/>
   </link>
 
-  <xacro:if value="${gazebo == 'classic'}">
+  <xacro:if value="${hardware_type == 'gz_classic'}">
     <gazebo>
       <plugin name="${wd_link_name}_plugin" filename="libgazebo_ros_create_wheel_drop.so">
         <ros>

@@ -122,7 +122,7 @@ def generate_launch_description():
             'robot_model',
             choices=get_interbotix_xslocobot_models(),
             description=(
-                'model type of the Interbotix Locobot such as `locobot_base` or `locobot_wx250s`.'
+                'model type of the Interbotix LoCoBot such as `locobot_base` or `locobot_wx250s`.'
             ),
         )
     )
@@ -133,7 +133,7 @@ def generate_launch_description():
                 '"mobile_" + "', LaunchConfiguration('robot_model'), '".split("_")[1]'
             ]),
             description=(
-                'the Interbotix Arm model on the locobot; this should never be set manually but '
+                'the Interbotix Arm model on the LoCoBot; this should never be set manually but '
                 'rather left to its default value.'
             ),
         )

@@ -53,7 +53,7 @@
             v_samples:=1 v_res:=1 v_min_angle:=0 v_max_angle:=0
             r_min r_max r_res *plugin">
     <!-- Classic -->
-    <xacro:if value="${gazebo == 'classic'}">
+    <xacro:if value="${hardware_type == 'gz_classic'}">
       <sensor type="ray" name="${sensor_name}">
         <update_rate>${update_rate}</update_rate>
         <visualize>${visualize}</visualize>
@@ -90,7 +90,7 @@
     </xacro:if>
 
     <!-- Ignition -->
-    <xacro:if value="${gazebo == 'ignition'}">
+    <xacro:if value="${hardware_type == 'gz_ignition'}">
       <sensor name="${sensor_name}" type="gpu_lidar">
         <update_rate>${update_rate}</update_rate>
         <visualize>${visualize}</visualize>

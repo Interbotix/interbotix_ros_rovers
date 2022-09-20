@@ -5,110 +5,229 @@
 
     <joint name="pan" type="revolute">
       <axis xyz="0 0 1"/>
-      <limit effort="2" lower="${-pi/2}" upper="${pi/2}" velocity="${pi}"/>
+      <limit
+        effort="2"
+        lower="${-pi/2}"
+        upper="${pi/2}"
+        velocity="${pi}"/>
       <xacro:insert_block name="origin"/>
-      <parent link="camera_tower_link"/>
-      <child link="pan_link"/>
+      <parent
+        link="camera_tower_link"/>
+      <child
+        link="pan_link"/>
     </joint>
-
-    <transmission name="trans_pan">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="pan">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="pan_motor">
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
 
     <link name="pan_link">
       <visual>
-        <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
+        <origin
+          rpy="0 0 ${pi/2}"
+          xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_pan.stl" scale="0.001 0.001 0.001"/>
+          <mesh
+            filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_pan.stl"
+            scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="interbotix_black"/>
       </visual>
       <collision>
-        <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
+        <origin
+          rpy="0 0 ${pi/2}"
+          xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_pan.stl" scale="0.001 0.001 0.001"/>
+          <mesh
+            filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_pan.stl"
+            scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
       <inertial>
-        <origin rpy="0 0 ${pi/2}" xyz="0.012 0.000496 0.018504"/>
+        <origin
+          rpy="0 0 ${pi/2}"
+          xyz="0.012 0.000496 0.018504"/>
         <mass value="0.098997"/>
-        <inertia ixx="0.0000276300" ixy="0.0000000418" ixz="0.0000005145" iyy="0.0000204300" iyz="-0.0000000421" izz="0.0000276300"/>
+        <inertia
+          ixx="0.0000276300"
+          ixy="0.0000000418"
+          ixz="0.0000005145"
+          iyy="0.0000204300"
+          iyz="-0.0000000421"
+          izz="0.0000276300"/>
       </inertial>
     </link>
+
+    <gazebo reference="pan_link">
+      <material>Custom/Interbotix</material>
+      <self_collide>true</self_collide>
+    </gazebo>
 
     <joint name="tilt" type="revolute">
       <axis xyz="0 1 0"/>
-      <limit effort="2" lower="${-pi/2}" upper="${radians(75)}" velocity="${pi}"/>
-      <origin rpy="0 0 0" xyz="0.025034 0 0.019"/>
-      <parent link="pan_link"/>
-      <child link="tilt_link"/>
+      <limit
+        effort="2"
+        lower="${-pi/2}"
+        upper="${radians(75)}"
+        velocity="${pi}"/>
+      <origin
+        rpy="0 0 0"
+        xyz="0.025034 0 0.019"/>
+      <parent
+        link="pan_link"/>
+      <child
+        link="tilt_link"/>
     </joint>
-
-    <transmission name="trans_tilt">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="tilt">
-        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="tilt_motor">
-        <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
 
     <link name="tilt_link">
       <visual>
-        <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
+        <origin
+          rpy="0 0 ${pi/2}"
+          xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_tilt.stl" scale="0.001 0.001 0.001"/>
+          <mesh
+            filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_tilt.stl"
+            scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="interbotix_black"/>
       </visual>
       <collision>
-        <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
+        <origin
+          rpy="0 0 ${pi/2}"
+          xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_tilt.stl" scale="0.001 0.001 0.001"/>
+          <mesh
+            filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_tilt.stl"
+            scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
       <inertial>
-        <origin rpy="0 0 ${pi/2}" xyz="0.0237737000 -0.0000016331 0.0000077432"/>
+        <origin
+          rpy="0 0 ${pi/2}"
+          xyz="0.0237737000 -0.0000016331 0.0000077432"/>
         <mass value="0.019845"/>
-        <inertia ixx="0.0000021677" ixy="0.0000000000" ixz="0.0000000001" iyy="0.0000063634" iyz="0.0000000003" izz="0.0000066157"/>
+        <inertia
+          ixx="0.0000021677"
+          ixy="0.0000000000"
+          ixz="0.0000000001"
+          iyy="0.0000063634"
+          iyz="0.0000000003"
+          izz="0.0000066157"/>
       </inertial>
     </link>
 
+    <gazebo reference="tilt_link">
+      <material>Custom/Interbotix</material>
+      <self_collide>true</self_collide>
+    </gazebo>
+
     <joint name="camera" type="fixed">
-      <origin rpy="0 0 0" xyz="0.05318 0.0175 0.000009"/>
-      <parent link="tilt_link"/>
-      <child link="camera_link"/>
+      <origin
+        rpy="0 0 0"
+        xyz="0.05318 0.0175 0.000009"/>
+      <parent
+        link="tilt_link"/>
+      <child
+        link="camera_link"/>
     </joint>
+
+    <gazebo reference="camera">
+      <disableFixedJointLumping>true</disableFixedJointLumping>
+    </gazebo>
 
     <link name="camera_link">
       <visual>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin
+          rpy="0 0 0"
+          xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera.stl" scale="0.001 0.001 0.001"/>
+          <mesh
+            filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera.stl"
+            scale="0.001 0.001 0.001"/>
         </geometry>
         <material name="">
-          <color rgba="0.55 0.55 0.55 1"/>
+          <color
+            rgba="0.55 0.55 0.55 1"/>
         </material>
       </visual>
       <collision>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin
+          rpy="0 0 0"
+          xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera.stl" scale="0.001 0.001 0.001"/>
+          <mesh
+            filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/locobot_camera.stl"
+            scale="0.001 0.001 0.001"/>
         </geometry>
       </collision>
       <inertial>
-        <origin rpy="0 0 0" xyz="-0.008972 -0.015818 0.000003"/>
+        <origin
+          rpy="0 0 0"
+          xyz="-0.008972 -0.015818 0.000003"/>
         <mass value="0.072"/>
-        <inertia ixx="0.0000465400" ixy="0.0000003028" ixz="0.0000000245" iyy="0.0000069128" iyz="0.0000000248" izz="0.0000468600"/>
+        <inertia
+          ixx="0.0000465400"
+          ixy="0.0000003028"
+          ixz="0.0000000245"
+          iyy="0.0000069128"
+          iyz="0.0000000248"
+          izz="0.0000468600"/>
       </inertial>
     </link>
+
+    <gazebo reference="camera_link">
+      <material>Gazebo/Grey</material>
+      <self_collide>true</self_collide>
+    </gazebo>
+
+    <!-- Adds a dummy link, libgazebo_ros_openni_kinect publishes from frame's z-axis -->
+    <!-- https://github.com/ros-simulation/gazebo_ros_pkgs/issues/243 -->
+    <joint name="camera_depth_joint" type="fixed">
+      <origin rpy="${-pi/2} 0 ${-pi/2}" xyz="0 0 0"/>
+      <parent link="camera_link"/>
+      <child link="camera_depth_link"/>
+    </joint>
+    <link name="camera_depth_link">
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </link>
+
+    <gazebo reference="camera_link">
+      <sensor name="camera_frame_sensor" type="depth">
+        <always_on>true</always_on>
+        <update_rate>30.0</update_rate>
+        <camera>
+          <horizontal_fov>0.994837</horizontal_fov>
+          <image>
+            <format>R8G8B8</format>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>10</far>
+          </clip>
+        </camera>
+        <plugin filename="libgazebo_ros_openni_kinect.so" name="camera_frame_controller">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>camera</cameraName>
+          <imageTopicName>color/image_raw</imageTopicName>
+          <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
+          <depthImageTopicName>aligned_depth_to_color/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>aligned_depth_to_color/camera_info</depthImageCameraInfoTopicName>
+          <pointCloudTopicName>depth_registered/points</pointCloudTopicName>
+          <frameName>camera_depth_link</frameName>
+          <pointCloudCutoff>0.01</pointCloudCutoff>
+          <pointCloudCutoffMax>10</pointCloudCutoffMax>
+          <distortionK1>0.00000001</distortionK1>
+          <distortionK2>0.00000001</distortionK2>
+          <distortionK3>0.00000001</distortionK3>
+          <distortionT1>0.00000001</distortionT1>
+          <distortionT2>0.00000001</distortionT2>
+          <CxPrime>0</CxPrime>
+          <Cx>0</Cx>
+          <Cy>0</Cy>
+          <focalLength>0</focalLength>
+          <hackBaseline>0</hackBaseline>
+        </plugin>
+      </sensor>
+    </gazebo>
 
   </xacro:macro>
 

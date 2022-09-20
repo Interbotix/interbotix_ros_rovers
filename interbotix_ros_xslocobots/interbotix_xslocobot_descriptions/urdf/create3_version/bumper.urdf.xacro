@@ -52,7 +52,7 @@ functional, while the 4 remaining ones are created as dummy links. -->
       <contact>
         <collision>${link_name}_collision</collision>
       </contact>
-      <xacro:if value="${gazebo == 'classic'}">
+      <xacro:if value="${hardware_type == 'gz_classic'}">
         <plugin name="${name}_plugin" filename="libgazebo_ros_create_bumper.so">
           <ros>
             <namespace>/</namespace>

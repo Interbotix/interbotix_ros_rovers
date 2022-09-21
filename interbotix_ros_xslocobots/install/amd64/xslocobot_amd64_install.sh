@@ -326,7 +326,9 @@ function install_locobot_ros1() {
     sudo udevadm control --reload-rules && sudo udevadm trigger
     cd $INSTALL_PATH
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
-    source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash
+    if [ $BASE_TYPE == "create3" ]; then
+      source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash
+    fi
     if catkin_make; then
       echo -e "${GRN}${BOLD}Interbotix LoCoBot ROS packages built successfully!${NORM}${OFF}"
       echo "source $INSTALL_PATH/devel/setup.bash" >> ~/.bashrc

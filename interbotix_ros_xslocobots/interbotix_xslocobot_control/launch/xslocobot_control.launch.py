@@ -66,6 +66,7 @@ def launch_setup(context, *args, **kwargs):
     rs_depth_module_profile_launch_arg = LaunchConfiguration('rs_depth_module_profile')
     rs_camera_logging_level_launch_arg = LaunchConfiguration('rs_camera_logging_level')
     rs_camera_output_location_launch_arg = LaunchConfiguration('rs_camera_output_location')
+    rs_camera_align_depth_launch_arg = LaunchConfiguration('rs_camera_align_depth')
     rs_camera_initial_reset_launch_arg = LaunchConfiguration('rs_camera_initial_reset')
 
     motor_configs_launch_arg = LaunchConfiguration('motor_configs')
@@ -189,6 +190,7 @@ def launch_setup(context, *args, **kwargs):
             'rgb_camera.profile': rs_rbg_camera_profile_launch_arg,
             'depth_module.profile': rs_depth_module_profile_launch_arg,
             'enable_pointcloud': rs_camera_pointcloud_enable_launch_arg,
+            'align_depth': rs_camera_align_depth_launch_arg,
             'initial_reset': rs_camera_initial_reset_launch_arg,
             'log_level': rs_camera_logging_level_launch_arg,
             'output': rs_camera_output_location_launch_arg,
@@ -323,6 +325,16 @@ def generate_launch_description():
             default_value='screen',
             choices=('screen', 'log'),
             description='set the logging location for the realsense2_camera launch include.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'rs_camera_align_depth',
+            default_value='false',
+            choices=('true', 'false'),
+            description=(
+                'whether to publish topics with the depth stream aligned with the color stream.'
+            ),
         )
     )
     declared_arguments.append(

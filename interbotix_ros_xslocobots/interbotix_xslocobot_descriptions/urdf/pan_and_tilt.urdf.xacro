@@ -15,6 +15,9 @@
         link="camera_tower_link"/>
       <child
         link="pan_link"/>
+      <dynamics
+        friction="0.1"
+        damping="0.1"/>
     </joint>
 
     <link name="pan_link">
@@ -55,7 +58,7 @@
     </link>
 
     <gazebo reference="pan_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <self_collide>true</self_collide>
     </gazebo>
 
@@ -73,7 +76,32 @@
         link="pan_link"/>
       <child
         link="tilt_link"/>
+      <dynamics
+        friction="0.1"
+        damping="0.1"/>
     </joint>
+
+    <xacro:if value="${hardware_type == 'gz_classic'}">
+      <ros2_control name="camera_controller" type="system">
+        <hardware>
+          <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </hardware>
+        <joint name="pan">
+          <command_interface name="position">
+            <param name="min">"${-pi/2}"</param>
+            <param name="max">"${pi/2}"</param>
+          </command_interface>
+          <state_interface name="position"/>
+        </joint>
+        <joint name="tilt">
+          <command_interface name="position">
+            <param name="min">"${-pi/2}"</param>
+            <param name="max">"${radians(75)}"</param>
+          </command_interface>
+          <state_interface name="position"/>
+        </joint>
+      </ros2_control>
+    </xacro:if>
 
     <link name="tilt_link">
       <visual>
@@ -113,7 +141,7 @@
     </link>
 
     <gazebo reference="tilt_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <self_collide>true</self_collide>
     </gazebo>
 
@@ -203,7 +231,7 @@
             <far>10</far>
           </clip>
         </camera>
-        <plugin filename="libgazebo_ros_openni_kinect.so" name="camera_frame_controller">
+        <plugin filename="libgazebo_ros_camera.so" name="camera_frame_controller">
           <alwaysOn>true</alwaysOn>
           <updateRate>0.0</updateRate>
           <cameraName>camera</cameraName>

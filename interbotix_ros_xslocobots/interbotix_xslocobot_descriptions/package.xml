@@ -6,10 +6,11 @@
   <description>The interbotix_xslocobot_descriptions package</description>
   <maintainer email="trsupport@trossenrobotics.com">Luke Schmitt</maintainer>
   <license>BSD</license>
-  <author email="solomon@trossenrobotics.com">Solomon Wiznitzer</author>
+  <author email="trsupport@trossenrobotics.com">Solomon Wiznitzer</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>interbotix_xs_modules</depend>
+  <depend>interbotix_common_sim</depend>
   <exec_depend>interbotix_xs_rviz</exec_depend>
   <depend>joint_state_publisher</depend>
   <depend>joint_state_publisher_gui</depend>

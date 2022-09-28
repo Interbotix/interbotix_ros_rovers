@@ -61,7 +61,7 @@
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/arms/$(arg arm_model).urdf.xacro"/>
 
     <gazebo reference="arm_base_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
     </gazebo>
 
@@ -70,62 +70,62 @@
     </gazebo>
 
     <gazebo reference="shoulder_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
     <gazebo reference="upper_arm_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
     <gazebo reference="forearm_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
     <gazebo reference="upper_forearm_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
     <gazebo reference="lower_forearm_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
     <gazebo reference="wrist_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
     <gazebo reference="gripper_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
     </gazebo>
 
     <gazebo reference="gripper_prop_link">
       <dampingFactor>0.01</dampingFactor>
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
     </gazebo>
 
     <gazebo reference="gripper_bar_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
     </gazebo>
 
     <gazebo reference="left_finger_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
     </gazebo>
 
     <gazebo reference="right_finger_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
     </gazebo>
 

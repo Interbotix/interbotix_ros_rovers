@@ -37,7 +37,7 @@
     </link>
 
     <gazebo reference="plate_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
     </gazebo>
 
     <gazebo reference="plate">

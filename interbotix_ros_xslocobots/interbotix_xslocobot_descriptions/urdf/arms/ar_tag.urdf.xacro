@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-
   <!-- If the AR tag is being used, then add the AR tag mount -->
 
   <xacro:if value="$(arg show_ar_tag)">
@@ -59,7 +58,7 @@
     </gazebo>
 
     <gazebo reference="ar_tag_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
     </gazebo>
 
   </xacro:if> <!-- show_ar_tag -->

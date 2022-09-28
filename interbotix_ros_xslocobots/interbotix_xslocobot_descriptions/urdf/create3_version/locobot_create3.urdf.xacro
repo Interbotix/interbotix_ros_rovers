@@ -17,6 +17,7 @@
     -->
 
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/bumper.urdf.xacro" />
+    <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/bump_caster.urdf.xacro" />
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/button.urdf.xacro" />
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/caster.urdf.xacro" />
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/create3_version/common_properties.urdf.xacro"/>
@@ -82,7 +83,7 @@
       <visual>
         <origin xyz="0 0 ${body_z_offset + base_link_z_offset}" rpy="0 0 ${pi/2}"/>
         <geometry>
-          <mesh filename="package://irobot_create_description/meshes/body_visual.dae" />
+          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/create3_version/body_visual.dae" />
         </geometry>
       </visual>
       <collision name="create3_base_collision">
@@ -96,6 +97,11 @@
       </xacro:inertial_cylinder_with_pose>
     </link>
 
+    <!-- Bump Caster -->
+    <xacro:bump_caster>
+      <origin xyz="-0.1098 0 0.0110" rpy="${pi} 0 ${pi/2}"/>
+    </xacro:bump_caster>
+
     <xacro:if value="${hardware_type == 'gz_ignition'}">
       <gazebo reference="base_link">
         <xacro:material_darkgray/>
@@ -105,8 +111,8 @@
     <!-- Bumper -->
     <xacro:bumper
         gazebo="$(arg gazebo)"
-        visual_mesh="package://irobot_create_description/meshes/bumper_visual.dae"
-        collision_mesh="package://irobot_create_description/meshes/bumper_collision.dae">
+        visual_mesh="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/create3_version/bumper_visual.dae"
+        collision_mesh="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/create3_version/bumper_collision.dae">
       <origin xyz="0 0 ${bumper_offset_z  + base_link_z_offset}"/>
       <inertial>
         <origin xyz="${bumper_inertial_x} 0 ${bumper_inertial_z}"/>
@@ -138,7 +144,7 @@
     <xacro:if value="${hardware_type == 'gz_classic'}">
       <gazebo>
         <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-          <parameters> $(find irobot_create_control)/config/control.yaml </parameters>
+          <parameters> $(find interbotix_xslocobot_sim)/config/create3_version/$(arg robot_model)_controllers.yaml </parameters>
         </plugin>
       </gazebo>
     </xacro:if>
@@ -146,7 +152,7 @@
     <xacro:if value="${hardware_type == 'gz_ignition'}">
       <gazebo>
         <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-          <parameters> $(find irobot_create_control)/config/control.yaml </parameters>
+          <parameters> $(find interbotix_xslocobot_sim)/config/create3_version/$(arg robot_model)_controllers.yaml </parameters>
         </plugin>
       </gazebo>
     </xacro:if>
@@ -257,10 +263,9 @@
       <gazebo>
         <plugin name="gazebo_ros_p3d_robot" filename="libgazebo_ros_p3d.so">
           <ros>
-            <namespace>/</namespace>
             <remapping>odom:=sim_ground_truth_pose</remapping>
           </ros>
-          <body_name>base_link</body_name>
+          <body_name>base_footprint</body_name>
           <frame_name>world</frame_name>
           <update_rate>62</update_rate>
           <xyz_offset>0 0 0</xyz_offset>

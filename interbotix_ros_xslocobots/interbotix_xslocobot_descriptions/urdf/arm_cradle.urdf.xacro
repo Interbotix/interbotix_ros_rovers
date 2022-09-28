@@ -56,7 +56,7 @@
     </gazebo>
 
     <gazebo reference="arm_cradle_link">
-      <material>Custom/Interbotix</material>
+      <material>Gazebo/DarkGrey</material>
     </gazebo>
 
     <gazebo reference="ee_arm">

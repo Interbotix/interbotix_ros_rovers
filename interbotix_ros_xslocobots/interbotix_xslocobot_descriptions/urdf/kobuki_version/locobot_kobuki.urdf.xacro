@@ -108,6 +108,19 @@
       link="wheel_left_link"/>
   </joint>
 
+  <xacro:if value="${hardware_type == 'gz_classic'}">
+    <ros2_control name="wheel_left_joint_controller" type="system">
+      <hardware>
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      </hardware>
+      <joint name="wheel_left_joint">
+        <state_interface name="velocity" />
+        <state_interface name="position" />
+        <command_interface name="velocity" />
+      </joint>
+    </ros2_control>
+  </xacro:if>
+
   <link name="wheel_left_link">
     <visual>
       <origin
@@ -161,6 +174,19 @@
     <child
       link="wheel_right_link"/>
   </joint>
+
+  <xacro:if value="${hardware_type == 'gz_classic'}">
+    <ros2_control name="wheel_right_joint_controller" type="system">
+      <hardware>
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      </hardware>
+      <joint name="wheel_right_joint">
+        <state_interface name="velocity" />
+        <state_interface name="position" />
+        <command_interface name="velocity" />
+      </joint>
+    </ros2_control>
+  </xacro:if>
 
   <link name="wheel_right_link">
     <visual>
@@ -500,45 +526,29 @@
 
   <gazebo>
     <!-- Gazebo ROS Control -->
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-      <legacyModeNS>true</legacyModeNS>
-    </plugin>
+    <xacro:if value="${hardware_type == 'gz_classic'}">
+      <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+        <parameters> $(find interbotix_xslocobot_sim)/config/kobuki_version/$(arg robot_model)_controllers.yaml </parameters>
+      </plugin>
+    </xacro:if>
 
-    <!-- Differential Drive -->
-    <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
-      <alwaysOn>true</alwaysOn>
-      <legacyMode>false</legacyMode>
-      <updateRate>30</updateRate>
-      <leftJoint>wheel_left_joint</leftJoint>
-      <rightJoint>wheel_right_joint</rightJoint>
-      <wheelSeparation>0.230</wheelSeparation>
-      <wheelDiameter>0.070</wheelDiameter>
-      <wheelTorque>1.0</wheelTorque>
-      <wheelAcceleration>0</wheelAcceleration>
-      <commandTopic>mobile_base/commands/velocity</commandTopic>
-      <odometryTopic>mobile_base/odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
-      <robotBaseFrame>base_footprint</robotBaseFrame>
-      <publishWheelJointState>true</publishWheelJointState>
-      <rosDebugLevel>na</rosDebugLevel>
-      <publishWheelTF>false</publishWheelTF>
-      <publishOdomTF>true</publishOdomTF>
-      <odometrySource>world</odometrySource>
-      <publishTf>1</publishTf>
-    </plugin>
+    <xacro:if value="${hardware_type == 'gz_ignition'}">
+      <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+        <parameters> $(find interbotix_xslocobot_sim)/config/kobuki_version/$(arg robot_model)_controllers.yaml </parameters>
+      </plugin>
+    </xacro:if>
 
     <!-- Ground truth pose -->
     <plugin filename="libgazebo_ros_p3d.so" name="p3d_base_controller">
-      <alwaysOn>true</alwaysOn>
-      <updateRate>100.0</updateRate>
-      <bodyName>base_link</bodyName>
-      <topicName>base/absolute_position</topicName>
-      <gaussianNoise>0</gaussianNoise>
-      <frameName>map</frameName>
-      <xyzOffsets>0 0 0</xyzOffsets>
-      <rpyOffsets>0 0 0</rpyOffsets>
-      <!--<interface:position name="p3d_base_position"/>-->
+      <ros>
+        <remapping>odom:=sim_ground_truth_pose</remapping>
+      </ros>
+      <body_name>base_footprint</body_name>
+      <frame_name>world</frame_name>
+      <update_rate>100.0</update_rate>
+      <xyz_offset>0 0 0</xyz_offset>
+      <rpy_offset>0.0 0.0 0.0</rpy_offset>
+      <gaussian_noise>0</gaussian_noise>
     </plugin>
   </gazebo>
 

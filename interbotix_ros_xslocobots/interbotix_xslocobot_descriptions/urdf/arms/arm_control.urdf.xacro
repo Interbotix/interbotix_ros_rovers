@@ -111,16 +111,4 @@
 
   </ros2_control>
 
-  <!-- Load the gazebo_ros2_control plugin if using Gazebo hardware -->
-  <xacro:if value="${hardware_type == 'gz_classic'}">
-    <gazebo>
-      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-        <robot_param>robot_description</robot_param>
-        <robot_param_node>robot_state_publisher</robot_param_node>
-        <parameters>$(find interbotix_xslocobot_sim)/config/trajectory_controllers/${robot_model}_trajectory_controllers.yaml</parameters>
-      </plugin>
-    </gazebo>
-    <xacro:include filename="$(find interbotix_common_sim)/media/materials/scripts/interbotix_texture.gazebo"/>
-  </xacro:if>
-
 </robot>

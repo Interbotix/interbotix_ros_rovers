@@ -23,7 +23,7 @@
   </xacro:if>
 
   <material name="interbotix_black">
-    <texture filename="package://interbotix_xslocobot_descriptions/meshes/interbotix_black.png"/>
+    <texture filename="package://interbotix_common_sim/media/materials/textures/interbotix_black.png"/>
   </material>
 
   <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/plate.urdf.xacro" />

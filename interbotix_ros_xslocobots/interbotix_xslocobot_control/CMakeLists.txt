@@ -17,6 +17,23 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 
+# Install Python executables
+install(
+  PROGRAMS
+    demos/python_ros2_api/bartender.py
+    demos/python_ros2_api/combo_control.py
+    demos/python_ros2_api/ee_cartesian_trajectory.py
+    demos/python_ros2_api/ee_pose_components.py
+    demos/python_ros2_api/ee_pose_matrix_control.py
+    demos/python_ros2_api/gripper_control.py
+    demos/python_ros2_api/joint_position_control.py
+    demos/python_ros2_api/joint_pwm_control.py
+    demos/python_ros2_api/move_base.py
+    demos/python_ros2_api/pan_tilt_control.py
+  DESTINATION
+    lib/${PROJECT_NAME}
+)
+
 install(
   DIRECTORY
     config

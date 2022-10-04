@@ -1,6 +1,0 @@
-<launch>
-
-  <arg name="robot_model" default=""/>
-  <arg name="robot_name" default=""/>
-
-</launch>

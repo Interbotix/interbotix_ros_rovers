@@ -43,6 +43,7 @@ from launch.actions import (
 from launch.conditions import IfCondition, LaunchConfigurationEquals, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
+    EnvironmentVariable,
     LaunchConfiguration,
     PathJoinSubstitution,
     PythonExpression,
@@ -268,7 +269,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'base_type',
-            default_value='create3',
+            default_value=EnvironmentVariable('INTERBOTIX_XSLOCOBOT_BASE_TYPE'),
             choices=('kobuki', 'create3'),
             description='the type of mobile base used by the robot.',
         )

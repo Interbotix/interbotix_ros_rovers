@@ -1,55 +1,54 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(interbotix_xslocobot_joy)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  interbotix_xslocobot_control
+if(CMAKE_COMPILER_IS_GNUXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
+find_package(interbotix_xs_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
+
+set(ROS_DEPENDENCIES
+  ament_index_cpp
   interbotix_xs_msgs
-  joy
-  std_msgs
+  rclcpp
+  sensor_msgs
 )
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-catkin_package(
-CATKIN_DEPENDS interbotix_xslocobot_control interbotix_xs_msgs joy std_msgs
-)
-
-###########
-## Build ##
-###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
-
-## Declare a C++ executable
-## Specify libraries to link a library or executable target against
-## Add cmake target dependencies of the executable
 add_executable(xslocobot_joy src/xslocobot_joy.cpp)
-target_link_libraries(xslocobot_joy ${catkin_LIBRARIES})
-add_dependencies(xslocobot_joy ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ament_target_dependencies(xslocobot_joy ${ROS_DEPENDENCIES})
 
-#############
-## Install ##
-#############
-
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-catkin_install_python(PROGRAMS
-  scripts/xslocobot_robot
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+install(
+  TARGETS
+    xslocobot_joy
+  DESTINATION
+    lib/${PROJECT_NAME}
 )
+
+install(
+  PROGRAMS
+    scripts/xslocobot_robot.py
+  DESTINATION
+    lib/${PROJECT_NAME}
+)
+install(
+  DIRECTORY
+    config
+    launch
+  DESTINATION
+    share/${PROJECT_NAME}/
+)
+
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+ament_package()

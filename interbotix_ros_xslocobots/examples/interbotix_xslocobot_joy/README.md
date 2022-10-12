@@ -1,6 +1,6 @@
 # interbotix_xslocobot_joy
 
-[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://www.trossenrobotics.com/docs/interbotix_xslocobots/ros_packages/joystick_control.html)
+[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://www.trossenrobotics.com/docs/interbotix_xslocobots/ros2_packages/joystick_control.html)
 
 ## Overview
 

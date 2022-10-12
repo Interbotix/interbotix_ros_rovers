@@ -191,7 +191,7 @@ def launch_setup(context, *args, **kwargs):
             'rgb_camera.profile': rs_rbg_camera_profile_launch_arg,
             'depth_module.profile': rs_depth_module_profile_launch_arg,
             'enable_pointcloud': rs_camera_pointcloud_enable_launch_arg,
-            'align_depth': rs_camera_align_depth_launch_arg,
+            'align_depth.enable': rs_camera_align_depth_launch_arg,
             'initial_reset': rs_camera_initial_reset_launch_arg,
             'log_level': rs_camera_logging_level_launch_arg,
             'output': rs_camera_output_location_launch_arg,
@@ -301,15 +301,15 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'rs_rbg_camera_profile',
-            default_value='640x480x30',
-            description='profile for the rbg camera image stream, in `<width>x<height>x<fps>`.',
+            default_value='640,480,30',
+            description='profile for the rbg camera image stream, in `<width>,<height>,<fps>`.',
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             'rs_depth_module_profile',
-            default_value='640x480x30',
-            description='profile for the depth module stream, in `<width>x<height>x<fps>`.',
+            default_value='640,480,30',
+            description='profile for the depth module stream, in `<width>,<height>,<fps>`.',
         )
     )
     declared_arguments.append(

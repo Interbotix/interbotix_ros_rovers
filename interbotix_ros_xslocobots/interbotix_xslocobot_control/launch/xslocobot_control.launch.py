@@ -37,6 +37,7 @@ from interbotix_xs_modules.xs_launch.xs_launch import determine_use_sim_time_par
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
+    GroupAction,
     IncludeLaunchDescription,
     OpaqueFunction,
 )
@@ -48,13 +49,14 @@ from launch.substitutions import (
     PathJoinSubstitution,
     PythonExpression,
 )
-from launch_ros.actions import Node
+from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.parameter_descriptions import ParameterFile, ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
 
 def launch_setup(context, *args, **kwargs):
     robot_model_launch_arg = LaunchConfiguration('robot_model')
+    robot_name_launch_arg = LaunchConfiguration('robot_name')
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
     rviz_frame_launch_arg = LaunchConfiguration('rviz_frame')
     use_base_launch_arg = LaunchConfiguration('use_base')
@@ -103,6 +105,7 @@ def launch_setup(context, *args, **kwargs):
         ]),
         launch_arguments={
             'robot_model': robot_model_launch_arg,
+            'robot_name': robot_name_launch_arg,
             'use_rviz': use_rviz_launch_arg,
             'rviz_frame': rviz_frame_launch_arg,
             'use_joint_pub': 'true',
@@ -118,6 +121,7 @@ def launch_setup(context, *args, **kwargs):
         package='interbotix_xs_sdk',
         executable='xs_sdk',
         name='xs_sdk',
+        namespace=robot_name_launch_arg,
         arguments=[],
         parameters=[{
             'motor_configs': motor_configs_launch_arg,
@@ -138,6 +142,7 @@ def launch_setup(context, *args, **kwargs):
         package='interbotix_xs_sdk',
         executable='xs_sdk_sim.py',
         name='xs_sdk_sim',
+        namespace=robot_name_launch_arg,
         arguments=[],
         parameters=[{
             'motor_configs': motor_configs_launch_arg,
@@ -145,10 +150,7 @@ def launch_setup(context, *args, **kwargs):
             'robot_description': ParameterValue(robot_description_launch_arg, value_type=str),
             'use_sim_time': use_sim_time_param,
         }],
-        output={
-            'stdout': 'screen',
-            'stderr': 'screen',
-        },
+        output={'both': 'screen'},
     )
 
     kobuki_node = Node(
@@ -158,45 +160,53 @@ def launch_setup(context, *args, **kwargs):
         package='kobuki_node',
         executable='kobuki_ros_node',
         name='kobuki_ros_node',
+        namespace=robot_name_launch_arg,
         output={'both': 'screen'},
         parameters=[
-            kobuki_ros_node_parameter_file
+            kobuki_ros_node_parameter_file,
         ],
     )
 
     rplidar_node = Node(
         condition=IfCondition(use_lidar_launch_arg),
+        package='rplidar_ros2',
         executable='rplidar_scan_publisher',
         name='rplidar_scan_publisher',
         output={'both': 'screen'},
+        namespace=robot_name_launch_arg,
         parameters=[{
             'serial_port': '/dev/rplidar',
-            'serial_baudrate': '115200',
-            'frame_id': 'laser_frame_link',
-            'inverted': 'false',
-            'angle_conpensate': 'true',
+            'serial_baudrate': 115200,
+            'frame_id': (robot_name_launch_arg, '/laser_frame_link'),
+            'inverted': False,
+            'angle_conpensate': True,
         }],
     )
 
-    rs_camera_launch_include = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare('realsense2_camera'),
-                'launch',
-                'rs_launch.py',
-            ])
-        ]),
-        launch_arguments={
-            'camera_name': 'camera',
-            'rgb_camera.profile': rs_rbg_camera_profile_launch_arg,
-            'depth_module.profile': rs_depth_module_profile_launch_arg,
-            'enable_pointcloud': rs_camera_pointcloud_enable_launch_arg,
-            'align_depth.enable': rs_camera_align_depth_launch_arg,
-            'initial_reset': rs_camera_initial_reset_launch_arg,
-            'log_level': rs_camera_logging_level_launch_arg,
-            'output': rs_camera_output_location_launch_arg,
-        }.items(),
-        condition=IfCondition(use_camera_launch_arg),
+    rs_camera_launch_include_w_ns = GroupAction(
+        actions=[
+            PushRosNamespace(robot_name_launch_arg),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([
+                    PathJoinSubstitution([
+                        FindPackageShare('realsense2_camera'),
+                        'launch',
+                        'rs_launch.py',
+                    ])
+                ]),
+                launch_arguments={
+                    'camera_name': 'camera',
+                    'rgb_camera.profile': rs_rbg_camera_profile_launch_arg,
+                    'depth_module.profile': rs_depth_module_profile_launch_arg,
+                    'enable_pointcloud': rs_camera_pointcloud_enable_launch_arg,
+                    'align_depth.enable': rs_camera_align_depth_launch_arg,
+                    'initial_reset': rs_camera_initial_reset_launch_arg,
+                    'log_level': rs_camera_logging_level_launch_arg,
+                    'output': rs_camera_output_location_launch_arg,
+                }.items(),
+                condition=IfCondition(use_camera_launch_arg),
+            )
+        ]
     )
 
     return [
@@ -205,7 +215,7 @@ def launch_setup(context, *args, **kwargs):
         xs_sdk_sim_node,
         kobuki_node,
         rplidar_node,
-        rs_camera_launch_include,
+        rs_camera_launch_include_w_ns,
     ]
 
 
@@ -218,6 +228,13 @@ def generate_launch_description():
             description=(
               'model type of the Interbotix LoCoBot such as `locobot_base` or `locobot_wx250s`.'
             )
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
         )
     )
     declared_arguments.append(
@@ -243,7 +260,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'rviz_frame',
-            default_value='base_footprint',
+            default_value=(LaunchConfiguration('robot_name'), 'base_footprint'),
             description=(
                 'fixed frame in RViz; this should be changed to `map` or `odom` if '
                 'mapping or using local odometry respectively.'
@@ -269,7 +286,10 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'base_type',
-            default_value=EnvironmentVariable('INTERBOTIX_XSLOCOBOT_BASE_TYPE'),
+            default_value=EnvironmentVariable(
+                name='INTERBOTIX_XSLOCOBOT_BASE_TYPE',
+                default_value='create3'
+            ),
             choices=('kobuki', 'create3'),
             description='the type of mobile base used by the robot.',
         )

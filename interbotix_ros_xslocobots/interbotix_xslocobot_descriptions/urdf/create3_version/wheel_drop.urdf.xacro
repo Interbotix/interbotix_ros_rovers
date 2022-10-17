@@ -25,8 +25,8 @@
   <xacro:property name="wd_joint_name" value="${wd_link_name}_joint"/>
 
   <joint name="${wd_joint_name}" type="prismatic">
-    <parent link="${parent_link}"/>
-    <child link="${wd_link_name}"/>
+    <parent link="${robot_name}/${parent_link}"/>
+    <child link="${robot_name}/${wd_link_name}"/>
     <xacro:insert_block name="origin"/>
     <axis xyz="0 1 0"/>
     <limit lower="0" upper="${detection_threshold}" effort="0" velocity="0"/>
@@ -44,13 +44,13 @@
     <springReference>${detection_threshold}</springReference>
   </gazebo>
 
-  <link name="${wd_link_name}">
+  <link name="${robot_name}/${wd_link_name}">
     <xacro:inertial_cuboid mass="${wd_mass}" x="${wd_size}" y="${wd_size}" z="${wd_size}"/>
   </link>
 
   <xacro:if value="${hardware_type == 'gz_classic'}">
     <gazebo>
-      <plugin name="${wd_link_name}_plugin" filename="libgazebo_ros_create_wheel_drop.so">
+      <plugin name="${robot_name}/${wd_link_name}_plugin" filename="libgazebo_ros_create_wheel_drop.so">
         <ros>
           <namespace>/</namespace>
           <remapping>~/out:=_internal/wheel_drop/${name}_wheel/event</remapping>
@@ -58,7 +58,7 @@
         <update_rate>${update_rate}</update_rate>
         <detection_threshold>${detection_threshold}</detection_threshold>
         <joint_name>${wd_joint_name}</joint_name>
-        <frame_id>${wd_link_name}</frame_id>
+        <frame_id>${robot_name}/${wd_link_name}</frame_id>
       </plugin>
     </gazebo>
   </xacro:if>

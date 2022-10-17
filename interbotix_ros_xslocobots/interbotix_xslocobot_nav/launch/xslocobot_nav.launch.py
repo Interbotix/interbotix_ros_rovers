@@ -40,7 +40,7 @@ from launch.actions import (
     IncludeLaunchDescription,
     OpaqueFunction,
 )
-from launch.conditions import IfCondition, LaunchConfigurationEquals
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
     LaunchConfiguration,
@@ -55,6 +55,7 @@ from launch_ros.substitutions import FindPackageShare
 def launch_setup(context, *args, **kwargs):
 
     robot_model_launch_arg = LaunchConfiguration('robot_model')
+    robot_name_launch_arg = LaunchConfiguration('robot_name')
     arm_model_launch_arg = LaunchConfiguration('arm_model')
     xs_driver_logging_level_launch_arg = LaunchConfiguration('xs_driver_logging_level')
     use_lidar_launch_arg = LaunchConfiguration('use_lidar')
@@ -122,6 +123,7 @@ def launch_setup(context, *args, **kwargs):
         ]),
         launch_arguments={
             'robot_model': robot_model_launch_arg,
+            'robot_name': robot_name_launch_arg,
             'arm_model': arm_model_launch_arg,
             'use_lidar': use_lidar_launch_arg,
             'use_rviz': use_rviz_launch_arg,
@@ -138,7 +140,7 @@ def launch_setup(context, *args, **kwargs):
 
     rtabmap_container = ComposableNodeContainer(
         name='rtabmap_container',
-        namespace='',
+        namespace=(robot_name_launch_arg, '/rtabmap'),
         package='rclcpp_components',
         executable='component_container',
         composable_node_descriptions=[
@@ -146,12 +148,13 @@ def launch_setup(context, *args, **kwargs):
                 package='rtabmap_ros',
                 plugin='rtabmap_ros::RGBDSync',
                 name='rgbd_sync',
+                namespace=(robot_name_launch_arg, '/rtabmap'),
                 parameters=[{
                     'approx_sync': False,
                     'use_sim_time': use_sim_time_param,
                 }],
                 remappings=[
-                    ('rbg/image', '/camera/color/image_raw'),
+                    ('rgb/image', '/camera/color/image_raw'),
                     ('depth/image', '/camera/aligned_depth_to_color/image_raw'),
                     ('rgb/camera_info', '/camera/color/camera_info'),
                 ],
@@ -160,6 +163,7 @@ def launch_setup(context, *args, **kwargs):
                 package='rtabmap_ros',
                 plugin='rtabmap_ros::PointCloudXYZRGB',
                 name='point_cloud_xyzrgb',
+                namespace=(robot_name_launch_arg, '/rtabmap'),
                 parameters=[{
                     'decimation': 4,
                     'voxel_size': 0.05,
@@ -173,6 +177,7 @@ def launch_setup(context, *args, **kwargs):
             ComposableNode(
                 package='rtabmap_ros',
                 plugin='rtabmap_ros::ObstaclesDetection',
+                namespace=(robot_name_launch_arg, '/rtabmap'),
                 name='obstacles_detection',
                 parameters=[{
                     'wait_for_transform': 0.2,
@@ -189,7 +194,9 @@ def launch_setup(context, *args, **kwargs):
                 package='rtabmap_ros',
                 plugin='rtabmap_ros::CoreWrapper',
                 name='rtabmap',
+                namespace=(robot_name_launch_arg, '/rtabmap'),
                 parameters=[{
+                    'visual_odometry': True,  # TODO
                     'subscribe_depth': False,
                     'subscribe_rgb': False,
                     'subscribe_rgbd': True,
@@ -219,18 +226,22 @@ def launch_setup(context, *args, **kwargs):
                 remappings=[
                     ('scan', '/scan'),
                     ('initialpose', '/initialpose'),
-                    ('goal_out', '/move_base_simple/goal'),
+                    # ('goal_out', '/move_base_simple/goal'),  # TODO
                 ],
                 extra_arguments=rtabmap_default_args,
                 # extra_arguments=rtabmap_args,
             ),
         ],
-        output={'both': 'screen'},
+        output={
+            'stdout': 'screen',
+            'stderr': 'screen',
+        },
     )
 
     rtabmapviz_node = Node(
         package='rtabmap_ros',
         executable='rtabmapviz',
+        namespace=robot_name_launch_arg,
         parameters=[{
             'subscribe_rgbd': True,
             'subscribe_scan': use_lidar_launch_arg,
@@ -244,11 +255,16 @@ def launch_setup(context, *args, **kwargs):
         output={'both': 'screen'},
     )
 
+    camera_tilt_angle_cmd = (
+        f"ros2 topic pub --once {robot_name_launch_arg.perform(context)}/commands/joint_group "
+        "interbotix_xs_msgs/msg/JointGroupCommand "
+        f"'{{name: 'camera', cmd: [0, {camera_tilt_angle_launch_arg.perform(context)}]}}'"
+    )
+
     camera_tilt_angle_executable = ExecuteProcess(
-        cmd=[
-            'ros2 topic pub --once commands/joint_group interbotix_xs_msgs/msg/JointGroupCommand ',
-            "--latch '{name: 'camera', cmd: [0, ", camera_tilt_angle_launch_arg, ']}'
-        ]
+        name='camera_tilt',
+        cmd=[camera_tilt_angle_cmd],
+        shell=True,
     )
 
     nav2_bringup_launch_include = IncludeLaunchDescription(
@@ -261,12 +277,39 @@ def launch_setup(context, *args, **kwargs):
         )
     )
 
+    tf_rebroadcaster_container = ComposableNodeContainer(
+        name='tf_rebroadcaster_container',
+        namespace=robot_name_launch_arg,
+        package='rclcpp_components',
+        executable='component_container',
+        composable_node_descriptions=[
+            ComposableNode(
+                package='interbotix_tf_tools',
+                plugin='interbotix_tf_tools::TFRebroadcaster',
+                name='tf_rebroadcaster',
+                namespace=robot_name_launch_arg,
+                parameters=[
+                    {
+                        'filepath_config': PathJoinSubstitution([
+                            FindPackageShare('interbotix_xslocobot_nav'),
+                            'config',
+                            'tf_rebroadcaster.yaml'
+                        ]),
+                        'topic_from': '/mobile_base/tf',
+                        'topic_to': '/tf',
+                    },
+                ],
+            ),
+        ],
+    )
+
     return [
-        # xslocobot_control_launch_include,
+        xslocobot_control_launch_include,
         rtabmap_container,
-        # rtabmapviz_node,
-        # camera_tilt_angle_executable,
+        rtabmapviz_node,
+        camera_tilt_angle_executable,
         # nav2_bringup_launch_include,
+        tf_rebroadcaster_container,
     ]
 
 
@@ -279,6 +322,13 @@ def generate_launch_description():
             description=(
               'model type of the Interbotix Locobot such as `locobot_base` or `locobot_wx250s`.'
             )
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
         )
     )
     declared_arguments.append(

@@ -8,11 +8,11 @@
                        min_range:=${25*mm2m} max_range:=${200*mm2m}
                        visualize:=false *origin" >
 
-    <xacro:property name="link_name" value="ir_intensity_${name}"/>
+    <xacro:property name="link_name" value="${robot_name}/ir_intensity_${name}"/>
 
     <joint name="${link_name}_joint" type="fixed">
       <xacro:insert_block name="origin" />
-      <parent link="${parent}"/>
+      <parent link="${robot_name}/${parent}"/>
       <child link="${link_name}"/>
     </joint>
 

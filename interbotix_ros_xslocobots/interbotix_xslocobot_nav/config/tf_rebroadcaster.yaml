@@ -1,0 +1,7 @@
+frames:
+  odom:
+    child_frame_id: base_link
+    prefix: 'locobot/'
+  odom:
+    child_frame_id: base_footprint
+    prefix: 'locobot/'

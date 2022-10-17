@@ -1,8 +1,8 @@
 controller_names:
-  - arm_controller
-  - gripper_controller
+  - locobot/arm_controller
+  - locobot/gripper_controller
 
-arm_controller:
+locobot/arm_controller:
   action_ns: follow_joint_trajectory
   type: FollowJointTrajectory
   default: true
@@ -12,7 +12,7 @@ arm_controller:
     - elbow
     - wrist_angle
 
-gripper_controller:
+locobot/gripper_controller:
   action_ns: follow_joint_trajectory
   type: FollowJointTrajectory
   default: true

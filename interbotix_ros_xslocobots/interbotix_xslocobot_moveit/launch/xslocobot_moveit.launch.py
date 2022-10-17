@@ -71,6 +71,7 @@ def load_yaml(package_name, file_path):
 def launch_setup(context, *args, **kwargs):
 
     robot_model_launch_arg = LaunchConfiguration('robot_model')
+    robot_name_launch_arg = LaunchConfiguration('robot_name')
     arm_model_launch_arg = LaunchConfiguration('arm_model')
     external_urdf_loc_launch_arg = LaunchConfiguration('external_urdf_loc')
     mode_configs_launch_arg = LaunchConfiguration('mode_configs')
@@ -169,16 +170,32 @@ def launch_setup(context, *args, **kwargs):
         'sensors': [''],
     }
 
+    remappings = [
+        (
+            f'{robot_name_launch_arg.perform(context)}/get_planning_scene',
+            f'/{robot_name_launch_arg.perform(context)}/get_planning_scene'
+        ),
+        (
+            '/arm_controller/follow_joint_trajectory',
+            f'/{robot_name_launch_arg.perform(context)}/arm_controller/follow_joint_trajectory'
+        ),
+        (
+            '/gripper_controller/follow_joint_trajectory',
+            f'/{robot_name_launch_arg.perform(context)}/gripper_controller/follow_joint_trajectory'
+        ),
+    ]
+
     move_group_node = Node(
         package='moveit_ros_move_group',
         executable='move_group',
+        # namespace=robot_name_launch_arg,
         parameters=[
             {
                 'planning_scene_monitor_options': {
                     'robot_description':
                         'robot_description',
                     'joint_state_topic':
-                        f'joint_states',
+                        f'{robot_name_launch_arg.perform(context)}/joint_states',
                 },
                 'use_sim_time': use_sim_time_param,
             },
@@ -192,6 +209,7 @@ def launch_setup(context, *args, **kwargs):
             joint_limits,
             sensor_parameters,
         ],
+        remappings=remappings,
         output={'both': 'screen'},
     )
 
@@ -200,8 +218,10 @@ def launch_setup(context, *args, **kwargs):
         package='rviz2',
         executable='rviz2',
         name='rviz2',
+        # namespace=robot_name_launch_arg,
         arguments=[
             '-d', rviz_config_file_launch_arg,
+            '-f', (robot_name_launch_arg, '/base_link')
         ],
         parameters=[
             robot_description,
@@ -210,6 +230,7 @@ def launch_setup(context, *args, **kwargs):
             kinematics_config,
             {'use_sim_time': use_sim_time_param},
         ],
+        remappings=remappings,
         output={'both': 'log'},
     )
 
@@ -223,6 +244,7 @@ def launch_setup(context, *args, **kwargs):
         ]),
         launch_arguments={
             'robot_model': robot_model_launch_arg,
+            'robot_name': robot_name_launch_arg,
             'arm_model': arm_model_launch_arg,
             'external_urdf_loc': external_urdf_loc_launch_arg,
             'use_rviz': 'false',
@@ -249,6 +271,7 @@ def launch_setup(context, *args, **kwargs):
         ]),
         launch_arguments={
             'robot_model': robot_model_launch_arg,
+            'robot_name': robot_name_launch_arg,
             'show_gripper_bar': 'true',
             'show_gripper_fingers': 'true',
             'external_urdf_loc': external_urdf_loc_launch_arg,
@@ -281,6 +304,13 @@ def generate_launch_description():
             description=(
               'model type of the Interbotix Locobot such as `locobot_base` or `locobot_wx250s`.'
             )
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
         )
     )
     declared_arguments.append(

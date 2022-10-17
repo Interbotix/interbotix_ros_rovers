@@ -11,12 +11,12 @@
         rpy="0 0 0"
         xyz="-0.017 0 0.04155"/>
       <parent
-        link="ee_arm_link"/>
+        link="${robot_name}/ee_arm_link"/>
       <child
-        link="ar_tag_link"/>
+        link="${robot_name}/ar_tag_link"/>
     </joint>
 
-    <link name="ar_tag_link">
+    <link name="${robot_name}/ar_tag_link">
       <visual>
         <origin
           rpy="0 0 0"
@@ -57,7 +57,7 @@
       <disableFixedJointLumping>true</disableFixedJointLumping>
     </gazebo>
 
-    <gazebo reference="ar_tag_link">
+    <gazebo reference="${robot_name}/ar_tag_link">
       <material>Gazebo/DarkGrey</material>
     </gazebo>
 

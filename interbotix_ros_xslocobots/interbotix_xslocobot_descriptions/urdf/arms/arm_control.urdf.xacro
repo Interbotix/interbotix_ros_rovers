@@ -32,6 +32,7 @@
         <param name="max">"${waist_limit_upper}"</param>
       </command_interface>
       <state_interface name="position"/>
+      <param name="initial_position">0.00</param>
     </joint>
 
     <joint name="shoulder">
@@ -40,6 +41,7 @@
         <param name="max">"${shoulder_limit_upper}"</param>
       </command_interface>
       <state_interface name="position"/>
+      <param name="initial_position">0.00</param>
     </joint>
 
     <joint name="elbow">
@@ -48,6 +50,7 @@
         <param name="max">"${elbow_limit_upper}"</param>
       </command_interface>
       <state_interface name="position"/>
+      <param name="initial_position">0.00</param>
     </joint>
 
     <xacro:if value="${dof >= 6}">
@@ -57,6 +60,7 @@
           <param name="max">"${forearm_roll_limit_upper}"</param>
         </command_interface>
         <state_interface name="position"/>
+        <param name="initial_position">0.00</param>
       </joint>
     </xacro:if>
 
@@ -66,6 +70,7 @@
         <param name="max">"${wrist_angle_limit_upper}"</param>
       </command_interface>
       <state_interface name="position"/>
+      <param name="initial_position">0.00</param>
     </joint>
 
     <xacro:if value="${dof >= 5}">
@@ -75,6 +80,7 @@
           <param name="max">"${wrist_rotate_limit_upper}"</param>
         </command_interface>
         <state_interface name="position"/>
+        <param name="initial_position">0.00</param>
       </joint>
     </xacro:if>
 
@@ -93,6 +99,7 @@
             <param name="max">"${-finger_limit_lower}"</param>
           </command_interface>
           <state_interface name="position"/>
+          <param name="initial_position">0.0195</param>
         </joint>
 
         <xacro:if value="${hardware_type == 'gz_classic'}">
@@ -104,6 +111,7 @@
               <param name="max">"${finger_limit_lower}"</param>
             </command_interface>
             <state_interface name="position"/>
+            <param name="initial_position">0.0195</param>
           </joint>
         </xacro:if>
       </xacro:if>

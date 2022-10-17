@@ -54,6 +54,7 @@ from launch_ros.substitutions import FindPackageShare
 def launch_setup(context, *args, **kwargs):
 
     robot_model_launch_arg = LaunchConfiguration('robot_model')
+    robot_name_launch_arg = LaunchConfiguration('robot_name')
     arm_model_launch_arg = LaunchConfiguration('arm_model')
     use_camera_launch_arg = LaunchConfiguration('use_camera')
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
@@ -88,6 +89,7 @@ def launch_setup(context, *args, **kwargs):
         ]),
         launch_arguments={
             'robot_model': robot_model_launch_arg,
+            'robot_name': robot_name_launch_arg,
             'arm_model': arm_model_launch_arg,
             'use_camera': use_camera_launch_arg,
             'use_rviz': use_rviz_launch_arg,
@@ -112,6 +114,7 @@ def launch_setup(context, *args, **kwargs):
         ]),
         launch_arguments={
             'robot_model': robot_model_launch_arg,
+            'robot_name': robot_name_launch_arg,
             'arm_model': arm_model_launch_arg,
             'use_rviz': use_rviz_launch_arg,
             'mode_configs': mode_configs_launch_arg,
@@ -127,6 +130,7 @@ def launch_setup(context, *args, **kwargs):
     controller_manager_node = Node(
         package='controller_manager',
         executable='ros2_control_node',
+        namespace=robot_name_launch_arg,
         parameters=[
             {
                 'robot_description': ParameterValue(robot_description_launch_arg, value_type=str)
@@ -142,7 +146,7 @@ def launch_setup(context, *args, **kwargs):
         executable='spawner',
         arguments=[
             '-c',
-            'controller_manager',
+            f'{robot_name_launch_arg.perform(context)}/controller_manager',
             'arm_controller',
         ],
         output={'both': 'screen'},
@@ -154,7 +158,7 @@ def launch_setup(context, *args, **kwargs):
         executable='spawner',
         arguments=[
             '-c',
-            'controller_manager',
+            f'{robot_name_launch_arg.perform(context)}/controller_manager',
             'gripper_controller',
         ],
         output={'both': 'screen'},
@@ -166,7 +170,7 @@ def launch_setup(context, *args, **kwargs):
         executable='spawner',
         arguments=[
             '-c',
-            'controller_manager',
+            f'{robot_name_launch_arg.perform(context)}/controller_manager',
             'joint_state_broadcaster',
         ],
         condition=LaunchConfigurationEquals(
@@ -195,6 +199,13 @@ def generate_launch_description():
             description=(
               'model type of the Interbotix LoCoBot such as `locobot_base` or `locobot_wx250s`.'
             )
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
         )
     )
     declared_arguments.append(

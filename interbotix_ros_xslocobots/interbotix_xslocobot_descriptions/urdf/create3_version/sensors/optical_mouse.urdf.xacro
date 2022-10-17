@@ -5,11 +5,11 @@
 
     <joint name="${name}_joint" type="fixed">
       <xacro:insert_block name="origin"/>
-      <parent link="${parent_link}"/>
-      <child link="${name}"/>
+      <parent link="${robot_name}/${parent_link}"/>
+      <child link="${robot_name}/${name}"/>
     </joint>
 
-    <link name="${name}">
+    <link name="${robot_name}/${name}">
       <xacro:inertial_dummy />
     </link>
 
@@ -21,7 +21,7 @@
               <remapping>~/out:=${name}</remapping>
             </ros>
           <update_rate>${update_rate}</update_rate>
-          <link_name>${name}</link_name>
+          <link_name>${robot_name}/${name}</link_name>
         </plugin>
       </gazebo>
     </xacro:if>

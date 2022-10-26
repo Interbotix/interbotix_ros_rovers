@@ -1,64 +1,64 @@
 topics:
   -
-    topic: /locobot/battery_state
+    topic: /mobile_base/battery_state
     type: sensor_msgs/msg/BatteryState
   -
-    topic: /locobot/cmd_audio
+    topic: /mobile_base/cmd_audio
     type: irobot_create_msgs/msg/AudioNoteVector
   -
-    topic: /locobot/cmd_lightring
+    topic: /mobile_base/cmd_lightring
     type: irobot_create_msgs/msg/LightringLeds
   -
-    topic: /locobot/cmd_vel
+    topic: /mobile_base/cmd_vel
     type: geometry_msgs/msg/Twist
   -
-    topic: /locobot/dock
+    topic: /mobile_base/dock
     type: irobot_create_msgs/msg/Dock
   -
-    topic: /locobot/hazard_detection
+    topic: /mobile_base/hazard_detection
     type: irobot_create_msgs/msg/HazardDetectionVector
   -
-    topic: /locobot/imu
+    topic: /mobile_base/imu
     type: sensor_msgs/msg/Imu
   -
-    topic: /locobot/interface_buttons
+    topic: /mobile_base/interface_buttons
     type: irobot_create_msgs/msg/InterfaceButtons
   -
-    topic: /locobot/ir_intensity
+    topic: /mobile_base/ir_intensity
     type: irobot_create_msgs/msg/IrIntensityVector
   -
-    topic: /locobot/ir_opcode
+    topic: /mobile_base/ir_opcode
     type: irobot_create_msgs/msg/IrOpcode
   -
-    topic: /locobot/kidnap_status
+    topic: /mobile_base/kidnap_status
     type: irobot_create_msgs/msg/KidnapStatus
   -
-    topic: /locobot/mouse
+    topic: /mobile_base/mouse
     type: irobot_create_msgs/msg/Mouse
   -
-    topic: /locobot/odom
+    topic: /mobile_base/odom
     type: nav_msgs/msg/Odometry
   -
-    topic: /locobot/rosout
+    topic: /mobile_base/rosout
     type: rcl_interfaces/msg/Log
   -
-    topic: /locobot/slip_status
+    topic: /mobile_base/slip_status
     type: irobot_create_msgs/msg/SlipStatus
   -
-    topic: /locobot/stop_status
+    topic: /mobile_base/stop_status
     type: irobot_create_msgs/msg/StopStatus
   -
-    topic: /locobot/tf
+    topic: /mobile_base/tf
     type: tf2_msgs/msg/TFMessage
   -
-    topic: /locobot/tf_static
+    topic: /mobile_base/tf_static
     type: tf2_msgs/msg/TFMessage
   -
-    topic: /locobot/wheel_status
+    topic: /mobile_base/wheel_status
     type: irobot_create_msgs/msg/WheelStatus
   -
-    topic: /locobot/wheel_ticks
+    topic: /mobile_base/wheel_ticks
     type: irobot_create_msgs/msg/WheelTicks
   -
-    topic: /locobot/wheel_vels
+    topic: /mobile_base/wheel_vels
     type: irobot_create_msgs/msg/WheelVels

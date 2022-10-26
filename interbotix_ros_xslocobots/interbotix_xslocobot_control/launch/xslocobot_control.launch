@@ -107,6 +107,15 @@
       name="parameter_bridge"
       pkg="interbotix_xslocobot_control"
       type="startup_bridge.sh" />
+    <node
+      name="tf_rebroadcaster"
+      pkg="interbotix_tf_tools"
+      type="tf_rebroadcaster"
+      output="screen">
+      <param name="topic_to"                value="/tf"/>
+      <param name="topic_from"              value="/mobile_base/tf"/>
+      <param name="filepath_config"         value="$(find interbotix_xslocobot_control)/config/tf_rebroadcaster.yaml"/>
+    </node>
   </group>
 
   <node if="$(arg use_lidar)"

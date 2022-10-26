@@ -14,9 +14,6 @@
   <arg name="launch_driver"                     default="true"/>
   <arg name="use_sim"                           default="false"/>
 
-  <arg name="xs_sdk_type" value="xs_sdk" unless="$(arg use_sim)"/>
-  <arg name="xs_sdk_type" value="xs_sdk_sim" if="$(arg use_sim)"/>
-
   <arg if="$(eval robot_model == 'locobot_base')"     name="mode_type" value="base"/>
   <arg unless="$(eval robot_model == 'locobot_base')" name="mode_type" value="all"/>
   <arg name="mode_configs" default="$(find interbotix_xslocobot_joy)/config/modes_$(arg mode_type).yaml"/>

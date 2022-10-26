@@ -8,7 +8,6 @@
   <arg name="show_gripper_bar"                  default="true"/>
   <arg name="show_gripper_fingers"              default="true"/>
   <arg name="external_urdf_loc"                 default=""/>
-  <arg name="load_gazebo_configs"               default="false"/>
   <arg name="use_joint_pub"                     default="false"/>
   <arg name="use_joint_pub_gui"                 default="false"/>
   <arg name="rate"                              default="10"/>
@@ -24,8 +23,7 @@
                                                          show_lidar:=$(arg show_lidar)
                                                          show_gripper_bar:=$(arg show_gripper_bar)
                                                          show_gripper_fingers:=$(arg show_gripper_fingers)
-                                                         external_urdf_loc:=$(arg external_urdf_loc)
-                                                         load_gazebo_configs:=$(arg load_gazebo_configs)"/>
+                                                         external_urdf_loc:=$(arg external_urdf_loc)"/>
 
   <param name="$(arg robot_name)/robot_description" command="xacro $(arg model)"/>
 

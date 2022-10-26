@@ -245,7 +245,7 @@
       <wheelAcceleration>0.9</wheelAcceleration>
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
+      <odometryFrame>$(arg robot_name)/odom</odometryFrame>
       <robotBaseFrame>$(arg robot_name)/base_footprint</robotBaseFrame>
       <publishWheelJointState>true</publishWheelJointState>
       <rosDebugLevel>na</rosDebugLevel>
@@ -260,7 +260,7 @@
       <alwaysOn>true</alwaysOn>
       <update_rate>62</update_rate>
       <bodyName>$(arg robot_name)/base_link</bodyName>
-      <topicName>base/sim_ground_truth_pose</topicName>
+      <topicName>mobile_base/sim_ground_truth_pose</topicName>
       <namespace>/</namespace>
       <frameName>map</frameName>
       <xyz_offset>0 0 0</xyz_offset>

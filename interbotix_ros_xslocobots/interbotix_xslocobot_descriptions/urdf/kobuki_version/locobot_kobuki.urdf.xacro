@@ -424,7 +424,7 @@
       <alwaysOn>true</alwaysOn>
       <updateRate>100.0</updateRate>
       <bodyName>$(arg robot_name)/base_link</bodyName>
-      <topicName>base/absolute_position</topicName>
+      <topicName>mobile_base/absolute_position</topicName>
       <gaussianNoise>0</gaussianNoise>
       <frameName>map</frameName>
       <xyzOffsets>0 0 0</xyzOffsets>

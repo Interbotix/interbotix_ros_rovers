@@ -16,10 +16,10 @@
   <arg name="launch_driver"                     default="true"/>
 
   <arg if="$(eval base_type == 'kobuki')"  name="move_base_cmd_vel_topic" default="mobile_base/commands/velocity"/>
-  <arg if="$(eval base_type == 'create3')" name="move_base_cmd_vel_topic" default="cmd_vel"/>
+  <arg if="$(eval base_type == 'create3')" name="move_base_cmd_vel_topic" default="/mobile_base/cmd_vel"/>
 
   <arg if="$(eval base_type == 'kobuki')"  name="odom_topic" default="mobile_base/odom"/>
-  <arg if="$(eval base_type == 'create3')" name="odom_topic" default="odom"/>
+  <arg if="$(eval base_type == 'create3')" name="odom_topic" default="/mobile_base/odom"/>
 
   <arg     if="$(arg use_lidar)" name="rtabmap_default_args" default="$(arg rtabmap_args)
                                                                       --RGBD/NeighborLinkRefining true

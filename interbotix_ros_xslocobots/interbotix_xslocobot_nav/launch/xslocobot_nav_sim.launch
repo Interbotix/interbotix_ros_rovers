@@ -14,6 +14,7 @@
   <arg name="database_path"                     default="~/.ros/rtabmap.db"/>
   <arg name="camera_tilt_angle"                 default="0.2618"/>
   <arg name="use_rviz"                          default="true"/>
+  <arg name="base_type"                         default="$(env INTERBOTIX_XSLOCOBOT_BASE_TYPE)"/> <!-- 'KOBUKI', 'CREATE3' -->
   <arg name="rviz_frame"                        default="map"/>
   <arg name="world_name"                        default="$(find interbotix_xslocobot_gazebo)/worlds/xslocobot_gazebo.world"/>
   <arg name="gui"                               default="true"/>
@@ -21,8 +22,15 @@
   <arg name="paused"                            default="true"/>
   <arg name="recording"                         default="false"/>
   <arg name="use_sim_time"                      default="true"/>
+  <arg name="use_position_controllers"          default="false"/>
+  <arg name="use_trajectory_controllers"        default="false"/>
   <arg name="dof"                               default="5"/>
-  <arg name="spawner_configuration"             default="-J tilt $(arg camera_tilt_angle)"/>
+
+  <arg if="$(eval base_type == 'kobuki')"  name="move_base_cmd_vel_topic" default="mobile_base/commands/velocity"/>
+  <arg if="$(eval base_type == 'create3')" name="move_base_cmd_vel_topic" default="cmd_vel"/>
+
+  <arg if="$(eval base_type == 'kobuki')"  name="odom_topic" default="mobile_base/odom"/>
+  <arg if="$(eval base_type == 'create3')" name="odom_topic" default="odom"/>
 
   <arg     if="$(arg use_lidar)" name="rtabmap_default_args" default="$(arg rtabmap_args)
                                                                       --RGBD/NeighborLinkRefining true
@@ -72,9 +80,9 @@
     <arg name="paused"                            default="$(arg paused)"/>
     <arg name="recording"                         default="$(arg recording)"/>
     <arg name="use_sim_time"                      default="$(arg use_sim_time)"/>
-    <arg name="use_position_controllers"          default="true"/>
+    <arg name="use_position_controllers"          default="$(arg use_position_controllers)"/>
+    <arg name="use_trajectory_controllers"        default="$(arg use_trajectory_controllers)"/>
     <arg name="dof"                               default="$(arg dof)"/>
-    <arg name="spawner_configuration"             default="$(arg spawner_configuration)"/>
   </include>
 
   <group ns="$(arg robot_name)/rtabmap">
@@ -189,9 +197,9 @@
     <param name="local_costmap/global_frame"      value="$(arg robot_name)/odom"/>
     <param name="local_costmap/robot_base_frame"  value="$(arg robot_name)/base_footprint"/>
 
-    <remap from="cmd_vel"                         to="mobile_base/commands/velocity"/>
+    <remap from="cmd_vel"                         to="$(arg move_base_cmd_vel_topic)"/>
     <remap from="map"                             to="rtabmap/grid_map"/>
-    <remap from="odom"                            to="mobile_base/odom"/>
+    <remap from="odom"                            to="$(arg odom_topic)"/>
   </node>
 
 </launch>

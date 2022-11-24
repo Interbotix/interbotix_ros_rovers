@@ -1,6 +1,6 @@
 # interbotix_xslocobot_gazebo
 
-[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://www.trossenrobotics.com/docs/interbotix_xslocobots/ros_packages/gazebo_simulation_configuration.html)
+[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/gazebo_simulation_configuration.html)
 
 ## Overview
 

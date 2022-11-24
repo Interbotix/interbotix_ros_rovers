@@ -1,6 +1,6 @@
 # Interbotix X-Series LoCoBot Python API Demos
 
-[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://www.trossenrobotics.com/docs/interbotix_xslocobots/ros_packages/python_demos.html)
+[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/python_demos.html)
 
 ## Overview
 

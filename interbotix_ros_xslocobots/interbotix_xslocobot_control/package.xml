@@ -16,6 +16,7 @@
   <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == kobuki">kobuki_ros</depend>
   <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == create3">irobot_create_msgs</depend>
   <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == create3">irobot_create_control</depend>
+  <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == create3">interbotix_tf_tools</depend>
   <depend>realsense2_camera</depend>
   <depend>rplidar_ros</depend>
 

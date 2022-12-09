@@ -43,7 +43,7 @@ Install the Interbotix X-Series LoCoBot packages and their dependencies.
 
 Options:
 
-  -h              Display this help message and quit
+  -h              Display this help message and quit.
 
   -d DISTRO       Install the DISTRO ROS distro compatible with your Ubuntu version. See
                   'https://github.com/Interbotix/.github/blob/main/SECURITY.md' for the list of
@@ -116,10 +116,10 @@ function validate_distro() {
   # check if chosen distro is valid and set ROS major version
   if contains_element $ROS_DISTRO_TO_INSTALL "${ALL_VALID_DISTROS[@]}"; then
     if contains_element $ROS_DISTRO_TO_INSTALL "${ROS1_VALID_DISTROS[@]}"; then
-      # Supported ROS1 distros
+      # Supported ROS 1 distros
       ROS_VERSION_TO_INSTALL=1
     elif contains_element $ROS_DISTRO_TO_INSTALL "${ROS2_VALID_DISTROS[@]}"; then
-      # Supported ROS2 distros
+      # Supported ROS 2 distros
       ROS_VERSION_TO_INSTALL=2
     else
       # For cases where it passes the first check but somehow fails the second check
@@ -173,15 +173,15 @@ function check_ubuntu_version() {
 
 function install_essential_packages() {
   # Install necessary core packages
-  sudo apt -y install openssh-server curl
+  sudo apt-get install -yq openssh-server curl
   if [ $ROS_VERSION_TO_INSTALL == 2 ]; then
     sudo pip3 install transforms3d
   fi
   if [ $PY_VERSION == 2 ]; then
-    sudo apt -y install python-pip
+    sudo apt-get install -yq python-pip
     sudo -H pip install modern_robotics six
   elif [ $PY_VERSION == 3 ]; then
-    sudo apt -y install python3-pip
+    sudo apt-get install -yq python3-pip
     sudo -H pip3 install modern_robotics six
   else
     failed "Something went wrong."
@@ -190,20 +190,29 @@ function install_essential_packages() {
 
 function install_ros1() {
   # Installs ROS 1
-  # Step 1: Install ROS 1
   if [ $(dpkg-query -W -f='${Status}' ros-$ROS_DISTRO_TO_INSTALL-desktop-full 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    echo -e "${GRN}Installing ROS1 $ROS_DISTRO_TO_INSTALL...${OFF}"
+    echo -e "${GRN}Installing ROS 1 $ROS_DISTRO_TO_INSTALL...${OFF}"
     sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
     curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
     sudo apt update
-    sudo apt -y install ros-$ROS_DISTRO_TO_INSTALL-desktop-full
+    sudo apt-get install -yq ros-$ROS_DISTRO_TO_INSTALL-desktop-full
     if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
       sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
     fi
     if [ $PY_VERSION == 2 ]; then
-      sudo apt -y install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+      sudo apt-get install -yq      \
+      python-rosdep                 \
+      python-rosinstall             \
+      python-rosinstall-generator   \
+      python-wstool                 \
+      build-essential
     else
-      sudo apt -y install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential
+      sudo apt-get install -yq      \
+      python3-rosdep                \
+      python3-rosinstall            \
+      python3-rosinstall-generator  \
+      python3-wstool                \
+      build-essential
     fi
     sudo rosdep init
     rosdep update
@@ -217,18 +226,25 @@ function install_ros1() {
 function install_ros2() {
   # Installs ROS 2
   if [ $(dpkg-query -W -f='${Status}' ros-$ROS_DISTRO_TO_INSTALL-desktop 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    echo -e "${GRN}Installing ROS 2 $ROS_DISTRO_TO_INSTALL desktop...${OFF}"
-    sudo apt install -y software-properties-common
+    echo -e "${GRN}Installing ROS 2 $ROS_DISTRO_TO_INSTALL...${OFF}"
+    sudo apt-get install -yq      \
+      software-properties-common  \
+      gnupg
     sudo add-apt-repository universe
-    sudo apt install -y curl gnupg lsb-release
     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
     sudo apt update
-    sudo apt install -y ros-$ROS_DISTRO_TO_INSTALL-desktop
+    sudo apt-get install -yq ros-$ROS_DISTRO_TO_INSTALL-desktop
     if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
       sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
     fi
-    sudo apt -y install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential python3-colcon-common-extensions
+    sudo apt-get install -yq            \
+      python3-rosdep                    \
+      python3-rosinstall                \
+      python3-rosinstall-generator      \
+      python3-wstool                    \
+      build-essential                   \
+      python3-colcon-common-extensions
     sudo rosdep init
     rosdep update
     if [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
@@ -236,63 +252,16 @@ function install_ros2() {
       source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash
     fi
   else
-    echo "ros-$ROS_DISTRO_TO_INSTALL-desktop-full is already installed!"
+    echo "ros-$ROS_DISTRO_TO_INSTALL-desktop is already installed!"
   fi
 }
 
 function install_perception_ros2() {
-  # Step 2: Install Realsense packages
-
-  # Step 2A: Install librealsense2
-  if [ $(dpkg-query -W -f='${Status}' librealsense2 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-    echo -e "${GRN}Installing librealsense2...${OFF}"
-    sudo apt-key adv --keyserver keys.gnupg.net --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
-    sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -sc) main" -u
-    version="2.50.0-0~realsense0.6128"
-
-    sudo apt -y install                   \
-      librealsense2-udev-rules=${version} \
-      librealsense2-dkms                  \
-      librealsense2=${version}            \
-      librealsense2-gl=${version}         \
-      librealsense2-gl-dev=${version}     \
-      librealsense2-gl-dbg=${version}     \
-      librealsense2-net=${version}        \
-      librealsense2-net-dev=${version}    \
-      librealsense2-net-dbg=${version}    \
-      librealsense2-utils=${version}      \
-      librealsense2-dev=${version}        \
-      librealsense2-dbg=${version}
-    sudo apt-mark hold librealsense2*
-  else
-    echo "librealsense2 already installed!"
-  fi
-
-  # Step 2B: Install realsense2 ROS Wrapper
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $REALSENSE_WS/install/setup.bash && ros2 pkg list | grep -q realsense;then
-    echo "${GRN}Installing RealSense ROS Wrapper...${OFF}"
-    mkdir -p $REALSENSE_WS/src
-    cd $REALSENSE_WS/src
-    git clone https://github.com/IntelRealSense/realsense-ros.git -b 4.0.4
-    cd $REALSENSE_WS
-    rosdep install -i --from-path src --rosdistro $ROS_DISTRO_TO_INSTALL --skip-keys=librealsense2 -y
-    if colcon build; then
-      echo -e "${GRN}${BOLD}Realsense ROS Wrapper built successfully!${NORM}${OFF}"
-      echo "source $REALSENSE_WS/install/setup.bash" >> ~/.bashrc
-    else
-      failed "Failed to build Realsense ROS Wrapper."
-    fi
-  else
-    echo "RealSense ROS Wrapper already installed!"
-  fi
-  source $REALSENSE_WS/install/setup.bash
-
-  # Step 3: Install apriltag ROS Wrapper
+  # Install apriltag ROS Wrapper
   if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $APRILTAG_WS/install/setup.bash && ros2 pkg list | grep -q apriltag; then
     echo -e "${GRN}${BOLD}Installing Apriltag ROS Wrapper...${NORM}${OFF}"
     mkdir -p $APRILTAG_WS/src
     cd $APRILTAG_WS/src
-    git clone https://github.com/AprilRobotics/apriltag.git
     git clone https://github.com/Interbotix/apriltag_ros.git -b ros2-port
     cd $APRILTAG_WS
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
@@ -310,17 +279,18 @@ function install_perception_ros2() {
 
 function install_locobot_ros1() {
   if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/devel/setup.bash && rospack list | grep -q interbotix_; then
-    echo "Interbotix LoCoBot ROS packages already installed!"
+    echo "Interbotix LoCoBot ROS 1 packages already installed!"
   else
     echo -e "${GRN}Installing ROS packages for the Interbotix LoCoBot...${OFF}"
     cd $INSTALL_PATH/src
     git clone https://github.com/Interbotix/interbotix_ros_core.git -b $ROS_DISTRO_TO_INSTALL
     git clone https://github.com/Interbotix/interbotix_ros_rovers.git -b $ROS_DISTRO_TO_INSTALL
     git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b $ROS_DISTRO_TO_INSTALL
-    rm interbotix_ros_core/interbotix_ros_xseries/CATKIN_IGNORE
-    rm interbotix_ros_toolboxes/interbotix_xs_toolbox/CATKIN_IGNORE
-    rm interbotix_ros_toolboxes/interbotix_perception_toolbox/CATKIN_IGNORE
-    rm interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_moveit_interface/CATKIN_IGNORE
+    rm                                                                                              \
+      interbotix_ros_core/interbotix_ros_xseries/CATKIN_IGNORE                                      \
+      interbotix_ros_toolboxes/interbotix_xs_toolbox/CATKIN_IGNORE                                  \
+      interbotix_ros_toolboxes/interbotix_perception_toolbox/CATKIN_IGNORE                          \
+      interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_moveit_interface/CATKIN_IGNORE
     cd interbotix_ros_core/interbotix_ros_xseries/interbotix_xs_sdk
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
@@ -350,9 +320,10 @@ function install_locobot_ros2() {
     git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b $ROS_DISTRO_TO_INSTALL
     # TODO(lsinterbotix) remove below when moveit_visual_tools is available in apt repo
     git clone https://github.com/ros-planning/moveit_visual_tools.git -b ros2
-    rm interbotix_ros_toolboxes/interbotix_perception_toolbox/COLCON_IGNORE
-    rm interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_moveit_interface/COLCON_IGNORE
-    rm interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_moveit_interface_msgs/COLCON_IGNORE
+    rm                                                                                                  \
+      interbotix_ros_toolboxes/interbotix_perception_toolbox/COLCON_IGNORE                              \
+      interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_moveit_interface/COLCON_IGNORE      \
+      interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_moveit_interface_msgs/COLCON_IGNORE
     cd interbotix_ros_core
     git submodule update --init interbotix_ros_xseries/dynamixel_workbench_toolbox
     git submodule update --init interbotix_ros_xseries/interbotix_xs_driver
@@ -377,7 +348,7 @@ function install_kobuki_ros1() {
   cd $INSTALL_PATH/src
   # no noetic branch - install from melodic branch source instead
   git clone https://github.com/yujinrobot/kobuki -b melodic
-  sudo apt -y install liborocos-kdl-dev
+  sudo apt-get install -yq liborocos-kdl-dev
   git clone https://github.com/yujinrobot/yujin_ocs.git
   cd yujin_ocs
   # Remove unused packages from yujin_ocs repo
@@ -416,12 +387,12 @@ function install_kobuki_ros2() {
 function install_create3_ros1() {
   # Install packages required to run the Create 3 using ROS 1, including ros1_bridge.
   # We can only install Galactic due to hardware constraints - The intersection of compatibility
-  # between ros1_bridge and the Create 3 is galactic & noetic
+  # between ros1_bridge and the Create 3 is Galactic & Noetic
   # TODO(lsinterbotix) only run this if messages can't be found, otherwise we rebuild ros1_bridge
   cd $INSTALL_PATH/src
   git clone https://github.com/Interbotix/create3_sim_ros1.git -b ros1
 
-  # This requires ROS2 to be installed.
+  # This requires ROS 2 to be installed.
   TEMP_ROS_DISTRO_TO_INSTALL=$ROS_DISTRO_TO_INSTALL # save ROS distro
   ROS_DISTRO_TO_INSTALL=galactic
   install_ros2
@@ -489,14 +460,27 @@ function install_create3_ros2() {
   git clone https://github.com/iRobotEducation/create3_sim.git -b $ROS_DISTRO_TO_INSTALL
 }
 
-function setup_env_vars() {
+function setup_env_vars_ros1() {
   # Setup Environment Variables
-  if [ -z "$ROS_IP" ]; then
+  if [ -z "$INTERBOTIX_WS" ]; then
     echo "Setting up Environment Variables..."
-    echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
-    echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}" >> ~/.bashrc
-    echo 'export ROS_IP=$(echo `hostname -I | cut -d" " -f1`)' >> ~/.bashrc
-    echo -e 'if [ -z "$ROS_IP" ]; then\n\texport ROS_IP=127.0.0.1\nfi' >> ~/.bashrc
+    echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp"                   >> ~/.bashrc
+    echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}"        >> ~/.bashrc
+    echo -e "export INTERBOTIX_WS=${INSTALL_PATH}"                      >> ~/.bashrc
+    echo 'export ROS_IP=$(echo `hostname -I | cut -d" " -f1`)'          >> ~/.bashrc
+    echo -e 'if [ -z "$ROS_IP" ]; then\n\texport ROS_IP=127.0.0.1\nfi'  >> ~/.bashrc
+  else
+    echo "Environment variables already set!"
+  fi
+}
+
+function setup_env_vars_ros2() {
+  # Setup Environment Variables
+  if [ -z "$INTERBOTIX_WS" ]; then
+    echo "Setting up Environment Variables..."
+    echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp"             >> ~/.bashrc
+    echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}"  >> ~/.bashrc
+    echo -e "export INTERBOTIX_WS=${INSTALL_PATH}"                >> ~/.bashrc
   else
     echo "Environment variables already set!"
   fi
@@ -535,7 +519,7 @@ if [ "$DISTRO_SET_FROM_CL" = false ]; then
   elif [ $UBUNTU_VERSION == "20.04" ]; then
     ROS_DISTRO_TO_INSTALL="noetic"
   else
-    echo -e "${BOLD}${RED}Unsupported Ubuntu verison: $UBUNTU_VERSION.${NORM}${OFF}"
+    echo -e "${BOLD}${RED}Unsupported Ubuntu version: $UBUNTU_VERSION.${NORM}${OFF}"
     failed "Interbotix LoCoBot only works with Ubuntu 18.04 bionic or 20.04 focal on your hardware."
   fi
 fi
@@ -582,14 +566,14 @@ sudo add-apt-repository multiverse
 sudo add-apt-repository restricted
 
 # Update the system
-sudo apt update && sudo apt -y upgrade
-sudo apt -y autoremove
+sudo apt-get update && sudo apt-get -y upgrade
+sudo apt-get -y autoremove
 
 install_essential_packages
 
 # configure LoCoBot computer ethernet to use proper network config for Create 3
 if [[ $BASE_TYPE == 'create3' ]]; then
-  sudo apt -y install netplan.io
+  sudo apt-get install -yq install netplan.io
   export CREATE3_NETWORK_CONFIG="network:
   version: 2
   ethernets:
@@ -621,6 +605,7 @@ if [[ $ROS_VERSION_TO_INSTALL == 1 ]]; then
     install_create3_ros1
   fi
   install_locobot_ros1
+  setup_env_vars_ros1
 elif [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
   failed "ROS 2 is not yet supported on the LoCoBot platform."
   install_ros2
@@ -631,13 +616,12 @@ elif [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
     install_create3_ros2
   fi
   install_locobot_ros2
+  setup_env_vars_ros2
 else
   failed "Something went wrong."
 fi
 
 shopt -u extglob
-
-setup_env_vars
 
 end_time="$(date -u +%s)"
 elapsed="$(($end_time-$start_time))"

@@ -179,7 +179,7 @@ validate_base_type
 
 if ! command -v lsb_release &> /dev/null; then
   sudo apt update
-  sudo apt-get install -y lsb-release
+  sudo apt-get install -yq lsb-release
 fi
 
 UBUNTU_VERSION="$(lsb_release -rs)"
@@ -191,7 +191,7 @@ if [ "$DISTRO_SET_FROM_CL" = false ]; then
   elif [ $UBUNTU_VERSION == "20.04" ]; then
     ROS_DISTRO_TO_INSTALL="noetic"
   else
-    echo -e "${BOLD}${RED}Unsupported Ubuntu verison: $UBUNTU_VERSION.${NORM}${OFF}"
+    echo -e "${BOLD}${RED}Unsupported Ubuntu version: $UBUNTU_VERSION.${NORM}${OFF}"
     failed "Interbotix LoCoBot only works with Ubuntu 18.04 Bionic or 20.04 Focal on your hardware."
   fi
 fi
@@ -222,7 +222,9 @@ echo -e "\n# Interbotix Configurations" >> ~/.bashrc
 
 export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}
 
-sudo apt -y install ros-$ROS_DISTRO_TO_INSTALL-rtabmap-ros ros-$ROS_DISTRO_TO_INSTALL-xacro
+sudo apt-get install -yq                  \
+  ros-$ROS_DISTRO_TO_INSTALL-rtabmap-ros  \
+  ros-$ROS_DISTRO_TO_INSTALL-xacro
 
 # Install Locobot packages
 if [ ! -d "$INSTALL_PATH/src" ]; then

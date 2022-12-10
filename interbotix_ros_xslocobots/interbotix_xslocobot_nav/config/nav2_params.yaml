@@ -1,0 +1,869 @@
+# The BT Navigator (Behavior Tree Navigator) module implements the NavigateToPose task interface.
+# It is a Behavior Tree-based implementation of navigation that is intended to allow for
+# flexibility in the navigation task and provide a way to easily specify complex robot behaviors,
+# including recovery.
+bt_navigator:
+  ros__parameters:
+    # Path to the default behavior tree XML description for NavigateToPose, see Behavior Tree XML
+    # Nodes
+    # (https://navigation.ros.org/configuration/packages/configuring-bt-xml.html#configuring-behavior-tree-xml)
+    # for details on this file. Used to be default_bt_xml_filename pre-Galactic.
+    # default_nav_to_pose_bt_xml: CONFIGURED IN LAUNCH FILE
+
+    # Path to the default behavior tree XML description for NavigateThroughPoses, see Behavior Tree
+    # XML Nodes
+    # (https://navigation.ros.org/configuration/packages/configuring-bt-xml.html#configuring-behavior-tree-xml)
+    # for details on this file. New to Galactic after NavigateThroughPoses was added.
+    # default_nav_through_poses_bt_xml: CONFIGURED IN LAUNCH FILE
+
+    # Reference frame. (default: map)
+    global_frame: map
+
+    # Path to behavior tree XML description. (default: base_link)
+    robot_base_frame: locobot/base_link
+
+    # Topic on which odometry is published. (default: odom)
+    odom_topic: /locobot/odom
+
+    # Duration (in milliseconds) for each iteration of BT execution. (default: 10)
+    bt_loop_duration: 10
+
+    # Default timeout value (in milliseconds) while a BT action node is waiting for acknowledgement
+    # from an action server. This value will be overwritten for a BT node if the input port
+    # “server_timeout” is provided. (default: 20)
+    default_server_timeout: 20
+
+    # Blackboard variable to use to supply the goal to the behavior tree for NavigateToPose. Should
+    # match ports of BT XML file. (default: "goal")
+    goal_blackboard_id: "goal"
+
+    # Blackboard variable to get the path from the behavior tree for NavigateThroughPoses feedback.
+    # Should match port names of BT XML file. (default: "path")
+    path_blackboard_id: "path"
+
+    # Blackboard variable to use to supply the goals to the behavior tree for NavigateThroughPoses.
+    # Should match ports of BT XML file. (default: "goals")
+    goals_blackboard_id: "goals"
+
+    enable_groot_monitoring: True
+
+    groot_zmq_publisher_port: 1666
+
+    groot_zmq_server_port: 1667
+
+    # List of behavior tree node shared libraries. (default:
+    # nav2_compute_path_to_pose_action_bt_node,
+    # nav2_follow_path_action_bt_node,
+    # nav2_back_up_action_bt_node,
+    # nav2_spin_action_bt_node,
+    # nav2_wait_action_bt_node,
+    # nav2_clear_costmap_service_bt_node,
+    # nav2_is_stuck_condition_bt_node,
+    # nav2_goal_reached_condition_bt_node,
+    # nav2_goal_updated_condition_bt_node,
+    # nav2_initial_pose_received_condition_bt_node,
+    # nav2_reinitialize_global_localization_service_bt_node,
+    # nav2_rate_controller_bt_node,
+    # nav2_distance_controller_bt_node,
+    # nav2_speed_controller_bt_node,
+    # nav2_recovery_node_bt_node,
+    # nav2_pipeline_sequence_bt_node,
+    # nav2_round_robin_node_bt_node,
+    # nav2_transform_available_condition_bt_node,
+    # nav2_time_expired_condition_bt_node,
+    # nav2_distance_traveled_condition_bt_node,
+    # nav2_single_trigger_bt_node)
+    plugin_lib_names:
+    - nav2_compute_path_to_pose_action_bt_node
+    - nav2_compute_path_through_poses_action_bt_node
+    - nav2_follow_path_action_bt_node
+    - nav2_back_up_action_bt_node
+    - nav2_spin_action_bt_node
+    - nav2_wait_action_bt_node
+    - nav2_clear_costmap_service_bt_node
+    - nav2_is_stuck_condition_bt_node
+    - nav2_goal_reached_condition_bt_node
+    - nav2_goal_updated_condition_bt_node
+    - nav2_initial_pose_received_condition_bt_node
+    - nav2_reinitialize_global_localization_service_bt_node
+    - nav2_rate_controller_bt_node
+    - nav2_distance_controller_bt_node
+    - nav2_speed_controller_bt_node
+    - nav2_truncate_path_action_bt_node
+    - nav2_goal_updater_node_bt_node
+    - nav2_recovery_node_bt_node
+    - nav2_pipeline_sequence_bt_node
+    - nav2_round_robin_node_bt_node
+    - nav2_transform_available_condition_bt_node
+    - nav2_time_expired_condition_bt_node
+    - nav2_distance_traveled_condition_bt_node
+    - nav2_single_trigger_bt_node
+    # - nav2_goal_updated_controller_bt_node
+    - nav2_is_battery_low_condition_bt_node # TODO(lsinterbotix): configure to use mobile_base battery
+    - nav2_navigate_through_poses_action_bt_node
+    - nav2_navigate_to_pose_action_bt_node
+    - nav2_remove_passed_goals_action_bt_node
+    - nav2_planner_selector_bt_node
+    - nav2_controller_selector_bt_node
+    - nav2_goal_checker_selector_bt_node
+
+# The Controller Server implements the server for handling the controller requests for the stack
+# and host a map of plugin implementations. It will take in path and plugin names for controller,
+# progress checker and goal checker to use and call the appropriate plugins.
+controller_server:
+  ros__parameters:
+    # Frequency to run controller (Hz). (default 20.0)
+    controller_frequency: 20.0
+
+    # The controller server filters the velocity portion of the odometry messages received before
+    # sending them to the controller plugin. Odometry values below this threshold (in m/s) will be
+    # set to 0.0. (default: 0.0001)
+    min_x_velocity_threshold: 0.001
+
+    # The controller server filters the velocity portion of the odometry messages received before
+    # sending them to the controller plugin. Odometry values below this threshold (in m/s) will be
+    # set to 0.0. For non-holonomic robots (default: 0.0001)
+    min_y_velocity_threshold: 0.5
+
+    # The controller server filters the velocity portion of the odometry messages received before
+    # sending them to the controller plugin. Odometry values below this threshold (in rad/s) will
+    # be set to 0.0. (default: 0.0001)
+    min_theta_velocity_threshold: 0.001
+
+    # The maximum duration in seconds the called controller plugin can fail (i.e. the
+    # computeVelocityCommands function of the plugin throwing an exception) before the
+    # nav2_msgs::action::FollowPath action fails. Setting it to the special value of -1.0 makes it
+    # infinite, 0 to disable, and any positive value for the appropriate timeout. (default: 0.0)
+    failure_tolerance: 0.3
+
+    # Speed limiting topic name to subscribe. This could be published by Speed Filter (please refer
+    # to Speed Filter Parameters
+    # (https://navigation.ros.org/configuration/packages/costmap-plugins/speed_filter.html#speed-filter)
+    # configuration page). You can also use this without the Speed Filter as well if you provide an
+    # external server to publish these messages
+    # (https://github.com/ros-planning/navigation2/blob/main/nav2_msgs/msg/SpeedLimit.msg).
+    # (default: "speed_limit") speed_limit_topic: "speed_limit" # UNUSED
+
+    # Topic to get instantaneous measurement of speed from. (default: "odom")
+    odom_topic: "/locobot/odom"
+
+    # Mapped name for progress checker plugin for checking progress made by robot. (default:
+    # "progress_checker")
+    progress_checker_plugin: "ProgressChecker"
+
+    # Mapped name for goal checker plugin for checking goal is reached. (default: ["goal_checker"])
+    goal_checker_plugins: ["GoalChecker"]
+
+    # List of mapped names for controller plugins for processing requests and parameters. (default:
+    # ["FollowPath"])
+    controller_plugins: ["FollowPath"]
+
+    # Progress checker parameters
+    ProgressChecker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+
+      # Minimum amount a robot must move to be progressing to goal (m). (default: 0.5)
+      required_movement_radius: 0.5
+
+      # Maximum amount of time a robot has to move the minimum radius (s). (default 10.0)
+      movement_time_allowance: 10.0
+
+    # Goal checker parameters
+    GoalChecker:
+      plugin: "nav2_controller::SimpleGoalChecker"
+
+      # Whether to check for XY position tolerance after rotating to goal orientation in case of
+      # minor localization changes. (default: true)
+      stateful: True
+
+      # Tolerance to meet goal completion criteria (m). (default: 0.25)
+      xy_goal_tolerance: 0.25
+
+      # Tolerance to meet goal completion criteria (rad). (default: 0.25)
+      yaw_goal_tolerance: 0.25
+
+    # DWB parameters
+    FollowPath:
+      plugin: "dwb_core::DWBLocalPlanner"
+
+      # List of critic plugins to use. (default: N/A)
+      critics:
+        - "RotateToGoal"
+        - "Oscillation"
+        - "BaseObstacle"
+        - "GoalAlign"
+        - "PathAlign"
+        - "PathDist"
+        - "GoalDist"
+
+      # Namespaces to load critics in. (default: ["dwb_critics"])
+      default_critic_namespaces: ["dwb_critics"]
+
+      # Whether to prune the path of old, passed points. (default: true)
+      prune_plan: true
+
+      # Determines whether we will pass the full plan on to the critics. (default: true)
+      shorten_transformed_plan: true
+
+      # Distance (m) to prune backward until. (default: 2.0)
+      prune_distance: 2.0
+
+      # Publish debug information. (default: false)
+      debug_trajectory_details: false
+
+      # Trajectory generator plugin name. (default: "dwb_plugins::StandardTrajectoryGenerator")
+      trajectory_generator_name: "dwb_plugins::StandardTrajectoryGenerator"
+
+      # Goal checker plugin name.
+      goal_checker_name: "dwb_plugins::SimpleGoalChecker"
+
+      # TF transform tolerance (s). (default: 0.1)
+      transform_tolerance: 0.2
+
+      # Stop evaluating scores after best score is found. (default: true)
+      short_circuit_trajectory_evaluation: true
+
+      # Kinematic Parameters
+
+      # Minimum velocity X (m/s). (default: 0.0)
+      min_vel_x: 0.0
+
+      # Minimum velocity Y (m/s). (default: 0.0)
+      min_vel_y: 0.0
+
+      # Maximum velocity X (m/s). (default: 0.0)
+      max_vel_x: 0.26
+
+      # Maximum velocity Y (m/s). (default: 0.0)
+      max_vel_y: 0.0
+
+      # Maximum angular velocity (rad/s). (default: 0.0)
+      max_vel_theta: 1.0
+
+      # Minimum translational speed (m/s). (default: 0.0)
+      min_speed_xy: 0.0
+
+      # Maximum translational speed (m/s). (default: 0.0)
+      max_speed_xy: 0.26
+
+      # Minimum angular speed (rad/s). (default: 0.0)
+      min_speed_theta: 0.0
+
+      # Maximum acceleration X (m/s^2). (default: 0.0)
+      acc_lim_x: 2.5
+
+      # Maximum acceleration Y (m/s^2). (default: 0.0)
+      acc_lim_y: 0.0
+
+      # Maximum acceleration rotation (rad/s^2). (default: 0.0)
+      acc_lim_theta: 3.2
+
+      # Maximum deceleration X (m/s^2). (default: 0.0)
+      decel_lim_x: -2.5
+
+      # Maximum deceleration Y (m/s^2). (default: 0.0)
+      decel_lim_y: 0.0
+
+      # Maximum deceleration rotation (rad/s^2). (default: 0.0)
+      decel_lim_theta: -3.2
+
+      # XYTheta Iterator Parameters
+      # Number of velocity samples in the X velocity direction. (default 20)
+      vx_samples: 20
+
+      # Number of velocity samples in the Y velocity direction. (default: 5)
+      vy_samples: 5
+
+      # Number of velocity samples in the angular directions. (default: 20)
+      vtheta_samples: 20
+
+      # Publisher Parameters
+      # Whether to publish the local plan evaluation. (default: true)
+      publish_evaluation: true
+
+      # Whether to publish the global plan. (default: true)
+      publish_global_plan: true
+
+      # Whether to publish the global plan in the odometry frame. (default: true)
+      publish_transformed_plan: true
+
+      # Whether to publish the local planner’s plan. (default: true)
+      publish_local_plan: true
+
+      # Whether to publish debug trajectories. (default: true)
+      publish_trajectories: true
+
+      # Whether to publish the cost grid. (default: false)
+      publish_cost_grid_pc: false
+
+      # How long for the marker to remain. (default: 0.1)
+      marker_lifetime: 0.1
+
+      # LimitedAccelGenerator Parameters
+      # Time to simulate ahead by (s). (default: 1.7)
+      sim_time: 1.7
+
+      # StandardTrajectoryGenerator Parameters
+      # If true, forward simulate by time. If False, forward simulate by linear and angular
+      # granularity. (default: false)
+      discretize_by_time: false
+
+      # Time ahead (s) to project. (default: 0.5)
+      time_granularity: 0.5
+
+      # Linear distance forward (m) to project. (default 0.5)
+      linear_granularity: 0.05
+
+      # Angular distance (rad) to project. (default: 0.025)
+      angular_granularity: 0.025
+
+      # Whether to include the last pose in the trajectory. (default: true)
+      include_last_point: true
+
+      # Time to simulate ahead by (s). (default: 1.7)
+      # sim_time: 1.7
+
+      # the goal checker will not check if the xy position matches again once it is found to be
+      # true. (default: true)
+      stateful: true
+
+      # BaseObstacleCritic Parameters
+
+      # Scores a trajectory based on where the path passes over the costmap. To use this properly,
+      # you must use the inflation layer in costmap to expand obstacles by the robot’s radius.
+
+      # Whether to allow for scores to be summed up. (default: false)
+      BaseObstacle.sum_scores: false
+
+      # Weighed scale for critic. (default: 1.0)
+      BaseObstacle.scale: 0.02
+
+      # GoalAlignCritic Parameters
+
+      # Scores a trajectory based on how well aligned the trajectory is with the goal pose.
+
+      # Scale for goal align critic. (default: 24.0)
+      GoalAlign.scale: 24.0
+
+      # Point in front of robot to look ahead to compute angular change from. (default 0.325)
+      GoalAlign.forward_point_distance: 0.1
+
+      # last, sum, or product combination methods. (default: "last")
+      GoalAlign.aggregation_type: "last"
+
+      # GoalDistCritic Parameters
+
+      # Scores a trajectory based on how close the trajectory gets the robot to the goal pose.
+
+      # Weighed scale for critic. (default: 1.0)
+      GoalDist.scale: 1.0
+
+      # last, sum, or product combination methods. (default: "last")
+      GoalDist.aggregation_type: "last"
+
+      # OscillationCritic Parameters
+
+      # Prevents the robot from just moving backwards and forwards.
+
+      # Minimum distance to move to reset oscillation watchdog (m). (default: 0.05)
+      Oscillation.oscillation_reset_dist: 0.05
+
+      # Minimum angular distance to move to reset watchdog (rad). (default: 0.2)
+      Oscillation.oscillation_reset_angle: 0.2
+
+      # Duration when a reset may be called. If -1, cannot be reset. (default: -1.0)
+      Oscillation.oscillation_reset_time: -1.0
+
+      # Threshold to check in the X velocity direction. (default: 0.05)
+      Oscillation.x_only_threshold: 0.05
+
+      # Weighed scale for critic. (default: 1.0)
+      Oscillation.scale: 1.0
+
+      # PathAlignCritic Parameters
+
+      # Scores a trajectory based on how well it is aligned to the path provided by the global
+      # planner.
+
+      # Point in front of robot to look ahead to compute angular change from. (default: 0.325)
+      PathAlign.forward_point_distance: 0.1
+
+      # last, sum, or product combination methods. (default: "last")
+      PathAlign.aggregation_type: "last"
+
+      # Scale for path align critic. (default: 32.0)
+      PathAlign.scale: 32.0
+
+      # PathDistCritic Parameters
+
+      # Scores a trajectory based on how well it is aligned to the path provided by the global
+      # planner.
+
+      # last, sum, or product combination methods. (default: "last")
+      PathDist.aggregation_type: "last"
+
+      # Weighed scale for critic. (default: 1.0)
+      PathDist.scale: 32.0
+
+      # Scale for goal distance critic. (default 24.0)
+      GoalDist.scale: 24.0
+
+      # RotateToGoalCritic Parameters
+
+      # Only allows the robot to rotate to the goal orientation when it is sufficiently close to
+      # the goal location.
+
+      # Tolerance to meet goal completion criteria (m). (default: 0.25)
+      xy_goal_tolerance: 0.25
+
+      # Velocity below is considered to be stopped at tolerance met (rad/s). (default: 0.25)
+      trans_stopped_velocity: 0.25
+
+      # Factor to slow robot motion by while rotating to goal. (default: 5.0)
+      RotateToGoal.slowing_factor: 5.0
+
+      # If > 0, amount of time to look forward for a collision for. (default: -1)
+      RotateToGoal.lookahead_time: -1.0
+
+      # Weighed scale for critic. (default: 1.0)
+      RotateToGoal.scale: 32.0
+
+# The Costmap 2D package implements a 2D grid-based costmap for environmental representations and a
+# number of sensor processing plugins. It is used in the planner and controller servers for
+# creating the space to check for collisions or higher cost areas to negotiate around.
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      # Whether to send full costmap every update, rather than updates. (default: false)
+      always_send_full_costmap: True
+
+      # Costmap update frequency. (default 5.0)
+      update_frequency: 5.0
+
+      # Frequency to publish costmap to topic. (default 1.0)
+      publish_frequency: 2.0
+
+      # Reference frame. (default: map)
+      global_frame: locobot/odom
+
+      # Robot base frame. (default: base_link)
+      robot_base_frame: locobot/base_link
+
+      # Whether costmap should roll with robot base frame. (default: False)
+      rolling_window: True
+
+      # Height of costmap (m). (default: 5)
+      width: 3
+
+      # Width of costmap (m). (default: 5)
+      height: 3
+
+      # Resolution of 1 pixel of the costmap, in meters. (default: 0.1)
+      resolution: 0.05
+
+      # Robot radius to use, if footprint coordinates not provided. (default: 0.1)
+      robot_radius: 0.25
+
+      # List of mapped plugin names for parameter namespaces and names. Note: Each plugin namespace
+      # defined in this list needs to have a plugin parameter defining the type of plugin to be
+      # loaded in the namespace.
+      plugins: ["obstacle_layer", "inflation_layer"]
+
+      # List of mapped costmap filter names for parameter namespaces and names. Note: Costmap
+      # filters are also loadable plugins just as ordinary costmap layers. This separation is made
+      # to avoid plugin and filter interference and places these filters on top of the combined
+      # layered costmap. As with plugins, each costmap filter namespace defined in this list needs
+      # to have a plugin parameter defining the type of filter plugin to be loaded in the
+      # namespace.
+      # filters:
+
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.55
+
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/obstacle.html
+
+        # Whether the obstacle_layer plugin is enabled. (default: True)
+        enabled: True
+
+        # Clear any occupied cells under robot footprint.
+        footprint_clearing_enabled: True
+
+        # Maximum height to add return to occupancy grid. (default: 2.0)
+        max_obstacle_height: 2.0
+
+        # Enum for method to add data to master costmap, default to maximum. (default: 1)
+        combination_method: 1
+
+        # namespace of sources of data.
+        observation_sources: scan
+
+        scan:
+          # Topic of data.
+          topic: /locobot/scan
+
+          # Frame of sensor, to use if not provided by message. If empty, uses message frame_id.
+          sensor_frame: ""
+
+          # How long to store messages in a buffer to add to costmap before removing them (s).
+          # (default: 0.0)
+          observation_persistence: 0.0
+
+          # Expected rate to get new data from sensor. (default: 0.0)
+          expected_update_rate: 0.0
+
+          # Data type of input, LaserScan or PointCloud2. (default: LaserScan)
+          data_type: "LaserScan"
+
+          # Minimum height to add return to occupancy grid. (default: 0.0)
+          min_obstacle_height: 0.0
+
+          # Maximum height to add return to occupancy grid. (default: 0.0)
+          max_obstacle_height: 2.0
+
+          # Are infinite returns from laser scanners valid measurements to raycast. (default:
+          # False)
+          inf_is_valid: False
+
+          # Whether source should mark in costmap. (default: True)
+          marking: True
+
+          # Whether source should raytrace clear in costmap. (default: False)
+          clearing: True
+
+          # Maximum range to mark obstacles in costmap. (default: 2.5)
+          obstacle_max_range: 2.5
+
+          # Minimum range to mark obstacles in costmap. (default: 0.0)
+          obstacle_min_range: 0.0
+
+          # Maximum range to raytrace clear obstacles from costmap. (default: 3.0)
+          raytrace_max_range: 3.0
+
+          # Minimum range to raytrace clear obstacles from costmap. (default: 0.0)
+          raytrace_min_range: 0.0
+
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/static.html
+
+        # QoS settings for map topic. (default: True)
+        map_subscribe_transient_local: True
+
+# The Costmap 2D package implements a 2D grid-based costmap for environmental representations and a
+# number of sensor processing plugins. It is used in the planner and controller servers for
+# creating the space to check for collisions or higher cost areas to negotiate around.
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      # Whether to send full costmap every update, rather than updates. (default: false)
+      always_send_full_costmap: True
+
+      # Amount to pad footprint (m). (default: 0.01)
+      footprint_padding: 0.01
+
+      # Ordered set of footprint points passed in as a string, must be closed set. For example, the
+      # following defines a square base with side lengths of 0.2 meters footprint: “[ [0.1, 0.1],
+      # [0.1, -0.1], [-0.1, -0.1], [-0.1, 0.1] ]”. (default: [])
+      # Disabled due to circular robot. See `robot_radius` parameter
+      # footprint:
+
+      # Reference frame. (default: map)
+      global_frame: map
+
+      # Minimum cost of an occupancy grid map to be considered a lethal obstacle. (default: 100)
+      lethal_cost_threshold: 100
+
+      # Topic of map from map_server or SLAM. (default: map)
+      map_topic: map
+
+      # X origin of the costmap relative to width (m). (default: 0.0)
+      origin_x: 10.0
+
+      # Y origin of the costmap relative to height (m). (default: 0.0)
+      origin_y: 10.0
+
+      # Frequency to publish costmap to topic. (default 1.0)
+      publish_frequency: 1.0
+
+      # Resolution of 1 pixel of the costmap, in meters. (default: 0.1)
+      resolution: 0.05
+
+      # Robot base frame. (default: base_link)
+      robot_base_frame: locobot/base_link
+
+      # Robot radius to use, if footprint coordinates not provided. (default: 0.1)
+      robot_radius: 0.25
+
+      # Whether costmap should roll with robot base frame. (default: False)
+      rolling_window: False
+
+      # If false, treats unknown space as free space, else as unknown space. (default: False)
+      track_unknown_space: True
+
+      # TF transform tolerance. (default: 0.3)
+      transform_tolerance: 0.3
+
+      # If occupancy grid map should be interpreted as only 3 values (free, occupied, unknown) or
+      # with its stored values. (default: True)
+      trinary_costmap: True
+
+      # Cost of unknown space if tracking it. (default: 255)
+      unknown_cost_value: 255
+
+      # Costmap update frequency. (default 5.0)
+      update_frequency: 1.0
+
+      # Whether when combining costmaps to use the maximum cost or override. (default: False)
+      use_maximum: False
+
+      # List of mapped plugin names for parameter namespaces and names. Note: Each plugin namespace
+      # defined in this list needs to have a plugin parameter defining the type of plugin to be
+      # loaded in the namespace.
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+
+      # List of mapped costmap filter names for parameter namespaces and names. Note: Costmap
+      # filters are also loadable plugins just as ordinary costmap layers. This separation is made
+      # to avoid plugin and filter interference and places these filters on top of the combined
+      # layered costmap. As with plugins, each costmap filter namespace defined in this list needs
+      # to have a plugin parameter defining the type of filter plugin to be loaded in the
+      # namespace.
+      # filters:
+
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/obstacle.html
+
+        # Whether the obstacle_layer plugin is enabled. (default: True)
+        enabled: True
+
+        # Clear any occupied cells under robot footprint.
+        footprint_clearing_enabled: True
+
+        # Maximum height to add return to occupancy grid. (default: 2.0)
+        max_obstacle_height: 2.0
+
+        # Enum for method to add data to master costmap, default to maximum. (default: 1)
+        combination_method: 1
+
+        # namespace of sources of data.
+        observation_sources: scan
+
+        scan:
+          # Topic of data.
+          topic: /locobot/scan
+
+          # Frame of sensor, to use if not provided by message. If empty, uses message frame_id.
+          sensor_frame: ""
+
+          # How long to store messages in a buffer to add to costmap before removing them (s).
+          # (default: 0.0)
+          observation_persistence: 0.0
+
+          # Expected rate to get new data from sensor. (default: 0.0)
+          expected_update_rate: 0.0
+
+          # Data type of input, LaserScan or PointCloud2. (default: LaserScan)
+          data_type: "LaserScan"
+
+          # Minimum height to add return to occupancy grid. (default: 0.0)
+          min_obstacle_height: 0.0
+
+          # Maximum height to add return to occupancy grid. (default: 0.0)
+          max_obstacle_height: 2.0
+
+          # Are infinite returns from laser scanners valid measurements to raycast. (default:
+          # False)
+          inf_is_valid: False
+
+          # Whether source should mark in costmap. (default: True)
+          marking: True
+
+          # Whether source should raytrace clear in costmap. (default: False)
+          clearing: True
+
+          # Maximum range to mark obstacles in costmap. (default: 2.5)
+          obstacle_max_range: 2.5
+
+          # Minimum range to mark obstacles in costmap. (default: 0.0)
+          obstacle_min_range: 0.0
+
+          # Maximum range to raytrace clear obstacles from costmap. (default: 3.0)
+          raytrace_max_range: 3.0
+
+          # Minimum range to raytrace clear obstacles from costmap. (default: 0.0)
+          raytrace_min_range: 0.0
+
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/static.html
+
+        # Whether the static_layer plugin is enabled. (default: True)
+        enabled: True
+
+        # Subscribe to static map updates after receiving first. (default: False)
+        subscribe_to_updates: False
+
+        # QoS settings for map topic. (default: True)
+        map_subscribe_transient_local: True
+
+        # TF tolerance. (default: 0.0)
+        transform_tolerance: 0.0
+
+        # Map topic to subscribe to. If left empty the map topic will default to the global
+        # map_topic parameter in costmap_2d_ros. (default: "")
+        map_topic: ""
+
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/inflation.html
+
+        # Whether the inflation_layer plugin is enabled. (default: True)
+        enabled: True
+
+        # Radius to inflate costmap around lethal obstacles. (default: 0.55)
+        inflation_radius: 0.55
+
+        # Exponential decay factor across inflation radius. (default: 10.0)
+        cost_scaling_factor: 3.0
+
+        # Whether to inflate unknown cells as if lethal. (default: False)
+        inflate_unknown: False
+
+        # Whether to inflate unknown cells. (default: False)
+        inflate_around_unknown: False
+
+# The Map Server implements the server for handling the map load requests for the stack and host a
+# map topic. It also implements a map saver server which will run in the background and save maps
+# based on service requests. There exists a map saver CLI similar to ROS 1 as well for a single map
+# save.
+map_saver:
+  ros__parameters:
+    # https://navigation.ros.org/configuration/packages/configuring-map-server.html
+
+    # Timeout to attempt saving the map (seconds). (default: 2)
+    save_map_timeout: 5.0
+
+    # Free space maximum probability threshold value for occupancy grid. (default: 0.25)
+    free_thresh_default: 0.25
+
+    # Occupied space minimum probability threshold value for occupancy grid. (default: 0.65)
+    occupied_thresh_default: 0.65
+
+    # QoS settings for map topic. (default: True)
+    map_subscribe_transient_local: True
+
+# The Planner Server implements the server for handling the planner requests for the stack and host
+# a map of plugin implementations. It will take in a goal and a planner plugin name to use and call
+# the appropriate plugin to compute a path to the goal.
+planner_server:
+  ros__parameters:
+    # Expected planner frequency. If the current frequency is less than the expected frequency,
+    # display the warning message.
+    expected_planner_frequency: 20.0
+    planner_plugins: ["GridBased"]
+    GridBased:
+      plugin: "nav2_navfn_planner/NavfnPlanner"
+      # Tolerance in meters between requested goal pose and end of path. (default: 0.5)
+      tolerance: 0.5
+      # Whether to use A*. If false, uses Dijkstra’s expansion. (default: false)
+      use_astar: false
+      # Whether to allow planning in unknown space. (default: true)
+      allow_unknown: true
+      # If true, the last pose of the path generated by the planner will have its orientation set
+      # to the approach orientation, i.e. the orientation of the vector connecting the last two
+      # points of the path. (default: false)
+      use_final_approach_orientation: false
+
+# TODO (lsinterbotix): Update to behavior_server on Humble
+# The Behavior Server implements the server for handling recovery behavior requests and hosting a
+# vector of plugins implementing various C++ behaviors. It is also possible to implement
+# independent behavior servers for each custom behavior, but this server will allow multiple
+# behaviors to share resources such as costmaps and TF buffers to lower incremental costs for new
+# behaviors.
+# Note: the wait recovery behavior has no parameters, the duration to wait is given in the action
+# request. Note: pre-Rolling/Humble this was the Recovery server, not behavior server. Launch
+# files, behaviors and tests were all renamed.
+recoveries_server:
+  ros__parameters:
+    # https://navigation.ros.org/configuration/packages/configuring-behavior-server.html?highlight=recoveries_server
+
+    # Raw costmap topic for collision checking. (default: local_costmap/costmap_raw)
+    costmap_topic: local_costmap/costmap_raw
+
+    # Topic for footprint in the costmap frame. (default: local_costmap/published_footprint)
+    footprint_topic: local_costmap/published_footprint
+
+    # Frequency to run behavior plugins. (default: 10.0)
+    cycle_frequency: 10.0
+
+    # TF transform tolerance. (default: 0.1)
+    transform_tolerance: 0.1
+
+    # Reference frame. (default: odom)
+    global_frame: locobot/odom
+
+    # Robot base frame. (default: base_link)
+    robot_base_frame: locobot/base_link
+
+    # List of plugin names to use, also matches action server names. Note: Each plugin namespace
+    # defined in this list needs to have a plugin parameter defining the type of plugin to be
+    # loaded in the namespace. (default: {“spin”, “back_up”, “drive_on_heading”, “wait”})
+    recovery_plugins: ["spin", "backup", "wait"]
+
+    spin:
+      plugin: "nav2_recoveries/Spin"
+
+    backup:
+      plugin: "nav2_recoveries/BackUp"
+
+    wait:
+      plugin: "nav2_recoveries/Wait"
+
+    # Time to look ahead for collisions (s). (default: 2.0)
+    simulate_ahead_time: 2.0
+
+    # Maximum rotational velocity (rad/s). (default: 1.0)
+    max_rotational_vel: 1.0
+
+    # Minimum rotational velocity (rad/s). (default: 0.4)
+    min_rotational_vel: 0.4
+
+    # maximum rotational acceleration (rad/s^2). (default: 3.0)
+    rotational_acc_lim: 3.2
+
+# The Waypoint Follower module implements a way of doing waypoint following using the
+# NavigateToPose action server. It will take in a set of ordered waypoints to follow and then try
+# to navigate to them in order. It also hosts a waypoint task executor plugin which can be used to
+# perform custom behavior at a waypoint like waiting for user instruction, taking a picture, or
+# picking up a box. If a waypoint is not achievable, the stop_on_failure parameter will determine
+# whether to continue to the next point or stop.
+waypoint_follower:
+  ros__parameters:
+    # https://navigation.ros.org/configuration/packages/configuring-waypoint-follower.html
+
+    # Whether to fail action task if a single waypoint fails. If false, will continue to next
+    # waypoint. (default: True)
+    stop_on_failure: True
+
+    # Rate to check for results from current navigation task. (default: 20)
+    loop_rate: 20
+
+    # A plugin to define tasks to be executed when robot arrives to a waypoint. Note: The plugin
+    # namespace defined needs to have a plugin parameter defining the type of plugin to be loaded
+    # in the namespace. (default: wait_at_waypoint)
+    waypoint_task_executor_plugin: "wait_at_waypoint"
+
+    wait_at_waypoint:
+      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+      # https://navigation.ros.org/configuration/packages/nav2_waypoint_follower-plugins/wait_at_waypoint.html
+
+      # Whether waypoint_task_executor plugin is enabled. (default: True)
+      enabled: True
+
+      # Amount of time in milliseconds, for robot to sleep/wait after each waypoint is reached. If
+      # zero, robot will directly continue to next waypoint. (default: 0)
+      waypoint_pause_duration: 200

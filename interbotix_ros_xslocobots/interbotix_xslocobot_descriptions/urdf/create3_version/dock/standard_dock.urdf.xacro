@@ -7,7 +7,7 @@
   <xacro:arg name="gazebo"         default="classic" />
 
   <xacro:property name="z_offset"  value="${4.6*mm2m}"/>
-  <xacro:property name="link_name" value="std_dock_link"/>
+  <xacro:property name="link_name" value="${robot_name}/std_dock_link"/>
 
   <xacro:arg name="visualize_rays" default="false"/>
 

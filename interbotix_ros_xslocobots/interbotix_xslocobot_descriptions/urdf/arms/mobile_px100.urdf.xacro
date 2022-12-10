@@ -40,7 +40,7 @@
   <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/arms/arm_control.urdf.xacro"/>
   <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/arms/ar_tag.urdf.xacro"/>
 
-  <link name="arm_base_link">
+  <link name="${robot_name}/arm_base_link">
     <visual>
       <origin
         rpy="0 0 ${-pi/2}"
@@ -86,15 +86,15 @@
       rpy="0 0 0"
       xyz="0 0 0.04293"/>
     <parent
-      link="arm_base_link"/>
+      link="${robot_name}/arm_base_link"/>
     <child
-      link="shoulder_link"/>
+      link="${robot_name}/shoulder_link"/>
     <dynamics
       friction="0.1"
       damping="0.1"/>
   </joint>
 
-  <link name="shoulder_link">
+  <link name="${robot_name}/shoulder_link">
     <visual>
       <origin
         rpy="0 0 ${pi/2}"
@@ -142,15 +142,15 @@
       rpy="0 0 0"
       xyz="0 0 0.04225"/>
     <parent
-      link="shoulder_link"/>
+      link="${robot_name}/shoulder_link"/>
     <child
-      link="upper_arm_link"/>
+      link="${robot_name}/upper_arm_link"/>
     <dynamics
       friction="0.1"
       damping="0.1"/>
   </joint>
 
-  <link name="upper_arm_link">
+  <link name="${robot_name}/upper_arm_link">
     <visual>
       <origin
         rpy="0 0 ${pi/2}"
@@ -196,15 +196,15 @@
       rpy="0 0 0"
       xyz="0.035 0 0.1"/>
     <parent
-      link="upper_arm_link"/>
+      link="${robot_name}/upper_arm_link"/>
     <child
-      link="forearm_link"/>
+      link="${robot_name}/forearm_link"/>
     <dynamics
       friction="0.1"
       damping="0.1"/>
   </joint>
 
-  <link name="forearm_link">
+  <link name="${robot_name}/forearm_link">
     <visual>
       <origin
         rpy="0 0 ${pi/2}"
@@ -256,15 +256,15 @@
         rpy="0 0 0"
         xyz="0.1 0 0"/>
       <parent
-        link="forearm_link"/>
+        link="${robot_name}/forearm_link"/>
       <child
-        link="gripper_link"/>
+        link="${robot_name}/gripper_link"/>
       <dynamics
         friction="0.1"
         damping="0.1"/>
     </joint>
 
-    <link name="gripper_link">
+    <link name="${robot_name}/gripper_link">
       <visual>
         <origin rpy="0 0 ${pi/2}" xyz="0 0 0"/>
         <geometry>
@@ -303,12 +303,12 @@
         rpy="0 0 0"
         xyz="0.063 0 0"/>
       <parent
-        link="gripper_link"/>
+        link="${robot_name}/gripper_link"/>
       <child
-        link="ee_arm_link"/>
+        link="${robot_name}/ee_arm_link"/>
     </joint>
 
-    <link name="ee_arm_link">
+    <link name="${robot_name}/ee_arm_link">
       <inertial>
         <mass value="0.001"/>
         <inertia
@@ -330,15 +330,15 @@
         rpy="0 0 0"
         xyz="0.0055 0 0"/>
       <parent
-        link="ee_arm_link"/>
+        link="${robot_name}/ee_arm_link"/>
       <child
-        link="gripper_prop_link"/>
+        link="${robot_name}/gripper_prop_link"/>
       <dynamics
         friction="0.1"
         damping="0.1"/>
     </joint>
 
-    <link name="gripper_prop_link">
+    <link name="${robot_name}/gripper_prop_link">
       <visual>
         <origin rpy="0 0 ${pi/2}" xyz="-0.0685 0 0"/>
         <geometry>
@@ -383,12 +383,12 @@
           rpy="0 0 0"
           xyz="0 0 0"/>
         <parent
-          link="ee_arm_link"/>
+          link="${robot_name}/ee_arm_link"/>
         <child
-          link="gripper_bar_link"/>
+          link="${robot_name}/gripper_bar_link"/>
       </joint>
 
-      <link name="gripper_bar_link">
+      <link name="${robot_name}/gripper_bar_link">
         <visual>
           <origin
             rpy="0 0 ${pi/2}"
@@ -431,12 +431,12 @@
           rpy="0 0 0"
           xyz="0.023 0 0"/>
         <parent
-          link="gripper_bar_link"/>
+          link="${robot_name}/gripper_bar_link"/>
         <child
-          link="fingers_link"/>
+          link="${robot_name}/fingers_link"/>
       </joint>
 
-      <link name="fingers_link">
+      <link name="${robot_name}/fingers_link">
         <inertial>
           <mass value="0.001"/>
           <inertia
@@ -464,15 +464,15 @@
             rpy="0 0 0"
             xyz="0 0 0"/>
           <parent
-            link="fingers_link"/>
+            link="${robot_name}/fingers_link"/>
           <child
-            link="left_finger_link"/>
+            link="${robot_name}/left_finger_link"/>
           <dynamics
             friction="0.1"
             damping="0.1"/>
         </joint>
 
-        <link name="left_finger_link">
+        <link name="${robot_name}/left_finger_link">
           <visual>
             <origin
               rpy="${pi} ${pi} 0"
@@ -520,9 +520,9 @@
             rpy="0 0 0"
             xyz="0 0 0"/>
           <parent
-            link="fingers_link"/>
+            link="${robot_name}/fingers_link"/>
           <child
-            link="right_finger_link"/>
+            link="${robot_name}/right_finger_link"/>
           <dynamics
             friction="0.1"
             damping="0.1"/>
@@ -534,7 +534,7 @@
           </xacro:unless>
         </joint>
 
-        <link name="right_finger_link">
+        <link name="${robot_name}/right_finger_link">
           <visual>
             <origin
               rpy="0 ${pi} 0"
@@ -577,12 +577,12 @@
             rpy="0 0 0"
             xyz="0.027575 0 0"/>
           <parent
-            link="fingers_link"/>
+            link="${robot_name}/fingers_link"/>
           <child
-            link="ee_gripper_link"/>
+            link="${robot_name}/ee_gripper_link"/>
         </joint>
 
-        <link name="ee_gripper_link">
+        <link name="${robot_name}/ee_gripper_link">
           <inertial>
             <mass value="0.001"/>
             <inertia

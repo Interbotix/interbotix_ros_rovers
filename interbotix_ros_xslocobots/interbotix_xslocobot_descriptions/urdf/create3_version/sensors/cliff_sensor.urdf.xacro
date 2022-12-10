@@ -10,13 +10,13 @@
   <xacro:property name="min_range"           value="${0.01*cm2m}"/>
   <xacro:property name="max_range"           value="${15*cm2m}"/>
   <xacro:property name="samples"             value="${fov_deg/5}"/>
-  <xacro:property name="sensor_name"         value="cliff_${name}"/>
+  <xacro:property name="sensor_name"         value="${robot_name}/cliff_${name}"/>
   <xacro:property name="detection_threshold" value="${8*cm2m}"/>
 
 
   <joint name="${sensor_name}_joint" type="fixed">
     <xacro:insert_block name="origin"/>
-    <parent link="${parent}"/>
+    <parent link="${robot_name}/${parent}"/>
     <child link="${sensor_name}"/>
   </joint>
 

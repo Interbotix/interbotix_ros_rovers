@@ -6,12 +6,12 @@
     <joint name="plate" type="fixed">
       <xacro:insert_block name="origin"/>
       <parent
-        link="base_link"/>
+        link="${robot_name}/base_link"/>
       <child
-        link="plate_link"/>
+        link="${robot_name}/plate_link"/>
     </joint>
 
-    <link name="plate_link">
+    <link name="${robot_name}/plate_link">
       <visual>
         <origin
           rpy="0 0 0"
@@ -36,7 +36,7 @@
       <xacro:insert_block name="inertial"/>
     </link>
 
-    <gazebo reference="plate_link">
+    <gazebo reference="${robot_name}/plate_link">
       <material>Gazebo/DarkGrey</material>
     </gazebo>
 

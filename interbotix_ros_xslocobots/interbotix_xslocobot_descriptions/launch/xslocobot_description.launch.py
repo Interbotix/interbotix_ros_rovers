@@ -37,6 +37,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition
 from launch.substitutions import (
+    EnvironmentVariable,
     LaunchConfiguration,
     PathJoinSubstitution,
     PythonExpression,
@@ -48,6 +49,7 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def launch_setup(context, *args, **kwargs):
+    robot_name_launch_arg = LaunchConfiguration('robot_name')
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
     rviz_frame_launch_arg = LaunchConfiguration('rviz_frame')
     rvizconfig_launch_arg = LaunchConfiguration('rvizconfig')
@@ -67,6 +69,7 @@ def launch_setup(context, *args, **kwargs):
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
+        namespace=robot_name_launch_arg,
         parameters=[{
             'robot_description': ParameterValue(robot_description_launch_arg, value_type=str),
             'use_sim_time': use_sim_time_param,
@@ -78,6 +81,7 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(use_joint_pub_launch_arg),
         package='joint_state_publisher',
         executable='joint_state_publisher',
+        namespace=robot_name_launch_arg,
         parameters=[{
             'rate': rate_launch_arg,
             'source_list': source_list_launch_arg,
@@ -89,6 +93,7 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(use_joint_pub_gui_launch_arg),
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
+        namespace=robot_name_launch_arg,
         output={'both': 'log'},
     )
 
@@ -97,6 +102,7 @@ def launch_setup(context, *args, **kwargs):
         package='rviz2',
         executable='rviz2',
         name='rviz2',
+        namespace=robot_name_launch_arg,
         arguments=[
             '-d', rvizconfig_launch_arg,
             '-f', rviz_frame_launch_arg,
@@ -120,10 +126,18 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'robot_model',
+            default_value=EnvironmentVariable('INTERBOTIX_XSLOCOBOT_ROBOT_MODEL'),
             choices=get_interbotix_xslocobot_models(),
             description=(
                 'model type of the Interbotix LoCoBot such as `locobot_base` or `locobot_wx250s`.'
             ),
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
         )
     )
     declared_arguments.append(
@@ -140,6 +154,14 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            'use_lidar',
+            default_value='false',
+            choices=('true', 'false'),
+            description='if `true`, the RPLidar node is launched.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'use_rviz',
             default_value='true',
             choices=('true', 'false'),
@@ -149,7 +171,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'rviz_frame',
-            default_value='base_footprint',
+            default_value=(LaunchConfiguration('robot_name'), '/base_link'),
             description=(
                 'fixed frame in RViz; this should be changed to `map` or `odom` if '
                 'mapping or using local odometry respectively.'

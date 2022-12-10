@@ -13,8 +13,8 @@
         <xacro:if value="${arm_type != 'mobile_px100'}">
           <origin rpy="0 0 0" xyz="0.097277 0 0.0095"/>
         </xacro:if> <!-- arm_type != 'mobile_px100' -->
-        <parent link="plate_link"/>
-        <child link="arm_base_link"/>
+        <parent link="${robot_name}/plate_link"/>
+        <child link="${robot_name}/arm_base_link"/>
       </joint>
 
     </xacro:if> <!-- base_type == 'kobuki' -->
@@ -24,11 +24,11 @@
       <joint name="arm_stand_link_joint" type="fixed">
         <axis xyz="0 0 0"/>
         <origin rpy="0 0 0" xyz="0.092002 0 0.007763"/>
-        <parent link="plate_link"/>
-        <child link="arm_stand_link"/>
+        <parent link="${robot_name}/plate_link"/>
+        <child link="${robot_name}/arm_stand_link"/>
       </joint>
 
-      <link name="arm_stand_link">
+      <link name="${robot_name}/arm_stand_link">
         <visual>
           <origin rpy="0 0 0" xyz="0 0 0"/>
           <geometry>
@@ -52,15 +52,15 @@
       <joint name="arm_base_link_joint" type="fixed">
         <axis xyz="0 0 0"/>
         <origin rpy="0 0 0" xyz="0 0 0.023"/>
-        <parent link="arm_stand_link"/>
-        <child link="arm_base_link"/>
+        <parent link="${robot_name}/arm_stand_link"/>
+        <child link="${robot_name}/arm_base_link"/>
       </joint>
 
     </xacro:if> <!-- base_type == 'create3' -->
 
     <xacro:include filename="$(find interbotix_xslocobot_descriptions)/urdf/arms/$(arg arm_model).urdf.xacro"/>
 
-    <gazebo reference="arm_base_link">
+    <gazebo reference="${robot_name}/arm_base_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
     </gazebo>
@@ -69,62 +69,62 @@
       <disableFixedJointLumping>true</disableFixedJointLumping>
     </gazebo>
 
-    <gazebo reference="shoulder_link">
+    <gazebo reference="${robot_name}/shoulder_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
-    <gazebo reference="upper_arm_link">
+    <gazebo reference="${robot_name}/upper_arm_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
-    <gazebo reference="forearm_link">
+    <gazebo reference="${robot_name}/forearm_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
-    <gazebo reference="upper_forearm_link">
+    <gazebo reference="${robot_name}/upper_forearm_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
-    <gazebo reference="lower_forearm_link">
+    <gazebo reference="${robot_name}/lower_forearm_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
-    <gazebo reference="wrist_link">
+    <gazebo reference="${robot_name}/wrist_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
       <self_collide>true</self_collide>
     </gazebo>
 
-    <gazebo reference="gripper_link">
+    <gazebo reference="${robot_name}/gripper_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
     </gazebo>
 
-    <gazebo reference="gripper_prop_link">
+    <gazebo reference="${robot_name}/gripper_prop_link">
       <dampingFactor>0.01</dampingFactor>
       <material>Gazebo/DarkGrey</material>
     </gazebo>
 
-    <gazebo reference="gripper_bar_link">
+    <gazebo reference="${robot_name}/gripper_bar_link">
       <material>Gazebo/DarkGrey</material>
     </gazebo>
 
-    <gazebo reference="left_finger_link">
+    <gazebo reference="${robot_name}/left_finger_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
     </gazebo>
 
-    <gazebo reference="right_finger_link">
+    <gazebo reference="${robot_name}/right_finger_link">
       <material>Gazebo/DarkGrey</material>
       <dampingFactor>0.01</dampingFactor>
     </gazebo>

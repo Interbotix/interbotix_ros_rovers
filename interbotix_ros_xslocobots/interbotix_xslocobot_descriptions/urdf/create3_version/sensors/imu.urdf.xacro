@@ -5,15 +5,15 @@
 
   <joint name="${name}_joint" type="fixed">
     <xacro:insert_block name="origin"/>
-    <parent link="${parent}"/>
-    <child link="${name}_link"/>
+    <parent link="${robot_name}/${parent}"/>
+    <child link="${robot_name}/${name}_link"/>
   </joint>
 
-  <link name="${name}_link">
+  <link name="${robot_name}/${name}_link">
       <xacro:inertial_dummy />
   </link>
 
-  <gazebo reference="${name}_link">
+  <gazebo reference="${robot_name}/${name}_link">
     <sensor type="imu" name="${name}">
       <always_on>true</always_on>
       <update_rate>${update_rate}</update_rate>

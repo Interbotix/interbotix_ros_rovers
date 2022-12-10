@@ -11,8 +11,10 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>interbotix_xslocobot_control</depend>
+  <depend>navigation2</depend>
   <depend>nav2_bringup</depend>
   <depend>rtabmap_ros</depend>
+  <depend>slam_toolbox</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

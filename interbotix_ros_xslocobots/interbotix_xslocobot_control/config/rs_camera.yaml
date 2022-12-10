@@ -1,0 +1,27 @@
+$(var robot_name):
+  camera/camera:
+    ros__parameters:
+      align_depth:
+        enable: $(var rs_camera_align_depth)
+      base_frame_id: $(var robot_name)_link
+      depth_module:
+        profile: $(var rs_depth_module_profile)
+      enable_color: true
+      enable_depth: true
+      enable_infra1: false
+      enable_infra2: false
+      enable_sync: false
+      hole_filling_filter:
+        enable: false
+      initial_reset: $(var rs_camera_initial_reset)
+      pointcloud:
+        ordered_pc: false
+      # publish_tf: true
+      rgb_camera:
+        profile: $(var rs_rbg_camera_profile)
+      spatial_filter:
+        enable: false
+      temporal_filter:
+        enable: false
+      tf_publish_rate: 0.0
+      wait_for_device_timeout: -1.0

@@ -9,12 +9,12 @@
          <axis xyz="0 0 0"/>
          <xacro:insert_block name="origin"/>
          <parent
-          link="camera_tower_link"/>
+          link="${robot_name}/camera_tower_link"/>
          <child
-          link="arm_cradle_link"/>
+          link="${robot_name}/arm_cradle_link"/>
       </joint>
 
-     <link name="arm_cradle_link">
+     <link name="${robot_name}/arm_cradle_link">
        <visual>
          <origin
           rpy="0 0 0"
@@ -55,7 +55,7 @@
       <disableFixedJointLumping>true</disableFixedJointLumping>
     </gazebo>
 
-    <gazebo reference="arm_cradle_link">
+    <gazebo reference="${robot_name}/arm_cradle_link">
       <material>Gazebo/DarkGrey</material>
     </gazebo>
 

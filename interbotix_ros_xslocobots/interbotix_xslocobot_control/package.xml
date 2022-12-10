@@ -11,6 +11,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>interbotix_xs_sdk</depend>
+  <depend>interbotix_common_modules</depend>
   <depend>interbotix_xs_modules</depend>
   <depend>interbotix_xslocobot_descriptions</depend>
   <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == kobuki">kobuki_ros</depend>

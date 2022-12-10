@@ -4,11 +4,11 @@
 <!-- The robot has a bumper with 5 contact sensors. The center one is
 functional, while the 4 remaining ones are created as dummy links. -->
 <xacro:macro name="dummy_bumper_zone" params="name parent_link:=base_link *origin">
-  <xacro:property name="link_name" value="${name}"/>
+  <xacro:property name="link_name" value="${robot_name}/${name}"/>
   <xacro:property name="joint_name" value="${name}_joint"/>
 
   <joint name="${joint_name}" type="fixed">
-    <parent link="${parent_link}"/>
+    <parent link="${robot_name}/${parent_link}"/>
     <child link="${link_name}"/>
     <xacro:insert_block name="origin"/>
   </joint>
@@ -17,11 +17,11 @@ functional, while the 4 remaining ones are created as dummy links. -->
 
 <xacro:macro name="bumper" params="name:=bump_front_center parent_link:=base_link update_rate:=62.0 gazebo visual_mesh collision_mesh
   *origin *inertial">
-  <xacro:property name="link_name" value="${name}"/>
+  <xacro:property name="link_name" value="${robot_name}/${name}"/>
   <xacro:property name="joint_name" value="${name}_joint"/>
 
   <joint name="${joint_name}" type="fixed">
-    <parent link="${parent_link}"/>
+    <parent link="${robot_name}/${parent_link}"/>
     <child link="${link_name}"/>
     <xacro:insert_block name="origin"/>
   </joint>

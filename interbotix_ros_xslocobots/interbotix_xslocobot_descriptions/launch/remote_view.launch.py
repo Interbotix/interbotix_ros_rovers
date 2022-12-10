@@ -37,6 +37,7 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def launch_setup(context, *args, **kwargs):
+    robot_name_launch_arg = LaunchConfiguration('robot_name')
     rviz_frame_launch_arg = LaunchConfiguration('rviz_frame')
     rvizconfig_launch_arg = LaunchConfiguration('rvizconfig')
 
@@ -44,6 +45,7 @@ def launch_setup(context, *args, **kwargs):
         package='rviz2',
         executable='rviz2',
         name='rviz2',
+        namespace=robot_name_launch_arg,
         arguments=[
             '-d', rvizconfig_launch_arg,
             '-f', rviz_frame_launch_arg,
@@ -60,8 +62,15 @@ def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'rviz_frame',
-            default_value='base_footprint',
+            default_value=(LaunchConfiguration('robot_name'), '/base_footprint'),
             description=(
                 'fixed frame in RViz; this should be changed to `map` or `odom` if '
                 'mapping or using local odometry respectively.'

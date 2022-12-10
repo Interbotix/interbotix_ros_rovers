@@ -3,11 +3,11 @@
 
 <xacro:macro name="button" params="name parent_link:=base_link *origin">
   <joint name="${name}_joint" type="fixed">
-    <parent link="${parent_link}"/>
-    <child link="${name}"/>
+    <parent link="${robot_name}/${parent_link}"/>
+    <child link="${robot_name}/${name}"/>
     <xacro:insert_block name="origin"/>
   </joint>
-  <link name="${name}"/>
+  <link name="${robot_name}/${name}"/>
 </xacro:macro>
 
 </robot>

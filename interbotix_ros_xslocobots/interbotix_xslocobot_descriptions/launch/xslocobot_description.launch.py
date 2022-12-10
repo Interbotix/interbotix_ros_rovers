@@ -37,6 +37,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition
 from launch.substitutions import (
+    EnvironmentVariable,
     LaunchConfiguration,
     PathJoinSubstitution,
     PythonExpression,
@@ -125,6 +126,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'robot_model',
+            default_value=EnvironmentVariable('INTERBOTIX_XSLOCOBOT_ROBOT_MODEL'),
             choices=get_interbotix_xslocobot_models(),
             description=(
                 'model type of the Interbotix LoCoBot such as `locobot_base` or `locobot_wx250s`.'
@@ -152,6 +154,14 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            'use_lidar',
+            default_value='false',
+            choices=('true', 'false'),
+            description='if `true`, the RPLidar node is launched.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'use_rviz',
             default_value='true',
             choices=('true', 'false'),
@@ -161,7 +171,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'rviz_frame',
-            default_value=(LaunchConfiguration('robot_name'), '/base_footprint'),
+            default_value=(LaunchConfiguration('robot_name'), '/base_link'),
             description=(
                 'fixed frame in RViz; this should be changed to `map` or `odom` if '
                 'mapping or using local odometry respectively.'

@@ -26,6 +26,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from interbotix_common_modules.launch import AndCondition
 from interbotix_xs_modules.xs_common import (
     get_interbotix_xslocobot_models,
 )
@@ -37,11 +38,14 @@ from interbotix_xs_modules.xs_launch.xs_launch import determine_use_sim_time_par
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
-    GroupAction,
     IncludeLaunchDescription,
     OpaqueFunction,
 )
-from launch.conditions import IfCondition, LaunchConfigurationEquals, UnlessCondition
+from launch.conditions import (
+    IfCondition,
+    LaunchConfigurationEquals,
+    UnlessCondition
+)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
     EnvironmentVariable,
@@ -49,7 +53,7 @@ from launch.substitutions import (
     PathJoinSubstitution,
     PythonExpression,
 )
-from launch_ros.actions import Node, PushRosNamespace
+from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterFile, ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
@@ -65,12 +69,8 @@ def launch_setup(context, *args, **kwargs):
 
     use_camera_launch_arg = LaunchConfiguration('use_camera')
     rs_camera_pointcloud_enable_launch_arg = LaunchConfiguration('rs_camera_pointcloud_enable')
-    rs_rbg_camera_profile_launch_arg = LaunchConfiguration('rs_rbg_camera_profile')
-    rs_depth_module_profile_launch_arg = LaunchConfiguration('rs_depth_module_profile')
     rs_camera_logging_level_launch_arg = LaunchConfiguration('rs_camera_logging_level')
     rs_camera_output_location_launch_arg = LaunchConfiguration('rs_camera_output_location')
-    rs_camera_align_depth_launch_arg = LaunchConfiguration('rs_camera_align_depth')
-    rs_camera_initial_reset_launch_arg = LaunchConfiguration('rs_camera_initial_reset')
 
     motor_configs_launch_arg = LaunchConfiguration('motor_configs')
     mode_configs_launch_arg = LaunchConfiguration('mode_configs')
@@ -154,9 +154,10 @@ def launch_setup(context, *args, **kwargs):
     )
 
     kobuki_node = Node(
-        condition=(
-            IfCondition(use_base_launch_arg) and LaunchConfigurationEquals('base_type', 'kobuki')
-        ),
+        condition=AndCondition([
+            use_base_launch_arg,
+            LaunchConfigurationEquals('base_type', 'kobuki'),
+        ]),
         package='kobuki_node',
         executable='kobuki_ros_node',
         name='kobuki_ros_node',
@@ -169,44 +170,70 @@ def launch_setup(context, *args, **kwargs):
 
     rplidar_node = Node(
         condition=IfCondition(use_lidar_launch_arg),
-        package='rplidar_ros2',
-        executable='rplidar_scan_publisher',
-        name='rplidar_scan_publisher',
-        output={'both': 'screen'},
+        package='rplidar_ros',
+        executable='rplidar_composition',
         namespace=robot_name_launch_arg,
+        output={'both': 'screen'},
+        name='rplidar_composition',
         parameters=[{
             'serial_port': '/dev/rplidar',
-            'serial_baudrate': 115200,
+            'serial_baudrate': 115200,  # A1 / A2
+            # 'serial_baudrate': 256000, # A3
             'frame_id': (robot_name_launch_arg, '/laser_frame_link'),
             'inverted': False,
-            'angle_conpensate': True,
+            'angle_compensate': True,
         }],
     )
 
-    rs_camera_launch_include_w_ns = GroupAction(
-        actions=[
-            PushRosNamespace(robot_name_launch_arg),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([
-                    PathJoinSubstitution([
-                        FindPackageShare('realsense2_camera'),
-                        'launch',
-                        'rs_launch.py',
-                    ])
+    rs_camera_node = Node(
+        condition=IfCondition(use_camera_launch_arg),
+        package='realsense2_camera',
+        executable='realsense2_camera_node',
+        namespace=(robot_name_launch_arg, '/camera'),
+        name='camera',
+        parameters=[
+            {
+                'publish_tf': True,
+                'pointcloud.enable': rs_camera_pointcloud_enable_launch_arg,
+            },
+            ParameterFile(
+                param_file=PathJoinSubstitution([
+                    FindPackageShare('interbotix_xslocobot_control'),
+                    'config',
+                    'rs_camera.yaml'
                 ]),
-                launch_arguments={
-                    'camera_name': 'camera',
-                    'rgb_camera.profile': rs_rbg_camera_profile_launch_arg,
-                    'depth_module.profile': rs_depth_module_profile_launch_arg,
-                    'enable_pointcloud': rs_camera_pointcloud_enable_launch_arg,
-                    'align_depth.enable': rs_camera_align_depth_launch_arg,
-                    'initial_reset': rs_camera_initial_reset_launch_arg,
-                    'log_level': rs_camera_logging_level_launch_arg,
-                    'output': rs_camera_output_location_launch_arg,
-                }.items(),
-                condition=IfCondition(use_camera_launch_arg),
-            )
-        ]
+                allow_substs=True,
+            ),
+        ],
+        output=rs_camera_output_location_launch_arg.perform(context),
+        arguments=[
+            '--ros-args', '--log-level', rs_camera_logging_level_launch_arg.perform(context)
+        ],
+        emulate_tty=True,
+    )
+
+    tf_rebroadcaster_launch_include = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare('interbotix_tf_tools'),
+                'launch',
+                'tf_rebroadcaster.launch.py'
+            ])
+        ]),
+        condition=AndCondition([
+            LaunchConfiguration('use_base_odom_tf'),
+            use_base_launch_arg,
+            LaunchConfigurationEquals('base_type', 'create3'),
+        ]),
+        launch_arguments={
+            'tf_rebroadcaster_config': PathJoinSubstitution([
+                FindPackageShare('interbotix_xslocobot_control'),
+                'config',
+                'tf_rebroadcaster.yaml'
+            ]),
+            'topic_from': ('/', robot_name_launch_arg, '/mobile_base/tf'),
+            'topic_to': '/tf',
+        }.items(),
     )
 
     return [
@@ -215,7 +242,8 @@ def launch_setup(context, *args, **kwargs):
         xs_sdk_sim_node,
         kobuki_node,
         rplidar_node,
-        rs_camera_launch_include_w_ns,
+        rs_camera_node,
+        tf_rebroadcaster_launch_include,
     ]
 
 
@@ -224,6 +252,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'robot_model',
+            default_value=EnvironmentVariable('INTERBOTIX_XSLOCOBOT_ROBOT_MODEL'),
             choices=get_interbotix_xslocobot_models(),
             description=(
               'model type of the Interbotix LoCoBot such as `locobot_base` or `locobot_wx250s`.'
@@ -260,7 +289,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'rviz_frame',
-            default_value=(LaunchConfiguration('robot_name'), 'base_footprint'),
+            default_value=(LaunchConfiguration('robot_name'), '/base_link'),
             description=(
                 'fixed frame in RViz; this should be changed to `map` or `odom` if '
                 'mapping or using local odometry respectively.'
@@ -283,6 +312,17 @@ def generate_launch_description():
     #         description='if `true`, loads AutoDock features.',
     #     )
     # )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'use_base_odom_tf',
+            default_value='true',
+            choices=('true', 'false'),
+            description=(
+                'if `true`, the odom TF from the base will be published. This only works on the '
+                'Create 3 base.'
+            ),
+        )
+    )
     declared_arguments.append(
         DeclareLaunchArgument(
             'base_type',

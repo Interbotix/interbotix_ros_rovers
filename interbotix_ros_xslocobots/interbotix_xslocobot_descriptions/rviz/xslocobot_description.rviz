@@ -317,8 +317,6 @@ Visualization Manager:
           Value: true
         odom:
           Value: true
-        std_dock_link:
-          Value: true
       Marker Scale: 0.15000000596046448
       Name: TF
       Show Arrows: true

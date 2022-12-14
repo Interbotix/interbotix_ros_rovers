@@ -1,6 +1,6 @@
 # interbotix_xslocobot_landmark_nav
 
-[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://www.trossenrobotics.com/docs/interbotix_xslocobots/ros_packages/landmark_based_navigation.html)
+[![View Documentation](https://docs.trossenrobotics.com/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros2_packages/landmark_based_navigation.html)
 
 ## Overview
 

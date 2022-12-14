@@ -1,6 +1,6 @@
 # interbotix_xslocobot_ros_control
 
-[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/ros_control.html)
+[![View Documentation](https://docs.trossenrobotics.com/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/ros_control.html)
 
 ## Overview
 

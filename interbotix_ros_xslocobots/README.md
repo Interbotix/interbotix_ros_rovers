@@ -1,6 +1,6 @@
 # InterbotiX X-Series LoCoBot ROS Packages
 
-[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs)
+[![View Documentation](https://docs.trossenrobotics.com/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/index.html)
 
 ![xslocobot_banner](images/xslocobot_banner.png)
 
@@ -42,9 +42,9 @@ All the ROS packages and Python scripts found within the [examples](examples/) d
 
 ## Documentation
 
-Find all documentation related to the X-Series LoCoBots including specifications, hardware setup, ROS packages, troubleshooting, and more at the [Trossen Robotics X-Series LoCoBot Documentation site](https://docs.trossenrobotics.com/interbotix_xslocobots_docs).
+Find all documentation related to the X-Series LoCoBots including specifications, hardware setup, ROS packages, troubleshooting, and more at the [Trossen Robotics X-Series LoCoBot Documentation site](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/index.html).
 
-Look for the [![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs) button on package and example READMEs for their structure and usage information.
+Look for the [![View Documentation](https://docs.trossenrobotics.com/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/index.html) button on package and example READMEs for their structure and usage information.
 
 ## Contributing
 To contribute your own custom X-Series LoCoBot in this repo, you will need to do the following steps:

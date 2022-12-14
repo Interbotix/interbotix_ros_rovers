@@ -1,6 +1,6 @@
 # interbotix_xslocobot_moveit_interface
 
-[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/moveit_interface_and_api.html)
+[![View Documentation](https://docs.trossenrobotics.com/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/moveit_interface_and_api.html)
 
 ## Overview
 

@@ -1,6 +1,6 @@
 # interbotix_xslocobot_descriptions
 
-[![View Documentation](https://trossenrobotics.com/docs/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/locobot_descriptions.html)
+[![View Documentation](https://docs.trossenrobotics.com/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/locobot_descriptions.html)
 
 ## Overview
 

@@ -1,138 +1,139 @@
-controller_manager:
-  ros__parameters:
-    update_rate: 1000
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-    arm_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-    gripper_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-    diffdrive_controller:
-      type: diff_drive_controller/DiffDriveController
-    camera_controller:
-      type: position_controllers/JointGroupPositionController
-arm_controller:
-  ros__parameters:
-    use_sim_time: True
-    joints:
-      - waist
-      - shoulder
-      - elbow
-      - forearm_roll
-      - wrist_angle
-      - wrist_rotate
-    interface_name: position
-    command_interfaces:
-      - position
-    state_interfaces:
-      - position
-    state_publish_rate: 50.0
-    action_monitor_rate: 20.0
-    constraints:
-      stopped_velocity_tolerance: 0.02
-      goal_time: 1.0
-gripper_controller:
-  ros__parameters:
-    use_sim_time: True
-    joints:
-      - left_finger
-      - right_finger
-    interface_name: position
-    command_interfaces:
-      - position
-    state_interfaces:
-      - position
-joint_state_broadcaster:
-  ros__parameters:
-    use_sim_time: True
-    joints:
-      - waist
-      - shoulder
-      - elbow
-      - forearm_roll
-      - wrist_angle
-      - wrist_rotate
-      - gripper
-      - left_finger
-      - right_finger
-      - left_wheel_joint
-      - right_wheel_joint
-      - pan
-      - tilt
-diffdrive_controller:
-  ros__parameters:
-    use_sim_time: True
-    left_wheel_names: ["left_wheel_joint"]
-    right_wheel_names: ["right_wheel_joint"]
+locobot:
+  controller_manager:
+    ros__parameters:
+      update_rate: 1000
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+      arm_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+      gripper_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+      diffdrive_controller:
+        type: diff_drive_controller/DiffDriveController
+      camera_controller:
+        type: position_controllers/JointGroupPositionController
+  arm_controller:
+    ros__parameters:
+      use_sim_time: True
+      joints:
+        - waist
+        - shoulder
+        - elbow
+        - forearm_roll
+        - wrist_angle
+        - wrist_rotate
+      interface_name: position
+      command_interfaces:
+        - position
+      state_interfaces:
+        - position
+      state_publish_rate: 50.0
+      action_monitor_rate: 20.0
+      constraints:
+        stopped_velocity_tolerance: 0.02
+        goal_time: 1.0
+  gripper_controller:
+    ros__parameters:
+      use_sim_time: True
+      joints:
+        - left_finger
+        - right_finger
+      interface_name: position
+      command_interfaces:
+        - position
+      state_interfaces:
+        - position
+  joint_state_broadcaster:
+    ros__parameters:
+      use_sim_time: True
+      joints:
+        - waist
+        - shoulder
+        - elbow
+        - forearm_roll
+        - wrist_angle
+        - wrist_rotate
+        - gripper
+        - left_finger
+        - right_finger
+        - left_wheel_joint
+        - right_wheel_joint
+        - pan
+        - tilt
+  diffdrive_controller:
+    ros__parameters:
+      use_sim_time: True
+      left_wheel_names: ["left_wheel_joint"]
+      right_wheel_names: ["right_wheel_joint"]
 
-    wheel_separation: 0.233
-    wheel_radius: 0.03575
+      wheel_separation: 0.233
+      wheel_radius: 0.03575
 
-    # Multiplier applied to the wheel separation parameter.
-    # This is used to account for a difference between the robot model and a real robot.
-    wheel_separation_multiplier: 1.0
+      # Multiplier applied to the wheel separation parameter.
+      # This is used to account for a difference between the robot model and a real robot.
+      wheel_separation_multiplier: 1.0
 
-    # Multipliers applied to the wheel radius parameter.
-    # This is used to account for a difference between the robot model and a real robot.
-    left_wheel_radius_multiplier: 1.0
-    right_wheel_radius_multiplier: 1.0
+      # Multipliers applied to the wheel radius parameter.
+      # This is used to account for a difference between the robot model and a real robot.
+      left_wheel_radius_multiplier: 1.0
+      right_wheel_radius_multiplier: 1.0
 
-    publish_rate: 62.0
-    odom_frame_id: odom
-    base_frame_id: base_footprint
-    pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
-    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+      publish_rate: 62.0
+      odom_frame_id: locobot/odom
+      base_frame_id: locobot/base_footprint
+      pose_covariance_diagonal : [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+      twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
 
-    open_loop: false
-    enable_odom_tf: true
+      open_loop: false
+      enable_odom_tf: true
 
-    cmd_vel_timeout: 0.5
-    use_stamped_vel: false
+      cmd_vel_timeout: 0.5
+      use_stamped_vel: false
 
-    # Preserve turning radius when limiting speed/acceleration/jerk
-    preserve_turning_radius: true
+      # Preserve turning radius when limiting speed/acceleration/jerk
+      preserve_turning_radius: true
 
-    # Publish limited velocity
-    publish_cmd: true
+      # Publish limited velocity
+      publish_cmd: true
 
-    # Publish wheel data
-    publish_wheel_data: true
+      # Publish wheel data
+      publish_wheel_data: true
 
-    # Velocity and acceleration limits in cartesian
-    # These limits do not factor in per wheel limits
-    # that might be exceeded when linear and angular are combined
-    # Whenever a min_* is unspecified, default to -max_*
-    linear.x.has_velocity_limits: true
-    linear.x.has_acceleration_limits: true
-    linear.x.has_jerk_limits: false
-    # This is max if system is safety_override "full"
-    # motion_control_node will bound this to 0.306 if safety enabled (as is by default)
-    linear.x.max_velocity: 0.46
-    linear.x.min_velocity: -0.46
-    linear.x.max_acceleration: 0.9
-    # Not using jerk limits yet
-    # linear.x.max_jerk: 0.0
-    # linear.x.min_jerk: 0.0
+      # Velocity and acceleration limits in cartesian
+      # These limits do not factor in per wheel limits
+      # that might be exceeded when linear and angular are combined
+      # Whenever a min_* is unspecified, default to -max_*
+      linear.x.has_velocity_limits: true
+      linear.x.has_acceleration_limits: true
+      linear.x.has_jerk_limits: false
+      # This is max if system is safety_override "full"
+      # motion_control_node will bound this to 0.306 if safety enabled (as is by default)
+      linear.x.max_velocity: 0.46
+      linear.x.min_velocity: -0.46
+      linear.x.max_acceleration: 0.9
+      # Not using jerk limits yet
+      # linear.x.max_jerk: 0.0
+      # linear.x.min_jerk: 0.0
 
-    angular.z.has_velocity_limits: true
-    angular.z.has_acceleration_limits: true
-    angular.z.has_jerk_limits: false
-    angular.z.max_velocity: 1.9
-    angular.z.min_velocity: -1.9
-    # Using 0.9 linear for each wheel, assuming one wheel accel to .9
-    # and other to -.9 with wheelbase leads to 7.725 rad/s^2
-    angular.z.max_acceleration: 7.725
-    angular.z.min_acceleration: -7.725
-    # Not using jerk limits yet
-    # angular.z.max_jerk: 0.0
-    # angular.z.min_jerk: 0.0
-camera_controller:
-  ros__parameters:
-    use_sim_time: True
-    joints:
-      - pan
-      - tilt
-    command_interfaces:
-      - position
-    state_interfaces:
-      - position
+      angular.z.has_velocity_limits: true
+      angular.z.has_acceleration_limits: true
+      angular.z.has_jerk_limits: false
+      angular.z.max_velocity: 1.9
+      angular.z.min_velocity: -1.9
+      # Using 0.9 linear for each wheel, assuming one wheel accel to .9
+      # and other to -.9 with wheelbase leads to 7.725 rad/s^2
+      angular.z.max_acceleration: 7.725
+      angular.z.min_acceleration: -7.725
+      # Not using jerk limits yet
+      # angular.z.max_jerk: 0.0
+      # angular.z.min_jerk: 0.0
+  camera_controller:
+    ros__parameters:
+      use_sim_time: True
+      joints:
+        - pan
+        - tilt
+      command_interfaces:
+        - position
+      state_interfaces:
+        - position

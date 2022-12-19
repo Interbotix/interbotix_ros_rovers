@@ -46,6 +46,7 @@ from launch.actions import (
 from launch.conditions import IfCondition, LaunchConfigurationEquals
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
+    EnvironmentVariable,
     LaunchConfiguration,
     PathJoinSubstitution,
     PythonExpression,
@@ -300,6 +301,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'robot_model',
+            default_value=EnvironmentVariable('INTERBOTIX_XSLOCOBOT_ROBOT_MODEL'),
             choices=get_interbotix_xslocobot_models(),
             description=(
               'model type of the Interbotix Locobot such as `locobot_base` or `locobot_wx250s`.'
@@ -327,6 +329,14 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            'use_lidar',
+            default_value='false',
+            choices=('true', 'false'),
+            description='if `true`, the RPLidar node is launched.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'external_srdf_loc',
             default_value=TextSubstitution(text=''),
             description=(
@@ -341,7 +351,7 @@ def generate_launch_description():
             default_value=PathJoinSubstitution([
                 FindPackageShare('interbotix_xslocobot_moveit'),
                 'config',
-                'modes.yaml',
+                'modes_all.yaml',
             ]),
             description="the file path to the 'mode config' YAML file.",
         )

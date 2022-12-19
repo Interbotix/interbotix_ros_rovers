@@ -85,7 +85,7 @@
     <disable_collisions link1="${robot_name}/ar_tag_link"                 link2="${robot_name}/wrist_link"          reason="Never" />
     <disable_collisions link1="${robot_name}/arm_base_link"               link2="${robot_name}/base_link"           reason="Default" />
     <disable_collisions link1="${robot_name}/arm_base_link"               link2="${robot_name}/battery_link"        reason="Default" />
-    <disable_collisions link1="${robot_name}/arm_base_link"               link2="${robot_name}/camera_link"         reason="Never" />
+    <disable_collisions link1="${robot_name}/arm_base_link"               link2="camera_${robot_name}_link"         reason="Never" />
     <disable_collisions link1="${robot_name}/arm_base_link"               link2="${robot_name}/camera_tower_link"   reason="Never" />
     <disable_collisions link1="${robot_name}/arm_base_link"               link2="${robot_name}/pan_link"            reason="Never" />
     <disable_collisions link1="${robot_name}/arm_base_link"               link2="${robot_name}/plate_link"          reason="Adjacent" />
@@ -93,21 +93,21 @@
     <disable_collisions link1="${robot_name}/arm_base_link"               link2="${robot_name}/tilt_link"           reason="Never" />
     <disable_collisions link1="${robot_name}/arm_base_link"               link2="${robot_name}/upper_arm_link"      reason="Never" />
     <disable_collisions link1="${robot_name}/base_link"                   link2="${robot_name}/battery_link"        reason="Default" />
-    <disable_collisions link1="${robot_name}/base_link"                   link2="${robot_name}/camera_link"         reason="Never" />
+    <disable_collisions link1="${robot_name}/base_link"                   link2="camera_${robot_name}_link"         reason="Never" />
     <disable_collisions link1="${robot_name}/base_link"                   link2="${robot_name}/camera_tower_link"   reason="Adjacent" />
     <disable_collisions link1="${robot_name}/base_link"                   link2="${robot_name}/pan_link"            reason="Never" />
     <disable_collisions link1="${robot_name}/base_link"                   link2="${robot_name}/plate_link"          reason="Adjacent" />
     <disable_collisions link1="${robot_name}/base_link"                   link2="${robot_name}/shoulder_link"       reason="Never" />
     <disable_collisions link1="${robot_name}/base_link"                   link2="${robot_name}/tilt_link"           reason="Never" />
-    <disable_collisions link1="${robot_name}/battery_link"                link2="${robot_name}/camera_link"         reason="Never" />
+    <disable_collisions link1="${robot_name}/battery_link"                link2="camera_${robot_name}_link"         reason="Never" />
     <disable_collisions link1="${robot_name}/battery_link"                link2="${robot_name}/camera_tower_link"   reason="Never" />
     <disable_collisions link1="${robot_name}/battery_link"                link2="${robot_name}/pan_link"            reason="Never" />
     <disable_collisions link1="${robot_name}/battery_link"                link2="${robot_name}/plate_link"          reason="Adjacent" />
     <disable_collisions link1="${robot_name}/battery_link"                link2="${robot_name}/shoulder_link"       reason="Never" />
     <disable_collisions link1="${robot_name}/battery_link"                link2="${robot_name}/tilt_link"           reason="Never" />
-    <disable_collisions link1="${robot_name}/camera_link"                 link2="${robot_name}/plate_link"          reason="Never" />
-    <disable_collisions link1="${robot_name}/camera_link"                 link2="${robot_name}/shoulder_link"       reason="Never" />
-    <disable_collisions link1="${robot_name}/camera_link"                 link2="${robot_name}/tilt_link"           reason="Adjacent" />
+    <disable_collisions link1="camera_${robot_name}_link"                 link2="${robot_name}/plate_link"          reason="Never" />
+    <disable_collisions link1="camera_${robot_name}_link"                 link2="${robot_name}/shoulder_link"       reason="Never" />
+    <disable_collisions link1="camera_${robot_name}_link"                 link2="${robot_name}/tilt_link"           reason="Adjacent" />
     <disable_collisions link1="${robot_name}/camera_tower_link"           link2="${robot_name}/pan_link"            reason="Adjacent" />
     <disable_collisions link1="${robot_name}/camera_tower_link"           link2="${robot_name}/plate_link"          reason="Never" />
     <disable_collisions link1="${robot_name}/camera_tower_link"           link2="${robot_name}/shoulder_link"       reason="Never" />
@@ -164,10 +164,10 @@
         <disable_collisions link1="${robot_name}/battery_link"            link2="${robot_name}/caster_front_link"   reason="Never" />
         <disable_collisions link1="${robot_name}/battery_link"            link2="${robot_name}/wheel_left_link"     reason="Never" />
         <disable_collisions link1="${robot_name}/battery_link"            link2="${robot_name}/wheel_right_link"    reason="Never" />
-        <disable_collisions link1="${robot_name}/camera_link"             link2="${robot_name}/caster_back_link"    reason="Never" />
-        <disable_collisions link1="${robot_name}/camera_link"             link2="${robot_name}/caster_front_link"   reason="Never" />
-        <disable_collisions link1="${robot_name}/camera_link"             link2="${robot_name}/wheel_left_link"     reason="Never" />
-        <disable_collisions link1="${robot_name}/camera_link"             link2="${robot_name}/wheel_right_link"    reason="Never" />
+        <disable_collisions link1="camera_${robot_name}_link"             link2="${robot_name}/caster_back_link"    reason="Never" />
+        <disable_collisions link1="camera_${robot_name}_link"             link2="${robot_name}/caster_front_link"   reason="Never" />
+        <disable_collisions link1="camera_${robot_name}_link"             link2="${robot_name}/wheel_left_link"     reason="Never" />
+        <disable_collisions link1="camera_${robot_name}_link"             link2="${robot_name}/wheel_right_link"    reason="Never" />
         <disable_collisions link1="${robot_name}/camera_tower_link"       link2="${robot_name}/caster_back_link"    reason="Never" />
         <disable_collisions link1="${robot_name}/camera_tower_link"       link2="${robot_name}/caster_front_link"   reason="Never" />
         <disable_collisions link1="${robot_name}/camera_tower_link"       link2="${robot_name}/wheel_left_link"     reason="Never" />
@@ -207,7 +207,7 @@
             <disable_collisions link1="${robot_name}/base_link"           link2="${robot_name}/lidar_tower_link"    reason="Never" />
             <disable_collisions link1="${robot_name}/battery_link"        link2="${robot_name}/laser_frame_link"    reason="Never" />
             <disable_collisions link1="${robot_name}/battery_link"        link2="${robot_name}/lidar_tower_link"    reason="Never" />
-            <disable_collisions link1="${robot_name}/camera_link"         link2="${robot_name}/laser_frame_link"    reason="Never" />
+            <disable_collisions link1="camera_${robot_name}_link"         link2="${robot_name}/laser_frame_link"    reason="Never" />
             <disable_collisions link1="${robot_name}/camera_tower_link"   link2="${robot_name}/laser_frame_link"    reason="Never" />
             <disable_collisions link1="${robot_name}/camera_tower_link"   link2="${robot_name}/lidar_tower_link"    reason="Adjacent" />
             <disable_collisions link1="${robot_name}/caster_back_link"    link2="${robot_name}/laser_frame_link"    reason="Never" />
@@ -242,8 +242,8 @@
         <disable_collisions link1="${robot_name}/base_link"               link2="${robot_name}/right_wheel"         reason="Adjacent" />
         <disable_collisions link1="${robot_name}/battery_link"            link2="${robot_name}/bump_caster_link"    reason="Never" />
         <disable_collisions link1="${robot_name}/battery_link"            link2="${robot_name}/bump_front_center"   reason="Never" />
-        <disable_collisions link1="${robot_name}/camera_link"             link2="${robot_name}/bump_caster_link"    reason="Never" />
-        <disable_collisions link1="${robot_name}/camera_link"             link2="${robot_name}/bump_front_center"   reason="Never" />
+        <disable_collisions link1="camera_${robot_name}_link"             link2="${robot_name}/bump_caster_link"    reason="Never" />
+        <disable_collisions link1="camera_${robot_name}_link"             link2="${robot_name}/bump_front_center"   reason="Never" />
         <disable_collisions link1="${robot_name}/camera_tower_link"       link2="${robot_name}/bump_caster_link"    reason="Never" />
         <disable_collisions link1="${robot_name}/camera_tower_link"       link2="${robot_name}/bump_front_center"   reason="Never" />
         <disable_collisions link1="${robot_name}/bump_caster_link"        link2="${robot_name}/bump_front_center"   reason="Never" />
@@ -271,7 +271,7 @@
             <disable_collisions link1="${robot_name}/base_link"           link2="${robot_name}/lidar_tower_link"    reason="Never" />
             <disable_collisions link1="${robot_name}/battery_link"        link2="${robot_name}/laser_frame_link"    reason="Never" />
             <disable_collisions link1="${robot_name}/battery_link"        link2="${robot_name}/lidar_tower_link"    reason="Never" />
-            <disable_collisions link1="${robot_name}/camera_link"         link2="${robot_name}/laser_frame_link"    reason="Never" />
+            <disable_collisions link1="camera_${robot_name}_link"         link2="${robot_name}/laser_frame_link"    reason="Never" />
             <disable_collisions link1="${robot_name}/camera_tower_link"   link2="${robot_name}/laser_frame_link"    reason="Never" />
             <disable_collisions link1="${robot_name}/camera_tower_link"   link2="${robot_name}/lidar_tower_link"    reason="Adjacent" />
             <disable_collisions link1="${robot_name}/bump_caster_link"    link2="${robot_name}/laser_frame_link"    reason="Never" />

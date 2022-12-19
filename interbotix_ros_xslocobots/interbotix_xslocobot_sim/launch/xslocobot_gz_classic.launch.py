@@ -58,6 +58,7 @@ from launch_ros.substitutions import FindPackageShare
 def launch_setup(context, *args, **kwargs):
 
     robot_model_launch_arg = LaunchConfiguration('robot_model')
+    robot_name_launch_arg = LaunchConfiguration('robot_name')
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
     rviz_config_launch_arg = LaunchConfiguration('rvizconfig')
     world_filepath_launch_arg = LaunchConfiguration('world_filepath')
@@ -150,6 +151,7 @@ def launch_setup(context, *args, **kwargs):
         package='gazebo_ros',
         executable='spawn_entity.py',
         name='spawn_robot',
+        namespace=robot_name_launch_arg,
         arguments=[
             '-entity', 'robot_description',
             '-topic', 'robot_description',
@@ -167,7 +169,7 @@ def launch_setup(context, *args, **kwargs):
         executable='spawner',
         arguments=[
             '-c',
-            'controller_manager',
+            f'{robot_name_launch_arg.perform(context)}/controller_manager',
             'joint_state_broadcaster',
         ],
     )
@@ -182,7 +184,7 @@ def launch_setup(context, *args, **kwargs):
         executable='spawner',
         arguments=[
             '-c',
-            'controller_manager',
+            f'{robot_name_launch_arg.perform(context)}/controller_manager',
             'arm_controller',
         ],
     )
@@ -198,7 +200,7 @@ def launch_setup(context, *args, **kwargs):
         executable='spawner',
         arguments=[
             '-c',
-            'controller_manager',
+            f'{robot_name_launch_arg.perform(context)}/controller_manager',
             'gripper_controller',
         ],
     )
@@ -209,7 +211,7 @@ def launch_setup(context, *args, **kwargs):
         executable='spawner',
         arguments=[
             '-c',
-            'controller_manager',
+            f'{robot_name_launch_arg.perform(context)}/controller_manager',
             'camera_controller',
         ],
     )
@@ -220,7 +222,7 @@ def launch_setup(context, *args, **kwargs):
         executable='spawner',
         arguments=[
             '-c',
-            'controller_manager',
+            f'{robot_name_launch_arg.perform(context)}/controller_manager',
             'diffdrive_controller',
         ],
     )
@@ -303,10 +305,18 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'robot_model',
+            default_value=EnvironmentVariable('INTERBOTIX_XSLOCOBOT_ROBOT_MODEL'),
             choices=get_interbotix_xslocobot_models(),
             description=(
               'model type of the Interbotix LoCoBot such as `locobot_base` or `locobot_wx250s`.'
             ),
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
         )
     )
     declared_arguments.append(
@@ -319,6 +329,14 @@ def generate_launch_description():
                 'the Interbotix Arm model on the LoCoBot; this should never be set manually but '
                 'rather left to its default value.'
             ),
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'use_lidar',
+            default_value='false',
+            choices=('true', 'false'),
+            description='if `true`, the RPLidar node is launched.',
         )
     )
     declared_arguments.append(

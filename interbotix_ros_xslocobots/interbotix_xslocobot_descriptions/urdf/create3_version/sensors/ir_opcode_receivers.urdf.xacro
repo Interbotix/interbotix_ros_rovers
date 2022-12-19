@@ -59,7 +59,7 @@
       <gazebo>
         <plugin name="${name}_plugin" filename="libgazebo_ros_create_ir_opcode.so">
           <ros>
-            <namespace>/</namespace>
+            <namespace>/${robot_name}</namespace>
             <remapping>~/out:=ir_opcode</remapping>
           </ros>
           <update_rate>${update_rate}</update_rate>

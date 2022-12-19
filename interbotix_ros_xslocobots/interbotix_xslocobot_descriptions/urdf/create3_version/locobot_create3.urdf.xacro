@@ -138,6 +138,11 @@
     <xacro:if value="${hardware_type == 'gz_classic'}">
       <gazebo>
         <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+          <ros>
+            <namespace>/$(arg robot_name)</namespace>
+          </ros>
+          <robot_param>robot_description</robot_param>
+          <robot_param_node>robot_state_publisher</robot_param_node>
           <parameters> $(find interbotix_xslocobot_sim)/config/create3_version/$(arg robot_model)_controllers.yaml </parameters>
         </plugin>
       </gazebo>
@@ -259,7 +264,7 @@
           <ros>
             <remapping>odom:=sim_ground_truth_pose</remapping>
           </ros>
-          <body_name>${robot_name}/base_footprint</body_name>
+          <body_name>${robot_name}/base_link</body_name>
           <frame_name>world</frame_name>
           <update_rate>62</update_rate>
           <xyz_offset>0 0 0</xyz_offset>
@@ -272,7 +277,7 @@
       <gazebo>
         <plugin name="dock_status_publisher" filename="libgazebo_ros_create_docking_status.so">
           <ros>
-            <namespace>/</namespace>
+            <namespace>/${robot_name}</namespace>
             <remapping>~/out:=dock</remapping>
           </ros>
           <update_rate>1.0</update_rate>

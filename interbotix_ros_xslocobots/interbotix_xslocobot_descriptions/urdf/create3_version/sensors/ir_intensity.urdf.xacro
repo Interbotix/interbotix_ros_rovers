@@ -9,6 +9,7 @@
                        visualize:=false *origin" >
 
     <xacro:property name="link_name" value="${robot_name}/ir_intensity_${name}"/>
+    <xacro:property name="sensor_name" value="${robot_name}_ir_intensity_${name}"/>
 
     <joint name="${link_name}_joint" type="fixed">
       <xacro:insert_block name="origin" />
@@ -24,19 +25,19 @@
       <preserveFixedJoint>true</preserveFixedJoint>
     </gazebo>
 
-    <gazebo reference="${link_name}">
-      <xacro:ray_sensor sensor_name="${link_name}" gazebo="${gazebo}"
+    <!-- <gazebo reference="${link_name}">
+      <xacro:ray_sensor sensor_name="${sensor_name}" gazebo="${gazebo}"
                       update_rate="${update_rate}" visualize="${visualize}"
                       h_samples="5" h_res="1.0" h_min_angle="-${fov/2}" h_max_angle="${fov/2}"
                       v_samples="5" v_res="1.0" v_min_angle="-${fov/2}" v_max_angle="${fov/2}"
                       r_min="${min_range}" r_max="${max_range}" r_res="1.0">
           <plugin filename="libgazebo_ros_create_ir_intensity_sensor.so" name="${link_name}">
             <ros>
-              <namespace>/</namespace>
+              <namespace>/${robot_name}</namespace>
               <remapping>~/out:=_internal/${link_name}</remapping>
             </ros>
           </plugin>
       </xacro:ray_sensor>
-    </gazebo>
+    </gazebo> -->
   </xacro:macro>
 </robot>

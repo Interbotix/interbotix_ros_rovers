@@ -62,7 +62,7 @@
       <xacro:if value="${hardware_type == 'gz_classic'}">
         <plugin name="${name}_plugin" filename="libgazebo_ros_create_imu.so">
           <ros>
-            <namespace>/</namespace>
+            <namespace>/$(arg robot_name)</namespace>
             <remapping>~/out:=imu</remapping>
           </ros>
         </plugin>

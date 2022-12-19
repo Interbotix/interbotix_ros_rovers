@@ -17,7 +17,7 @@
       <gazebo>
         <plugin name="${name}_plugin" filename="libgazebo_ros_create_optical_mouse.so">
             <ros>
-              <namespace>/</namespace>
+              <namespace>/${robot_name}</namespace>
               <remapping>~/out:=${name}</remapping>
             </ros>
           <update_rate>${update_rate}</update_rate>

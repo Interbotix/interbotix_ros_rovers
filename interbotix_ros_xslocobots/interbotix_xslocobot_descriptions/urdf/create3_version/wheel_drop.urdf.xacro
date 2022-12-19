@@ -52,7 +52,7 @@
     <gazebo>
       <plugin name="${robot_name}/${wd_link_name}_plugin" filename="libgazebo_ros_create_wheel_drop.so">
         <ros>
-          <namespace>/</namespace>
+          <namespace>/${robot_name}</namespace>
           <remapping>~/out:=_internal/wheel_drop/${name}_wheel/event</remapping>
         </ros>
         <update_rate>${update_rate}</update_rate>

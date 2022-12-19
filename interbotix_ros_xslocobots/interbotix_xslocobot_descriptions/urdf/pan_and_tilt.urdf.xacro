@@ -232,6 +232,9 @@
           </clip>
         </camera>
         <plugin filename="libgazebo_ros_camera.so" name="camera_frame_controller">
+          <ros>
+            <namespace>/$(arg robot_name)</namespace>
+          </ros>
           <alwaysOn>true</alwaysOn>
           <updateRate>0.0</updateRate>
           <cameraName>camera</cameraName>

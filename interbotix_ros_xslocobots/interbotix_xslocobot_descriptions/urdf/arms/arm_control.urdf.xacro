@@ -117,49 +117,52 @@
       </xacro:if>
     </xacro:if>
 
-    <joint name="pan">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
-    </joint>
+    <xacro:if value="${hardware_type == 'fake'}">
 
-    <joint name="tilt">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
-    </joint>
-
-    <xacro:if value="${base_type == 'create3'}">
-
-      <joint name="wheel_drop_left_joint">
+      <joint name="pan">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
       </joint>
 
-      <joint name="wheel_drop_right_joint">
+      <joint name="tilt">
         <command_interface name="position"/>
         <state_interface name="position"/>
         <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
       </joint>
 
-      <joint name="left_wheel_joint">
-        <command_interface name="position"/>
-        <command_interface name="velocity"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
-      </joint>
+      <xacro:if value="${base_type == 'create3'}">
 
-      <joint name="right_wheel_joint">
-        <command_interface name="position"/>
-        <command_interface name="velocity"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
-      </joint>
+        <joint name="wheel_drop_left_joint">
+          <command_interface name="position"/>
+          <state_interface name="position"/>
+          <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
+        </joint>
 
-    </xacro:if> <!-- $(base_type) == 'create3' -->
+        <joint name="wheel_drop_right_joint">
+          <command_interface name="position"/>
+          <state_interface name="position"/>
+          <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
+        </joint>
+
+        <joint name="left_wheel_joint">
+          <command_interface name="position"/>
+          <command_interface name="velocity"/>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+          <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
+        </joint>
+
+        <joint name="right_wheel_joint">
+          <command_interface name="position"/>
+          <command_interface name="velocity"/>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+          <param name="initial_position">0.0</param>  <!-- initial position for the GenericSystem -->
+        </joint>
+
+      </xacro:if> <!-- base_type == 'create3' -->
+    </xacro:if> <!-- hardware_type == 'gz_classic' -->
 
   </ros2_control>
 

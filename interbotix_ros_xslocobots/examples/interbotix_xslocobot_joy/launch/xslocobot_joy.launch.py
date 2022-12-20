@@ -249,7 +249,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'controller',
             default_value='ps4',
-            choices=('ps4', 'ps3', 'xbox360'),
+            choices=('ps4', 'ps3'),
             description='type of controller.',
 
         )

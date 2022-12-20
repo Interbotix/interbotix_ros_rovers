@@ -54,6 +54,7 @@ from launch_ros.substitutions import FindPackageShare
 def launch_setup(context, *args, **kwargs):
 
     robot_model_launch_arg = LaunchConfiguration('robot_model')
+    robot_name_launch_arg = LaunchConfiguration('robot_name')
     arm_model_launch_arg = LaunchConfiguration('arm_model')
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
     rviz_frame_launch_arg = LaunchConfiguration('rviz_frame')
@@ -72,6 +73,7 @@ def launch_setup(context, *args, **kwargs):
         name='joy_node',
         package='joy',
         executable='joy_node',
+        namespace=robot_name_launch_arg,
         parameters=[{
             'dev': '/dev/input/js0',
         }],
@@ -84,6 +86,7 @@ def launch_setup(context, *args, **kwargs):
         name='xslocobot_joy',
         package='interbotix_xslocobot_joy',
         executable='xslocobot_joy',
+        namespace=robot_name_launch_arg,
         parameters=[{
             'threshold': threshold_launch_arg,
             'controller': controller_launch_arg
@@ -93,12 +96,13 @@ def launch_setup(context, *args, **kwargs):
     xslocobot_robot_node = Node(
         package='interbotix_xslocobot_joy',
         executable='xslocobot_robot.py',
+        namespace=robot_name_launch_arg,
         parameters=[{
             'robot_model': robot_model_launch_arg,
         }],
         arguments=[
             '--robot_model', robot_model_launch_arg.perform(context),
-            '--robot_name', '',
+            '--robot_name', robot_name_launch_arg.perform(context),
             '--use_base', use_base_launch_arg.perform(context),
         ],
     )
@@ -113,6 +117,7 @@ def launch_setup(context, *args, **kwargs):
         ]),
         launch_arguments={
             'robot_model': robot_model_launch_arg,
+            'robot_name': robot_name_launch_arg,
             'arm_model': arm_model_launch_arg,
             'use_rviz': use_rviz_launch_arg,
             'rviz_frame': rviz_frame_launch_arg,
@@ -148,6 +153,13 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'arm_model',
             default_value=PythonExpression([
                 '"mobile_" + "', LaunchConfiguration('robot_model'), '".split("_")[1]'
@@ -169,7 +181,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'rviz_frame',
-            default_value='base_footprint',
+            default_value=(LaunchConfiguration('robot_name'), '/base_footprint'),
             description=(
                 'fixed frame in RViz; this should be changed to `map` or `odom` if '
                 'mapping or using local odometry respectively; `base_footprint` otherwise.'

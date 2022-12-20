@@ -44,7 +44,7 @@ from rclpy.utilities import remove_ros_args
 
 class XSLocobotRobot(InterbotixLocobotXS):
     """
-    Proccesses incoming LocobotJoy messages and outputs robot commands.
+    Processes incoming LocobotJoy messages and outputs robot commands.
 
     The XSLocobotRobot class is responsible for reading in LocobotJoy messages and sending joint
     and gripper commands to the xs_sdk node, and twist commands to the base; while the arm's
@@ -347,7 +347,7 @@ class XSLocobotRobot(InterbotixLocobotXS):
 def main(args=None):
     p = argparse.ArgumentParser()
     p.add_argument('--robot_model')
-    p.add_argument('--robot_name', default='')
+    p.add_argument('--robot_name', default='locobot')
     p.add_argument('--use_base', default=False)
     p.add_argument('args', nargs=argparse.REMAINDER)
 

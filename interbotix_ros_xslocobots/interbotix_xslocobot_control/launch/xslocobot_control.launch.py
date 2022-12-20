@@ -360,6 +360,20 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            'rs_rbg_camera_profile',
+            default_value='640,480,30',
+            description='profile for the rbg camera image stream, in `<width>,<height>,<fps>`.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'rs_depth_module_profile',
+            default_value='640,480,30',
+            description='profile for the depth module stream, in `<width>,<height>,<fps>`.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'rs_camera_logging_level',
             default_value='info',
             choices=('debug', 'info', 'warn', 'error', 'fatal'),
@@ -372,6 +386,16 @@ def generate_launch_description():
             default_value='screen',
             choices=('screen', 'log'),
             description='set the logging location for the realsense2_camera launch include.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'rs_camera_align_depth',
+            default_value='false',
+            choices=('true', 'false'),
+            description=(
+                'whether to publish topics with the depth stream aligned with the color stream.'
+            ),
         )
     )
     declared_arguments.append(

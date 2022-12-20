@@ -11,7 +11,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>interbotix_xs_msgs</depend>
   <depend>interbotix_xs_modules</depend>
-  <depend>interbotix_xsloxobot_control</depend>
+  <depend>interbotix_xslocobot_control</depend>
   <depend>launch</depend>
   <depend>launch_ros</depend>
   <depend>joy</depend>

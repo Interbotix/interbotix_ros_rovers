@@ -232,7 +232,7 @@ def launch_setup(context, *args, **kwargs):
                 'tf_rebroadcaster.yaml'
             ]),
             'topic_from': ('/', robot_name_launch_arg, '/mobile_base/tf'),
-            'topic_to': '/tf',
+            'namespace_to': '',
         }.items(),
     )
 

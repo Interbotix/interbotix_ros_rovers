@@ -339,7 +339,7 @@ function install_locobot_ros2() {
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
     cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/cyclonedds_config_locobot.xml $CYCLONEDDS_URI
-    CONNECTION_NAME=$(ifconfig | grep wl | cut -d ":" -f1) sed -i "s,\${WIRELESS_INTERFACE},$CONNECTION_NAME,g" $CYCLONEDDS_URI
+    sed -i "s,\${WIRELESS_INTERFACE},$(ifconfig | grep wl | cut -d ":" -f1),g" $CYCLONEDDS_URI
     cd $INSTALL_PATH
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     if colcon build; then

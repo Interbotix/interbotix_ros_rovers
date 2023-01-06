@@ -183,7 +183,7 @@ function check_ubuntu_version() {
 
 function install_essential_packages() {
   # Install necessary core packages
-  sudo apt-get install -yq openssh-server curl
+  sudo apt-get install -yq openssh-server curl net-tools
   if [ $PY_VERSION == 2 ]; then
     sudo apt-get install -yq python-pip
     sudo -H pip install modern_robotics six
@@ -639,9 +639,10 @@ elapsed="$(($end_time-$start_time))"
 
 echo -e "${GRN}Installation complete, took $elapsed seconds in total.${OFF}"
 echo -e "${GRN}NOTE: Remember to reboot the computer before using the robot!${OFF}"
-echo -e "${BLU}${BOLD}\nReboot now?\n${PROMPT}${NORM}${OFF}\c"
-read -r resp
-if [[ $resp == [yY] || $resp == [yY][eE][sS] ]]; then
-  reboot
+if [ "$NONINTERACTIVE" = false ]; then
+  echo -e "${BLU}${BOLD}\nReboot now?\n${PROMPT}${NORM}${OFF}\c"
+  read -r resp
+  if [[ $resp == [yY] || $resp == [yY][eE][sS] ]]; then
+    reboot
+  fi
 fi
-

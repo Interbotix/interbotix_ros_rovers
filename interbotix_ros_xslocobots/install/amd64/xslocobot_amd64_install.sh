@@ -19,12 +19,13 @@ RRE="${NORM}${OFF}"
 
 PROMPT="> "
 
-ALL_VALID_DISTROS=('melodic' 'noetic' 'galactic')
+ALL_VALID_DISTROS=('melodic' 'noetic' 'galactic' 'humble')
 ROS1_VALID_DISTROS=('melodic' 'noetic')
-ROS2_VALID_DISTROS=('galactic')
+ROS2_VALID_DISTROS=('galactic' 'humble')
 
 BIONIC_VALID_DISTROS=('melodic')
 FOCAL_VALID_DISTROS=('noetic' 'galactic')
+JAMMY_VALID_DISTROS=('humble')
 
 VALID_BASE_TYPES=('kobuki' 'create3')
 
@@ -36,6 +37,7 @@ APRILTAG_WS=~/apriltag_ws
 BRIDGE_WS=~/ros1_bridge_ws
 BRIDGE_MSGS_ROS1_WS=~/create3_ros1_ws
 BRIDGE_MSGS_ROS2_WS=~/create3_ros2_ws
+CYCLONEDDS_URI=~/cyclonedds_config_locobot.xml
 
 _usage="${BOLD}USAGE: ./xslocobot_amd64_install.sh [-h][-d DISTRO][-p PATH][-b BASE_TYPE][-n]${NORM}
 
@@ -164,6 +166,14 @@ function check_ubuntu_version() {
       fi
       ;;
 
+    22.04 )
+      if contains_element $ROS_DISTRO_TO_INSTALL "${JAMMY_VALID_DISTROS[@]}"; then
+        PY_VERSION=3
+      else
+        failed "Chosen ROS distribution '$ROS_DISTRO_TO_INSTALL' is not supported on Ubuntu ${UBUNTU_VERSION}."
+      fi
+      ;;
+
     *)
       failed "Something went wrong."
       ;;
@@ -174,9 +184,6 @@ function check_ubuntu_version() {
 function install_essential_packages() {
   # Install necessary core packages
   sudo apt-get install -yq openssh-server curl
-  if [ $ROS_VERSION_TO_INSTALL == 2 ]; then
-    sudo pip3 install transforms3d
-  fi
   if [ $PY_VERSION == 2 ]; then
     sudo apt-get install -yq python-pip
     sudo -H pip install modern_robotics six
@@ -185,6 +192,9 @@ function install_essential_packages() {
     sudo -H pip3 install modern_robotics six
   else
     failed "Something went wrong."
+  fi
+  if [ $ROS_VERSION_TO_INSTALL == 2 ]; then
+    sudo pip3 install transforms3d
   fi
 }
 
@@ -215,7 +225,7 @@ function install_ros1() {
       build-essential
     fi
     sudo rosdep init
-    rosdep update
+    rosdep update --include-eol-distros
     echo "source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash" >> ~/.bashrc
   else
     echo "ros-$ROS_DISTRO_TO_INSTALL-desktop-full is already installed!"
@@ -230,7 +240,7 @@ function install_ros2() {
     sudo apt-get install -yq      \
       software-properties-common  \
       gnupg
-    sudo add-apt-repository universe
+    sudo add-apt-repository -y universe
     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
     sudo apt update
@@ -246,7 +256,7 @@ function install_ros2() {
       build-essential                   \
       python3-colcon-common-extensions
     sudo rosdep init
-    rosdep update
+    rosdep update --include-eol-distros
     if [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
       echo "source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash" >> ~/.bashrc
       source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash
@@ -258,7 +268,9 @@ function install_ros2() {
 
 function install_perception_ros2() {
   # Install apriltag ROS Wrapper
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $APRILTAG_WS/install/setup.bash && ros2 pkg list | grep -q apriltag; then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $APRILTAG_WS/install/setup.bash && ros2 pkg list | grep -q apriltag_ros; then
+    echo "Apriltag ROS Wrapper already installed!"
+  else
     echo -e "${GRN}${BOLD}Installing Apriltag ROS Wrapper...${NORM}${OFF}"
     mkdir -p $APRILTAG_WS/src
     cd $APRILTAG_WS/src
@@ -271,8 +283,6 @@ function install_perception_ros2() {
     else
       failed "Failed to build Apriltag ROS Wrapper."
     fi
-  else
-    echo "Apriltag ROS Wrapper already installed!"
   fi
   source $APRILTAG_WS/install/setup.bash
 }
@@ -308,7 +318,7 @@ function install_locobot_ros1() {
 }
 
 function install_locobot_ros2() {
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/install/setup.bash && ros2 pkg list | grep -q interbotix_;then
+  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/install/setup.bash && ros2 pkg list | grep -q interbotix_; then
     echo "Interbotix LoCoBot ROS packages already installed!"
   else
     echo -e "${GRN}Installing ROS 2 packages for the Interbotix LoCoBot...${OFF}"
@@ -328,6 +338,8 @@ function install_locobot_ros2() {
     cd interbotix_ros_xseries/interbotix_xs_sdk
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
+    cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/cyclonedds_config_locobot.xml $CYCLONEDDS_URI
+    CONNECTION_NAME=$(ifconfig | grep wl | cut -d ":" -f1) sed -i "s,\${WIRELESS_INTERFACE},$CONNECTION_NAME,g" $CYCLONEDDS_URI
     cd $INSTALL_PATH
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     if colcon build; then
@@ -386,7 +398,7 @@ function install_create3_ros1() {
   # Install packages required to run the Create 3 using ROS 1, including ros1_bridge.
   # We can only install Galactic due to hardware constraints - The intersection of compatibility
   # between ros1_bridge and the Create 3 is Galactic & Noetic
-  # TODO(lsinterbotix) only run this if messages can't be found, otherwise we rebuild ros1_bridge
+  # TODO(lsinterbotix): only run this if messages can't be found, otherwise we rebuild ros1_bridge
   cd $INSTALL_PATH/src
   git clone https://github.com/Interbotix/create3_sim_ros1.git -b ros1
 
@@ -453,9 +465,13 @@ function install_create3_ros1() {
 
 function install_create3_ros2() {
   # Install LoCoBot packages for the Create 3 base
-  cd $INSTALL_PATH/src
-  git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b $ROS_DISTRO_TO_INSTALL
-  git clone https://github.com/iRobotEducation/create3_sim.git -b $ROS_DISTRO_TO_INSTALL
+  if [ -d "$INSTALL_PATH/src/irobot_create_msgs" ]; then
+    :
+  else
+    cd $INSTALL_PATH/src
+    git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b $ROS_DISTRO_TO_INSTALL
+    git clone https://github.com/iRobotEducation/create3_sim.git -b asoragna/humble # TODO(lsinterbotix): change to distro branch once humble branch exists
+  fi
 }
 
 function setup_env_vars_ros1() {
@@ -479,6 +495,7 @@ function setup_env_vars_ros2() {
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp"             >> ~/.bashrc
     echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}"  >> ~/.bashrc
     echo -e "export INTERBOTIX_WS=${INSTALL_PATH}"                >> ~/.bashrc
+    echo -e "export CYCLONEDDS_URI=${CYCLONEDDS_URI}"             >> ~/.bashrc
   else
     echo "Environment variables already set!"
   fi
@@ -502,7 +519,7 @@ validate_base_type
 
 if ! command -v lsb_release &> /dev/null; then
   sudo apt update
-  sudo apt-get install -y lsb-release
+  sudo apt-get install -yq lsb-release
 fi
 
 UBUNTU_VERSION="$(lsb_release -rs)"
@@ -516,9 +533,11 @@ if [ "$DISTRO_SET_FROM_CL" = false ]; then
     ROS_DISTRO_TO_INSTALL="melodic"
   elif [ $UBUNTU_VERSION == "20.04" ]; then
     ROS_DISTRO_TO_INSTALL="noetic"
+  elif [ $UBUNTU_VERSION == "22.04" ]; then
+    ROS_DISTRO_TO_INSTALL="humble"
   else
     echo -e "${BOLD}${RED}Unsupported Ubuntu version: $UBUNTU_VERSION.${NORM}${OFF}"
-    failed "Interbotix LoCoBot only works with Ubuntu 18.04 bionic or 20.04 focal on your hardware."
+    failed "Interbotix LoCoBot only works with Ubuntu 18.04 bionic or 20.04 focal, or 22.04 jammy on your hardware."
   fi
 fi
 
@@ -558,11 +577,6 @@ echo -e "\n# Interbotix Configurations" >> ~/.bashrc
 
 export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}
 
-# Configure Ubuntu repositories to allow restricted, universe, and multiverse
-sudo add-apt-repository universe
-sudo add-apt-repository multiverse
-sudo add-apt-repository restricted
-
 # Update the system
 sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get -y autoremove
@@ -571,7 +585,7 @@ install_essential_packages
 
 # configure LoCoBot computer ethernet to use proper network config for Create 3
 if [[ $BASE_TYPE == 'create3' ]]; then
-  sudo apt-get install -yq install netplan.io
+  sudo apt-get install -yq netplan.io
   export CREATE3_NETWORK_CONFIG="network:
   version: 2
   ethernets:
@@ -580,12 +594,12 @@ if [[ $BASE_TYPE == 'create3' ]]; then
       optional: true
       addresses: [192.168.186.3/24]
 "
-  if [ ! -f "/etc/netplan/99_config.yaml" ]; then
+  if [ ! -f "/etc/netplan/99_interbotix_config.yaml" ]; then
     if [ ! -d "/etc/netplan/" ]; then
       sudo mkdir -p /etc/netplan/
     fi
-    sudo touch /etc/netplan/99_config.yaml
-    sudo bash -c 'echo -e "'"$CREATE3_NETWORK_CONFIG"'" > /etc/netplan/99_config.yaml'
+    sudo touch /etc/netplan/99_interbotix_config.yaml
+    sudo bash -c 'echo -e "'"$CREATE3_NETWORK_CONFIG"'" > /etc/netplan/99_interbotix_config.yaml'
     sudo netplan apply
     sleep 10
   fi
@@ -605,7 +619,6 @@ if [[ $ROS_VERSION_TO_INSTALL == 1 ]]; then
   install_locobot_ros1
   setup_env_vars_ros1
 elif [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
-  failed "ROS 2 is not yet supported on the LoCoBot platform."
   install_ros2
   install_perception_ros2
   if [[ $BASE_TYPE == 'kobuki' ]]; then
@@ -626,3 +639,9 @@ elapsed="$(($end_time-$start_time))"
 
 echo -e "${GRN}Installation complete, took $elapsed seconds in total.${OFF}"
 echo -e "${GRN}NOTE: Remember to reboot the computer before using the robot!${OFF}"
+echo -e "${BLU}${BOLD}\nReboot now?\n${PROMPT}${NORM}${OFF}\c"
+read -r resp
+if [[ $resp == [yY] || $resp == [yY][eE][sS] ]]; then
+  reboot
+fi
+

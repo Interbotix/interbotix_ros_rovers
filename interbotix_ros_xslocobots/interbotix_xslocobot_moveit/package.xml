@@ -24,7 +24,6 @@
   <depend>moveit_planners_ompl</depend>
   <depend>moveit_ros_visualization</depend>
   <depend>moveit_setup_assistant</depend>
-  <depend>trac_ik_kinematics_plugin</depend>
   <depend>joint_state_publisher</depend>
   <depend>robot_state_publisher</depend>
   <depend>xacro</depend>

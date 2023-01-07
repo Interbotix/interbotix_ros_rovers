@@ -340,8 +340,10 @@ function install_locobot_ros2() {
     cd interbotix_ros_xseries/interbotix_xs_sdk
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
-    cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/cyclonedds_config_locobot.xml $CYCLONEDDS_URI
-    sed -i "s,\${WIRELESS_INTERFACE},$(ifconfig | grep wl | cut -d ":" -f1),g" $CYCLONEDDS_URI
+    if [[ $BASE_TYPE == 'create3' ]]; then
+      cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/cyclonedds_config_locobot.xml $CYCLONEDDS_URI
+      sed -i "s,\${WIRELESS_INTERFACE},$(ifconfig | grep wl | cut -d ":" -f1),g" $CYCLONEDDS_URI
+    fi
     cd $INSTALL_PATH
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     if colcon build; then
@@ -387,13 +389,17 @@ function install_kobuki_ros1() {
 
 function install_kobuki_ros2() {
   # Install ROS 2 packages for the Kobuki base
-  echo -e "${GRN}Installing Kobuki ROS 2 packages...${OFF}"
-  cd $INSTALL_PATH/src
-  git clone https://github.com/kobuki-base/kobuki_core.git
-  git clone https://github.com/kobuki-base/velocity_smoother.git
-  git clone https://github.com/kobuki-base/cmd_vel_mux.git
-  git clone https://github.com/kobuki-base/kobuki_ros_interfaces.git
-  git clone https://github.com/kobuki-base/kobuki_ros.git
+  if [ -d "$INSTALL_PATH/src/kobuki_core" ]; then
+    :
+  else
+    echo -e "${GRN}Installing Kobuki ROS 2 packages...${OFF}"
+    cd $INSTALL_PATH/src
+    git clone https://github.com/kobuki-base/kobuki_core.git
+    git clone https://github.com/kobuki-base/velocity_smoother.git
+    git clone https://github.com/kobuki-base/cmd_vel_mux.git
+    git clone https://github.com/kobuki-base/kobuki_ros_interfaces.git
+    git clone https://github.com/kobuki-base/kobuki_ros.git
+  fi https://github.com/kobuki-base/kobuki_ros.git
 }
 
 function install_create3_ros1() {
@@ -473,6 +479,7 @@ function install_create3_ros2() {
     cd $INSTALL_PATH/src
     git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b $ROS_DISTRO_TO_INSTALL
     git clone https://github.com/iRobotEducation/create3_sim.git -b asoragna/humble # TODO(lsinterbotix): change to distro branch once humble branch exists
+    echo -e "export CYCLONEDDS_URI=${CYCLONEDDS_URI}" >> ~/.bashrc
   fi
 }
 
@@ -497,7 +504,6 @@ function setup_env_vars_ros2() {
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp"             >> ~/.bashrc
     echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}"  >> ~/.bashrc
     echo -e "export INTERBOTIX_WS=${INSTALL_PATH}"                >> ~/.bashrc
-    echo -e "export CYCLONEDDS_URI=${CYCLONEDDS_URI}"             >> ~/.bashrc
   else
     echo "Environment variables already set!"
   fi

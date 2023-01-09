@@ -399,7 +399,7 @@ function install_kobuki_ros2() {
     git clone https://github.com/kobuki-base/cmd_vel_mux.git
     git clone https://github.com/kobuki-base/kobuki_ros_interfaces.git
     git clone https://github.com/kobuki-base/kobuki_ros.git
-  fi https://github.com/kobuki-base/kobuki_ros.git
+  fi
 }
 
 function install_create3_ros1() {
@@ -504,6 +504,7 @@ function setup_env_vars_ros2() {
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp"             >> ~/.bashrc
     echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}"  >> ~/.bashrc
     echo -e "export INTERBOTIX_WS=${INSTALL_PATH}"                >> ~/.bashrc
+
   else
     echo "Environment variables already set!"
   fi

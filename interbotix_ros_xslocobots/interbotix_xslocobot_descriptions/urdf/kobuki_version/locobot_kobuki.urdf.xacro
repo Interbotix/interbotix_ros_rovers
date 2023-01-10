@@ -39,7 +39,7 @@
     # POSSIBILITY OF SUCH DAMAGE.
   -->
 
-  <link name="${robot_name}/base_footprint">
+  <link name="${robot_name}/base_footprint"/>
 
   <joint name="base_joint" type="fixed">
     <origin

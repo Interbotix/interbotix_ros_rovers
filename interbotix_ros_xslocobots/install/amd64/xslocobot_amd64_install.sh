@@ -98,6 +98,29 @@ $_usage
 EOF
 }
 
+_install_warning="${BOLD}
+
+            IF YOU PURCHASED THIS LOCOBOT FROM TROSSEN ROBOTICS,
+                  YOU SHOULD *NOT* RUN THIS SCRIPT.
+
+https://docs.trossenrobotics.com/interbotix_xslocobots_docs/getting_started.html
+${NORM}"
+
+function print_install_warning() {
+  # print usage
+  cat << EOF
+$_install_warning
+EOF
+
+echo -e "\nContinue anyways?\n${PROMPT}${NORM}${OFF}\c"
+read -r resp
+if [[ $resp == [yY] || $resp == [yY][eE][sS] ]]; then
+  :
+else
+  exit 0
+fi
+}
+
 # https://stackoverflow.com/a/8574392/16179107
 function contains_element () {
   # check if an element is in an array
@@ -523,6 +546,10 @@ do
   esac
 done
 shift "$(($OPTIND -1))"
+
+if [ "$NONINTERACTIVE" = false ]; then
+  print_install_warning
+fi
 
 validate_base_type
 

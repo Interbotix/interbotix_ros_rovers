@@ -407,7 +407,6 @@ function install_kobuki_ros1() {
     yocs_waypoints_navi             \
     yujin_ocs
   cd ..
-  git clone https://github.com/Slamtec/rplidar_ros.git
 }
 
 function install_kobuki_ros2() {
@@ -501,7 +500,11 @@ function install_create3_ros2() {
   else
     cd $INSTALL_PATH/src
     git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b $ROS_DISTRO_TO_INSTALL
-    git clone https://github.com/iRobotEducation/create3_sim.git -b asoragna/humble # TODO(lsinterbotix): change to distro branch once humble branch exists
+    git clone https://github.com/iRobotEducation/create3_sim.git -b $ROS_DISTRO_TO_INSTALL
+    git clone https://github.com/ros-controls/gz_ros2_control.git -b master
+    cd gz_ros2_control
+    git checkout 9087043
+    cd -
     echo -e "export CYCLONEDDS_URI=${CYCLONEDDS_URI}" >> ~/.bashrc
   fi
 }

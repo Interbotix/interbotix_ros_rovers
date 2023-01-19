@@ -7,7 +7,7 @@
   <arg name="external_urdf_loc"                 default=""/>
   <arg name="use_rviz"                          default="false"/>
   <arg name="rviz_frame"                        default="$(arg robot_name)/base_footprint"/>
-  <arg name="base_type"                         default="$(env INTERBOTIX_XSLOCOBOT_BASE_TYPE)"/> <!-- 'KOBUKI', 'CREATE3' -->
+  <arg name="base_type"                         default="$(optenv INTERBOTIX_XSLOCOBOT_BASE_TYPE create3)"/> <!-- 'kobuki', 'create3' -->
   <arg name="use_base"                          default="false"/>
   <arg name="use_dock"                          default="false"/>
   <arg name="use_lidar"                         default="false"/>

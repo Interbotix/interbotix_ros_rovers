@@ -530,12 +530,12 @@
     <!-- Gazebo ROS Control -->
     <xacro:if value="${hardware_type == 'gz_classic'}">
       <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-          <ros>
-            <namespace>/$(arg robot_name)</namespace>
-          </ros>
-          <robot_param>robot_description</robot_param>
-          <robot_param_node>robot_state_publisher</robot_param_node>
-          <parameters> $(find interbotix_xslocobot_sim)/config/kobuki_version/$(arg robot_model)_controllers.yaml </parameters>
+        <ros>
+          <namespace>/$(arg robot_name)</namespace>
+        </ros>
+        <robot_param>robot_description</robot_param>
+        <robot_param_node>robot_state_publisher</robot_param_node>
+        <parameters> $(find interbotix_xslocobot_sim)/config/kobuki_version/$(arg robot_model)_controllers.yaml </parameters>
       </plugin>
     </xacro:if>
 

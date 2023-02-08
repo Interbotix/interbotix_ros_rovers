@@ -37,7 +37,7 @@ APRILTAG_WS=~/apriltag_ws
 BRIDGE_WS=~/ros1_bridge_ws
 BRIDGE_MSGS_ROS1_WS=~/create3_ros1_ws
 BRIDGE_MSGS_ROS2_WS=~/create3_ros2_ws
-CYCLONEDDS_URI=~/cyclonedds_config_locobot.xml
+FASTRTPS_DEFAULT_PROFILES_FILE=$INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/super_client_configuration_file.xml
 
 _usage="${BOLD}USAGE: ./xslocobot_amd64_install.sh [-h][-d DISTRO][-p PATH][-b BASE_TYPE][-n]${NORM}
 
@@ -363,10 +363,6 @@ function install_locobot_ros2() {
     cd interbotix_ros_xseries/interbotix_xs_sdk
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
-    if [[ $BASE_TYPE == 'create3' ]]; then
-      cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/cyclonedds_config_locobot.xml $CYCLONEDDS_URI
-      sed -i "s,\${WIRELESS_INTERFACE},$(ifconfig | grep wl | cut -d ":" -f1),g" $CYCLONEDDS_URI
-    fi
     cd $INSTALL_PATH
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     if colcon build; then
@@ -501,11 +497,25 @@ function install_create3_ros2() {
     cd $INSTALL_PATH/src
     git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b $ROS_DISTRO_TO_INSTALL
     git clone https://github.com/iRobotEducation/create3_sim.git -b $ROS_DISTRO_TO_INSTALL
-    git clone https://github.com/ros-controls/gz_ros2_control.git -b master
-    cd gz_ros2_control
-    git checkout 9087043
-    cd -
-    echo -e "export CYCLONEDDS_URI=${CYCLONEDDS_URI}" >> ~/.bashrc
+    # TODO: the block below can be removed when https://github.com/ros-controls/gz_ros2_control/issues/105 is resolved
+    if [[ "$ROS_DISTRO_TO_INSTALL" = "humble" || "$ROS_DISTRO_TO_INSTALL" = "rolling" ]]; then
+      git clone https://github.com/ros-controls/gz_ros2_control.git -b master
+      cd gz_ros2_control
+      git checkout 9087043
+      cd -
+    fi
+  fi
+}
+
+function config_rmw() {
+  # configures LoCoBot's computer
+  if [ -z "$ROS_DISCOVERY_SERVER" ]; then
+    echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
+    echo "export FASTRTPS_DEFAULT_PROFILES_FILE=${FASTRTPS_DEFAULT_PROFILES_FILE}" >> ~/.bashrc
+    echo "export ROS_DISCOVERY_SERVER=127.0.0.1:11811" >> ~/.bashrc
+    sudo cp ${INSTALL_PATH}/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/fastdds_disc_server.service /lib/systemd/system/
+    sudo systemctl daemon-reload
+    sudo systemctl enable fastdds_disc_server.service
   fi
 }
 
@@ -527,10 +537,8 @@ function setup_env_vars_ros2() {
   # Setup Environment Variables
   if [ -z "$INTERBOTIX_WS" ]; then
     echo "Setting up Environment Variables..."
-    echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp"             >> ~/.bashrc
     echo -e "export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}"  >> ~/.bashrc
     echo -e "export INTERBOTIX_WS=${INSTALL_PATH}"                >> ~/.bashrc
-
   else
     echo "Environment variables already set!"
   fi
@@ -625,20 +633,11 @@ install_essential_packages
 # configure LoCoBot computer ethernet to use proper network config for Create 3
 if [[ $BASE_TYPE == 'create3' ]]; then
   sudo apt-get install -yq netplan.io
-  export CREATE3_NETWORK_CONFIG="network:
-  version: 2
-  ethernets:
-    eno1:
-      dhcp4: false
-      optional: true
-      addresses: [192.168.186.3/24]
-"
   if [ ! -f "/etc/netplan/99_interbotix_config.yaml" ]; then
     if [ ! -d "/etc/netplan/" ]; then
       sudo mkdir -p /etc/netplan/
     fi
-    sudo touch /etc/netplan/99_interbotix_config.yaml
-    sudo bash -c 'echo -e "'"$CREATE3_NETWORK_CONFIG"'" > /etc/netplan/99_interbotix_config.yaml'
+    sudo cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/conf/99_interbotix_config_locobot.yaml /etc/netplan/
     sudo netplan apply
     sleep 10
   fi
@@ -667,6 +666,7 @@ elif [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
   fi
   install_locobot_ros2
   setup_env_vars_ros2
+  config_rmw
 else
   failed "Something went wrong."
 fi

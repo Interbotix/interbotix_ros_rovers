@@ -1,0 +1,12 @@
+[Unit]
+Description=FastDDS discovery server
+After=network.target
+
+[Service]
+Type=forking
+Restart=on-failure
+RestartSec=1
+ExecStart=/bin/bash -e /home/locobot/interbotix_ws/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/fastdds_disc_server.sh
+
+[Install]
+WantedBy=multi-user.target

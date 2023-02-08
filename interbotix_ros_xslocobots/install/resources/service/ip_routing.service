@@ -1,0 +1,19 @@
+# This service sets up a ip route on the LoCoBot's computer for 192.168.186.0/24 through the
+# computer's wireless network interface.
+# This file should be copied to `/lib/systemd/system/`.
+# Afterwards, run the command:
+#   `sudo systemctl daemon-reload`
+# Followed by the command:
+#   `sudo systemctl enable ip_routing.service`
+
+[Unit]
+Description=Enable LoCoBot IP routing for 192.168.186.0/24
+
+[Service]
+Type=simple
+ExecStart=/home/locobot/interbotix_ws/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/ip_routing.sh
+RestartSec=1
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

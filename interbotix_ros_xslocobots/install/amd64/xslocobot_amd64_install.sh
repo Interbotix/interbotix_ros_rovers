@@ -630,19 +630,6 @@ sudo apt-get -y autoremove
 
 install_essential_packages
 
-# configure LoCoBot computer ethernet to use proper network config for Create 3
-if [[ $BASE_TYPE == 'create3' ]]; then
-  sudo apt-get install -yq netplan.io
-  if [ ! -f "/etc/netplan/99_interbotix_config.yaml" ]; then
-    if [ ! -d "/etc/netplan/" ]; then
-      sudo mkdir -p /etc/netplan/
-    fi
-    sudo cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/conf/99_interbotix_config_locobot.yaml /etc/netplan/
-    sudo netplan apply
-    sleep 10
-  fi
-fi
-
 mkdir -p $INSTALL_PATH/src
 
 shopt -s extglob
@@ -669,6 +656,19 @@ elif [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
   config_rmw
 else
   failed "Something went wrong."
+fi
+
+# configure LoCoBot computer ethernet to use proper network config for Create 3
+if [[ $BASE_TYPE == 'create3' ]]; then
+  sudo apt-get install -yq netplan.io
+  if [ ! -f "/etc/netplan/99_interbotix_config.yaml" ]; then
+    if [ ! -d "/etc/netplan/" ]; then
+      sudo mkdir -p /etc/netplan/
+    fi
+    sudo cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/conf/99_interbotix_config_locobot.yaml /etc/netplan/
+    sudo netplan apply
+    sleep 10
+  fi
 fi
 
 shopt -u extglob

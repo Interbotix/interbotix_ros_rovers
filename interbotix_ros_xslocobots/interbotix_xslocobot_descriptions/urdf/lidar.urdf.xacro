@@ -136,7 +136,7 @@
         </ray>
         <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_ray_sensor.so">
           <ros>
-            <remapping>~/out:=scan</remapping>
+            <remapping>~/out:=${robot_name}/scan</remapping>
           </ros>
           <output_type>sensor_msgs/LaserScan</output_type>
           <frame_name>${robot_name}/laser_frame_link</frame_name>

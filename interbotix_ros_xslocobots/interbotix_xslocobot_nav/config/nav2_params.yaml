@@ -787,7 +787,7 @@ planner_server:
 # Note: the wait recovery behavior has no parameters, the duration to wait is given in the action
 # request. Note: pre-Rolling/Humble this was the Recovery server, not behavior server. Launch
 # files, behaviors and tests were all renamed.
-recoveries_server:
+behavior_server:
   ros__parameters:
     # https://navigation.ros.org/configuration/packages/configuring-behavior-server.html?highlight=recoveries_server
 
@@ -815,13 +815,13 @@ recoveries_server:
     recovery_plugins: ["spin", "backup", "wait"]
 
     spin:
-      plugin: "nav2_recoveries/Spin"
+      plugin: "nav2_behaviors/Spin"
 
     backup:
-      plugin: "nav2_recoveries/BackUp"
+      plugin: "nav2_behaviors/BackUp"
 
     wait:
-      plugin: "nav2_recoveries/Wait"
+      plugin: "nav2_behaviors/Wait"
 
     # Time to look ahead for collisions (s). (default: 2.0)
     simulate_ahead_time: 2.0

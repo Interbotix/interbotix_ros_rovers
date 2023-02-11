@@ -443,7 +443,7 @@ local_costmap:
       # Frequency to publish costmap to topic. (default 1.0)
       publish_frequency: 2.0
 
-      # Reference frame. (default: map)
+      # Reference frame. (default: odom)
       global_frame: locobot/odom
 
       # Robot base frame. (default: base_link)
@@ -453,10 +453,10 @@ local_costmap:
       rolling_window: True
 
       # Height of costmap (m). (default: 5)
-      width: 3
+      width: 5
 
       # Width of costmap (m). (default: 5)
-      height: 3
+      height: 5
 
       # Resolution of 1 pixel of the costmap, in meters. (default: 0.1)
       resolution: 0.05
@@ -581,16 +581,22 @@ global_costmap:
       map_topic: map
 
       # X origin of the costmap relative to width (m). (default: 0.0)
-      origin_x: 10.0
+      origin_x: -10.0
 
       # Y origin of the costmap relative to height (m). (default: 0.0)
-      origin_y: 10.0
+      origin_y: -10.0
 
       # Frequency to publish costmap to topic. (default 1.0)
       publish_frequency: 1.0
 
+      # Height of costmap (m). (default: 5)
+      width: 20
+
+      # Width of costmap (m). (default: 5)
+      height: 20
+
       # Resolution of 1 pixel of the costmap, in meters. (default: 0.1)
-      resolution: 0.05
+      resolution: 0.1
 
       # Robot base frame. (default: base_link)
       robot_base_frame: locobot/base_link

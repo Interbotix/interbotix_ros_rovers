@@ -31,18 +31,29 @@ This launch script borrows heavily from the original Nav2 bringup launch file:
     https://github.com/ros-planning/navigation2/blob/2de3f92c0f476de4bda21d1fc5268657b499b258/nav2_bringup/bringup/launch/bringup_launch.py
 """
 
+from multiprocessing import Condition
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     OpaqueFunction,
-    SetEnvironmentVariable
+    SetEnvironmentVariable,
+    GroupAction
+)
+from launch.conditions import (
+    IfCondition,
+    LaunchConfigurationEquals,
+    LaunchConfigurationNotEquals,
 )
 from launch.substitutions import (
     PathJoinSubstitution,
     LaunchConfiguration,
     TextSubstitution,
 )
-from launch_ros.actions import Node
+from launch_ros.actions import (
+    Node,
+    SetParameter
+)
+
 from launch_ros.substitutions import FindPackageShare
 from nav2_common.launch import RewrittenYaml
 
@@ -50,14 +61,18 @@ from nav2_common.launch import RewrittenYaml
 def launch_setup(context, *args, **kwargs):
     namespace_launch_arg = LaunchConfiguration('namespace')
     use_sim_time_launch_arg = LaunchConfiguration('use_sim_time')
+    log_level_launch_arg = LaunchConfiguration('log_level')
     autostart_launch_arg = LaunchConfiguration('autostart')
+    use_respawn_launch_arg = LaunchConfiguration('use_respawn')
     nav2_params_file_launch_arg = LaunchConfiguration('nav2_params_file')
     cmd_vel_topic_launch_arg = LaunchConfiguration('cmd_vel_topic')
-
+    use_slam_toolbox_launch_arg = LaunchConfiguration('use_slam_toolbox')
+    slam_toolbox_mode_launch_arg = LaunchConfiguration('slam_toolbox_mode')
+    map_yaml_file_launch_arg = LaunchConfiguration('map')
     # Set env var to print messages to stdout immediately
     set_logging_env_var = SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1')
 
-    lifecycle_nodes = [
+    lifecycle_nodes_navigation = [
         'controller_server',
         'planner_server',
         'behavior_server',
@@ -65,8 +80,27 @@ def launch_setup(context, *args, **kwargs):
         'waypoint_follower'
     ]
 
+    lifecycle_nodes_slam = [
+        'map_saver'
+    ]
+
+    lifecycle_nodes_localization = [
+        'map_server'
+        'amcl'
+    ]
+
     remappings = [
         ('/cmd_vel', cmd_vel_topic_launch_arg),
+    ]
+
+    # Map fully qualified names to relative ones so the node's namespace can be prepended.
+    # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
+    # https://github.com/ros/geometry2/issues/32
+    # https://github.com/ros/robot_state_publisher/pull/30
+    tf_remappings = [
+        ('/tf', 'tf'),
+        ('/tf_static', 'tf_static'
+        )
     ]
 
     # Create our own temporary YAML files that include substitutions
@@ -89,7 +123,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             configured_params
         ],
-        remappings=remappings,
+        remappings=tf_remappings + remappings,
     )
 
     planner_server_node = Node(
@@ -100,10 +134,10 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             configured_params
         ],
-        remappings=remappings,
+        remappings=tf_remappings,
     )
 
-    recoveries_server_node = Node(
+    behavior_server_node = Node(
         package='nav2_behaviors',
         executable='behavior_server',
         name='behavior_server',
@@ -111,7 +145,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             configured_params
         ],
-        remappings=remappings,
+        remappings=tf_remappings,
     )
 
     bt_navigator_node = Node(
@@ -122,7 +156,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             configured_params
         ],
-        remappings=remappings,
+        remappings=tf_remappings,
     )
 
     waypoint_follower_node = Node(
@@ -133,7 +167,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             configured_params
         ],
-        remappings=remappings,
+        remappings=tf_remappings,
     )
 
     lifecycle_manager_navigation_node = Node(
@@ -144,7 +178,85 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             {'use_sim_time': use_sim_time_launch_arg},
             {'autostart': autostart_launch_arg},
-            {'node_names': lifecycle_nodes},
+            {'node_names': lifecycle_nodes_navigation},
+        ]
+    )
+
+    slam_toolbox_nav2_nodes = GroupAction(
+        condition=IfCondition(use_slam_toolbox_launch_arg),
+        actions=[
+            SetParameter('use_sim_time', use_sim_time_launch_arg),
+            Node(
+                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization'),
+                package='nav2_map_server',
+                executable='map_saver_server',
+                output='screen',
+                respawn=use_respawn_launch_arg,
+                respawn_delay=2.0,
+                arguments=[
+                    '--ros-args', '--log-level', log_level_launch_arg
+                ],
+                parameters=[
+                    configured_params
+                ],
+            ),
+            Node(
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                package='nav2_map_server',
+                executable='map_server',
+                name='map_server',
+                output='screen',
+                respawn=use_respawn_launch_arg,
+                respawn_delay=2.0,
+                arguments=[
+                    '--ros-args', '--log-level', log_level_launch_arg
+                ],
+                parameters=[
+                    configured_params,
+                    {'yaml_filename': map_yaml_file_launch_arg},
+                ],
+                remappings=tf_remappings
+            ),
+            Node(
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                package='nav2_amcl',
+                executable='amcl',
+                name='amcl',
+                output='screen',
+                respawn=use_respawn_launch_arg,
+                respawn_delay=2.0,
+                parameters=[configured_params],
+                arguments=['--ros-args', '--log-level', log_level_launch_arg],
+                remappings=tf_remappings
+            ),
+            Node(
+                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization'),
+                package='nav2_lifecycle_manager',
+                executable='lifecycle_manager',
+                name='lifecycle_manager_slam',
+                output='screen',
+                arguments=[
+                    '--ros-args', '--log-level', log_level_launch_arg
+                ],
+                parameters=[
+                    {'autostart': autostart_launch_arg},
+                    {'node_names': lifecycle_nodes_slam},
+                ]
+            ),
+            Node(
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                package='nav2_lifecycle_manager',
+                executable='lifecycle_manager',
+                name='lifecycle_manager_localization',
+                output='screen',
+                arguments=[
+                    '--ros-args', '--log-level', log_level_launch_arg
+                ],
+                parameters=[
+                    {'autostart': autostart_launch_arg},
+                    {'node_names': lifecycle_nodes_localization},
+                ]
+            ),
         ]
     )
 
@@ -152,10 +264,12 @@ def launch_setup(context, *args, **kwargs):
         set_logging_env_var,
         controller_server_node,
         planner_server_node,
-        recoveries_server_node,
+        behavior_server_node,
         bt_navigator_node,
         waypoint_follower_node,
         lifecycle_manager_navigation_node,
+        slam_toolbox_nav2_nodes,
+
     ]
 
 def generate_launch_description():
@@ -206,6 +320,55 @@ def generate_launch_description():
                 ' using Gazebo hardware.'
             )
         )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'use_slam_toolbox',
+            default_value='false',
+            choices=('true', 'false'),
+            description=(
+                'whether to use slam_toolbox over rtabmap.'
+            )
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'slam_toolbox_mode',
+            default_value='online_async',
+            choices=(
+                # 'lifelong',
+                'localization',
+                # 'offline',
+                'online_async',
+                'online_sync'
+            ),
+            description=(
+                "the node to launch the SLAM in using the slam_toolbox. Currently only "
+                "'localization', 'online_sync', and 'online_async' modes are supported."
+            ),
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'map',
+            default_value='',
+            description='Full path to map yaml file to load if using localization mode'
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'log_level',
+            default_value='info',
+            choices=('debug', 'info', 'warn', 'error', 'fatal'),
+            description='log'
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'use_respawn', default_value='false',
+            choices=('true', 'false'),
+            description='Whether to respawn if a node crashes. Applied when composition is disabled.')
+
     )
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

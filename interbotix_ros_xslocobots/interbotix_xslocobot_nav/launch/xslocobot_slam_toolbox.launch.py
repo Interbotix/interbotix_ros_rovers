@@ -68,6 +68,7 @@ def launch_setup(context, *args, **kwargs):
     hardware_type_launch_arg = LaunchConfiguration('hardware_type')
     use_base_odom_tf_launch_arg = LaunchConfiguration('use_base_odom_tf')
     launch_nav2_launch_arg = LaunchConfiguration('launch_nav2')
+    map_yaml_file_launch_arg = LaunchConfiguration('map')
 
     # sets use_sim_time parameter to 'true' if using gazebo hardware
     use_sim_time_param = determine_use_sim_time_param(
@@ -168,6 +169,9 @@ def launch_setup(context, *args, **kwargs):
             'use_sim_time': use_sim_time_param,
             'autostart': 'true',
             'params_file': LaunchConfiguration('nav2_params_file'),
+            'use_slam_toolbox': 'true',
+            'slam_toolbox_mode': slam_mode_launch_arg,
+            'map': map_yaml_file_launch_arg,
         }.items(),
     )
 
@@ -343,6 +347,13 @@ def generate_launch_description():
                 'published over the ROS topic /clock; this value is automatically set to `true` if'
                 ' using Gazebo hardware.'
             )
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'map',
+            default_value='',
+            description='Full path to map yaml file to load if using localization mode'
         )
     )
     declared_arguments.extend(

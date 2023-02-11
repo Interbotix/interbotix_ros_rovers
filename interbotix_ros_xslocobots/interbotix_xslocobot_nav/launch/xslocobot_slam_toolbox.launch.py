@@ -333,7 +333,6 @@ def generate_launch_description():
     )
     declared_arguments.extend(
         declare_interbotix_xslocobot_robot_description_launch_arguments(
-            use_lidar='true',
             show_gripper_bar='true',
             show_gripper_fingers='true',
             hardware_type='actual',

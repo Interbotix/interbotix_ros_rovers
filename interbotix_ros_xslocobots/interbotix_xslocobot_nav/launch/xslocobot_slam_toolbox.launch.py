@@ -112,6 +112,19 @@ def launch_setup(context, *args, **kwargs):
         cmd=[camera_tilt_angle_cmd],
         shell=True,
     )
+    slam_toolbox_online_sync_slam_node = Node(
+        condition=LaunchConfigurationEquals('slam_mode', 'online_sync'),
+        package='slam_toolbox',
+        executable='sync_slam_toolbox_node',
+        name='slam_toolbox',
+        parameters=[
+            slam_toolbox_params_file_launch_arg,
+            {
+                'use_sim_time': use_sim_time_param,
+            }
+        ],
+        output='screen'
+    )
 
     slam_toolbox_online_async_slam_node = Node(
         condition=LaunchConfigurationEquals('slam_mode', 'online_async'),
@@ -160,6 +173,7 @@ def launch_setup(context, *args, **kwargs):
 
     return [
         xslocobot_control_launch_include,
+        slam_toolbox_online_sync_slam_node,
         slam_toolbox_online_async_slam_node,
         slam_toolbox_localization_slam_node,
         camera_tilt_angle_executable,

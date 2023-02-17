@@ -31,7 +31,6 @@ This launch script borrows heavily from the original Nav2 bringup launch file:
     https://github.com/ros-planning/navigation2/blob/2de3f92c0f476de4bda21d1fc5268657b499b258/nav2_bringup/bringup/launch/bringup_launch.py
 """
 
-from multiprocessing import Condition
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
@@ -67,7 +66,6 @@ def launch_setup(context, *args, **kwargs):
     nav2_params_file_launch_arg = LaunchConfiguration('nav2_params_file')
     cmd_vel_topic_launch_arg = LaunchConfiguration('cmd_vel_topic')
     use_slam_toolbox_launch_arg = LaunchConfiguration('use_slam_toolbox')
-    slam_toolbox_mode_launch_arg = LaunchConfiguration('slam_toolbox_mode')
     map_yaml_file_launch_arg = LaunchConfiguration('map')
     # Set env var to print messages to stdout immediately
     set_logging_env_var = SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -269,7 +267,6 @@ def launch_setup(context, *args, **kwargs):
         waypoint_follower_node,
         lifecycle_manager_navigation_node,
         slam_toolbox_nav2_nodes,
-
     ]
 
 def generate_launch_description():
@@ -360,7 +357,7 @@ def generate_launch_description():
             'log_level',
             default_value='info',
             choices=('debug', 'info', 'warn', 'error', 'fatal'),
-            description='log'
+            description='set the logging level of the Nav2 nodes.'
         )
     )
     declared_arguments.append(

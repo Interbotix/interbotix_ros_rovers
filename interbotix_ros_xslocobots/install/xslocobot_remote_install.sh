@@ -229,6 +229,7 @@ function install_locobot_ros2() {
     #   * interbotix_xs_msgs
     #   * interbotix_xslocobot_descriptions
     #   * interbotix_xslocobot_sim
+    #   * all interbotix_xs_toolboxes packages
     touch                                                                                               \
       interbotix_ros_core/interbotix_ros_xseries/interbotix_ros_xseries/COLCON_IGNORE                   \
       interbotix_ros_core/interbotix_ros_xseries/interbotix_xs_sdk/COLCON_IGNORE                        \
@@ -238,9 +239,7 @@ function install_locobot_ros2() {
       interbotix_ros_rovers/interbotix_ros_xslocobots/interbotix_xslocobot_moveit/COLCON_IGNORE         \
       interbotix_ros_rovers/interbotix_ros_xslocobots/interbotix_xslocobot_nav/COLCON_IGNORE            \
       interbotix_ros_rovers/interbotix_ros_xslocobots/interbotix_xslocobot_perception/COLCON_IGNORE     \
-      interbotix_ros_rovers/interbotix_ros_xslocobots/interbotix_xslocobot_ros_control/COLCON_IGNORE    \
-      interbotix_ros_toolboxes/interbotix_xs_toolbox/interbotix_xs_toolbox/COLCON_IGNORE                \
-      interbotix_ros_toolboxes/interbotix_xs_toolbox/interbotix_xs_rviz/COLCON_IGNORE
+      interbotix_ros_rovers/interbotix_ros_xslocobots/interbotix_xslocobot_ros_control/COLCON_IGNORE
     cd "$INSTALL_PATH" || exit
     rosdep install --from-paths src --ignore-src -r -y --rosdistro="$ROS_DISTRO_TO_INSTALL"
     if colcon build; then
@@ -255,7 +254,6 @@ function install_locobot_ros2() {
 
 function config_rmw() {
   # configures remote computer's RMW
-  # shellcheck disable=SC2016,SC2129
   if [ -z "$ROS_DISCOVERY_SERVER" ]; then
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
     echo "export FASTRTPS_DEFAULT_PROFILES_FILE=${FASTRTPS_DEFAULT_PROFILES_FILE}" >> ~/.bashrc
@@ -269,7 +267,6 @@ function config_rmw() {
 }
 
 function setup_env_vars_ros1() {
-  # shellcheck disable=SC2016,SC2129
   # Setup Environment Variables
   if [ -z "$ROS_IP" ]; then
     echo -e "${GRN}Setting up Environment Variables...${OFF}"
@@ -396,12 +393,12 @@ shopt -u extglob
 
 if [[ "$ROS_VERSION_TO_INSTALL" == 1 ]]; then
   echo "Remote Installation Complete! Close this terminal and open a new one to finish."
-  echo -en "NOTE: Remember to comment out the ${ORANGE}source $INSTALL_PATH/devel/setup.bash${OFF} "
-  echo -en "and ${ORANGE}export ROS_MASTER_URI=http://$HOSTNAME.local:11311${OFF} lines from the "
+  echo -en "NOTE: Remember to comment out the ${ORANGE}'source $INSTALL_PATH/devel/setup.bash'${OFF} "
+  echo -en "and ${ORANGE}'export ROS_MASTER_URI=http://$HOSTNAME.local:11311'${OFF} lines from the "
   echo -e  ".bashrc file when done using the LoCoBot! Then close out of your terminal and open a new one."
 elif [[ "$ROS_VERSION_TO_INSTALL" == 2 ]]; then
   echo "Remote Installation Complete! reboot your computer to finish."
-  echo -en "NOTE: Remember to comment out the ${ORANGE}source $INSTALL_PATH/install/setup.bash${OFF} and "
-  echo -en "${ORANGE}export ROS_DISCOVERY_SERVER=${LOCOBOT_IP}:11811${OFF} lines from the .bashrc file "
-  echo -en "and disable the ip_routing service when done using the LoCoBot! Then reboot your computer."
+  echo -en "NOTE: Remember to comment out the ${ORANGE}'source $INSTALL_PATH/install/setup.bash'${OFF} and "
+  echo -en "${ORANGE}'export ROS_DISCOVERY_SERVER=${LOCOBOT_IP}:11811'${OFF} lines from the .bashrc file "
+  echo -e "and disable the ip_routing service when done using the LoCoBot! Then reboot your computer."
 fi

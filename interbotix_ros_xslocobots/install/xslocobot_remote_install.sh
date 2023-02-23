@@ -30,6 +30,9 @@ VALID_BASE_TYPES=('kobuki' 'create3')
 NONINTERACTIVE=false
 DISTRO_SET_FROM_CL=false
 INSTALL_PATH=~/interbotix_ws
+FASTRTPS_DEFAULT_PROFILES_FILE="$INSTALL_PATH"/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/super_client_configuration_file.xml
+IP_ROUTING_SCRIPT="$INSTALL_PATH"/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/ip_routing.sh
+IP_ROUTING_SERVICE_FILE="$INSTALL_PATH"/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/ip_routing.service
 HOSTNAME=""
 
 _usage="${BOLD}USAGE: ./xslocobot_remote_install.sh [-h][-d DISTRO][-p PATH][-b BASE_TYPE][-r HOSTNAME][-i LOCOBOT_IP][-n]${NORM}
@@ -257,8 +260,9 @@ function config_rmw() {
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
     echo "export FASTRTPS_DEFAULT_PROFILES_FILE=${FASTRTPS_DEFAULT_PROFILES_FILE}" >> ~/.bashrc
     echo "export ROS_DISCOVERY_SERVER=${LOCOBOT_IP}:11811" >> ~/.bashrc
-    sudo cp "$INSTALL_PATH"/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/ip_routing.service /lib/systemd/system/
-    sed -i "s/10.42.0.15/${LOCOBOT_IP}/g" "$INSTALL_PATH"/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/ip_routing.sh
+    sudo cp "$IP_ROUTING_SERVICE_FILE" /lib/systemd/system/
+    sed -i "s/127.0.0.1/${LOCOBOT_IP}/g" "$FASTRTPS_DEFAULT_PROFILES_FILE"
+    sed -i "s/10.42.0.15/${LOCOBOT_IP}/g" "$IP_ROUTING_SCRIPT"
     sudo systemctl daemon-reload
     sudo systemctl enable ip_routing.service
   fi

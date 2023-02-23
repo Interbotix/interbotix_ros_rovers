@@ -281,8 +281,8 @@ function install_ros2() {
     sudo rosdep init
     rosdep update --include-eol-distros
     if [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
-      echo "source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash" >> ~/.bashrc
-      source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash
+      echo "source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash" >> ~/.bashrc
+      source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash
     fi
   else
     echo "ros-$ROS_DISTRO_TO_INSTALL-desktop is already installed!"
@@ -291,7 +291,7 @@ function install_ros2() {
 
 function install_perception_ros2() {
   # Install apriltag ROS Wrapper
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $APRILTAG_WS/install/setup.bash && ros2 pkg list | grep -q apriltag_ros; then
+  if source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash && source "$APRILTAG_WS"/install/setup.bash && ros2 pkg list | grep -q apriltag_ros; then
     echo "Apriltag ROS Wrapper already installed!"
   else
     echo -e "${GRN}${BOLD}Installing Apriltag ROS Wrapper...${NORM}${OFF}"
@@ -299,7 +299,7 @@ function install_perception_ros2() {
     cd $APRILTAG_WS/src
     git clone https://github.com/Interbotix/apriltag_ros.git -b ros2-port
     cd $APRILTAG_WS
-    rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
+    rosdep install --from-paths src --ignore-src -r -y --rosdistro="$ROS_DISTRO_TO_INSTALL"
     if colcon build; then
       echo -e "${GRN}${BOLD}Apriltag ROS Wrapper built successfully!${NORM}${OFF}"
       echo "source $APRILTAG_WS/install/setup.bash" >> ~/.bashrc
@@ -311,14 +311,14 @@ function install_perception_ros2() {
 }
 
 function install_locobot_ros1() {
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/devel/setup.bash && rospack list | grep -q interbotix_; then
+  if source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash && source "$INSTALL_PATH"/devel/setup.bash && rospack list | grep -q interbotix_; then
     echo "Interbotix LoCoBot ROS 1 packages already installed!"
   else
-    echo -e "${GRN}Installing ROS packages for the Interbotix LoCoBot...${OFF}"
+    echo -e "${GRN}Installing ROS 1 packages for the Interbotix LoCoBot...${OFF}"
     cd $INSTALL_PATH/src
-    git clone https://github.com/Interbotix/interbotix_ros_core.git -b $ROS_DISTRO_TO_INSTALL
-    git clone https://github.com/Interbotix/interbotix_ros_rovers.git -b $ROS_DISTRO_TO_INSTALL
-    git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b $ROS_DISTRO_TO_INSTALL
+    git clone https://github.com/Interbotix/interbotix_ros_core.git -b "$ROS_DISTRO_TO_INSTALL"
+    git clone https://github.com/Interbotix/interbotix_ros_rovers.git -b "$ROS_DISTRO_TO_INSTALL"
+    git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b "$ROS_DISTRO_TO_INSTALL"
     rm                                                                                              \
       interbotix_ros_core/interbotix_ros_xseries/CATKIN_IGNORE                                      \
       interbotix_ros_toolboxes/interbotix_xs_toolbox/CATKIN_IGNORE                                  \
@@ -328,29 +328,29 @@ function install_locobot_ros1() {
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
     cd $INSTALL_PATH
-    rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
-    if [ $BASE_TYPE == "create3" ]; then
+    rosdep install --from-paths src --ignore-src -r -y --rosdistro="$ROS_DISTRO_TO_INSTALL"
+    if [ "$BASE_TYPE" == "create3" ]; then
       source $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash
     fi
     if catkin_make; then
-      echo -e "${GRN}${BOLD}Interbotix LoCoBot ROS packages built successfully!${NORM}${OFF}"
+      echo -e "${GRN}${BOLD}Interbotix LoCoBot ROS 1 packages built successfully!${NORM}${OFF}"
       echo "source $INSTALL_PATH/devel/setup.bash" >> ~/.bashrc
       source $INSTALL_PATH/devel/setup.bash
     else
-      failed "Failed to build packages for the Interbotix LoCoBot."
+      failed "Failed to build ROS 1 packages for the Interbotix LoCoBot."
     fi
   fi
 }
 
 function install_locobot_ros2() {
-  if source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash && source $INSTALL_PATH/install/setup.bash && ros2 pkg list | grep -q interbotix_; then
-    echo "Interbotix LoCoBot ROS packages already installed!"
+  if source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash && source "$INSTALL_PATH"/install/setup.bash && ros2 pkg list | grep -q interbotix_; then
+    echo "Interbotix LoCoBot ROS 2 packages already installed!"
   else
     echo -e "${GRN}Installing ROS 2 packages for the Interbotix LoCoBot...${OFF}"
     cd $INSTALL_PATH/src
-    git clone https://github.com/Interbotix/interbotix_ros_core.git -b $ROS_DISTRO_TO_INSTALL
-    git clone https://github.com/Interbotix/interbotix_ros_rovers.git -b $ROS_DISTRO_TO_INSTALL
-    git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b $ROS_DISTRO_TO_INSTALL
+    git clone https://github.com/Interbotix/interbotix_ros_core.git -b "$ROS_DISTRO_TO_INSTALL"
+    git clone https://github.com/Interbotix/interbotix_ros_rovers.git -b "$ROS_DISTRO_TO_INSTALL"
+    git clone https://github.com/Interbotix/interbotix_ros_toolboxes.git -b "$ROS_DISTRO_TO_INSTALL"
     # TODO(lsinterbotix) remove below when moveit_visual_tools is available in apt repo
     git clone https://github.com/ros-planning/moveit_visual_tools.git -b ros2
     rm                                                                                                  \
@@ -364,13 +364,13 @@ function install_locobot_ros2() {
     sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
     sudo udevadm control --reload-rules && sudo udevadm trigger
     cd $INSTALL_PATH
-    rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
+    rosdep install --from-paths src --ignore-src -r -y --rosdistro="$ROS_DISTRO_TO_INSTALL"
     if colcon build; then
-      echo -e "${GRN}${BOLD}Interbotix LoCoBot ROS packages built successfully!${NORM}${OFF}"
+      echo -e "${GRN}${BOLD}Interbotix LoCoBot ROS 2 packages built successfully!${NORM}${OFF}"
       echo "source $INSTALL_PATH/install/setup.bash" >> ~/.bashrc
       source $INSTALL_PATH/install/setup.bash
     else
-      failed "Failed to build packages for the Interbotix LoCoBot."
+      failed "Failed to build ROS 2 packages for the Interbotix LoCoBot."
     fi
   fi
 }
@@ -421,6 +421,7 @@ function install_kobuki_ros2() {
 }
 
 function install_create3_ros1() {
+  # shellcheck disable=SC2016,SC2129
   # Install packages required to run the Create 3 using ROS 1, including ros1_bridge.
   # We can only install Galactic due to hardware constraints - The intersection of compatibility
   # between ros1_bridge and the Create 3 is Galactic & Noetic
@@ -440,8 +441,8 @@ function install_create3_ros1() {
   cd $BRIDGE_MSGS_ROS1_WS/src
   git clone https://github.com/Interbotix/irobot_create_msgs_ros1.git -b ros1
   TEMP1=$(mktemp)
-  echo ". /opt/ros/noetic/setup.bash && cd $BRIDGE_MSGS_ROS1_WS && catkin_make_isolated --install" > $TEMP1
-  chmod a+x $TEMP1
+  echo ". /opt/ros/noetic/setup.bash && cd $BRIDGE_MSGS_ROS1_WS && catkin_make_isolated --install" > "$TEMP1"
+  chmod a+x "$TEMP1"
   if ($TEMP1); then
     echo -e "${GRN}${BOLD}irobot_create_msgs for ROS 1 built successfully!${NORM}${OFF}"
   else
@@ -453,8 +454,8 @@ function install_create3_ros1() {
   cd $BRIDGE_MSGS_ROS2_WS/src
   git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b galactic
   TEMP2=$(mktemp)
-  echo ". /opt/ros/galactic/setup.bash && cd $BRIDGE_MSGS_ROS2_WS && colcon build" > $TEMP2
-  chmod a+x $TEMP2
+  echo ". /opt/ros/galactic/setup.bash && cd $BRIDGE_MSGS_ROS2_WS && colcon build" > "$TEMP2"
+  chmod a+x "$TEMP2"
   if ($TEMP2); then
     echo -e "${GRN}${BOLD}irobot_create_msgs for ROS 2 built successfully!${NORM}${OFF}"
   else
@@ -466,8 +467,8 @@ function install_create3_ros1() {
   cd $BRIDGE_WS/src
   git clone https://github.com/ros2/ros1_bridge.git -b galactic
   TEMP3=$(mktemp)
-  echo ". /opt/ros/noetic/setup.bash && . /opt/ros/galactic/setup.bash && . $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash && . $BRIDGE_MSGS_ROS2_WS/install/setup.bash && cd $BRIDGE_WS && colcon build --packages-select ros1_bridge --cmake-force-configure" > $TEMP3
-  chmod a+x $TEMP3
+  echo ". /opt/ros/noetic/setup.bash && . /opt/ros/galactic/setup.bash && . $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash && . $BRIDGE_MSGS_ROS2_WS/install/setup.bash && cd $BRIDGE_WS && colcon build --packages-select ros1_bridge --cmake-force-configure" > "$TEMP3"
+  chmod a+x "$TEMP3"
   if ($TEMP3); then
     echo -e "${GRN}${BOLD}ros1_bridge built successfully!${NORM}${OFF}"
   else
@@ -476,13 +477,14 @@ function install_create3_ros1() {
 
   # Check that irobot_create_msgs exists in the built messages
   TEMP4=$(mktemp)
-  echo ". /opt/ros/noetic/setup.bash && . /opt/ros/galactic/setup.bash && . $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash && . $BRIDGE_MSGS_ROS2_WS/install/setup.bash && . $BRIDGE_WS/install/setup.bash && ros2 run ros1_bridge dynamic_bridge --print-pairs | grep -q 'irobot_create_msgs'" > $TEMP4
-  chmod a+x $TEMP4
+  echo ". /opt/ros/noetic/setup.bash && . /opt/ros/galactic/setup.bash && . $BRIDGE_MSGS_ROS1_WS/install_isolated/setup.bash && . $BRIDGE_MSGS_ROS2_WS/install/setup.bash && . $BRIDGE_WS/install/setup.bash && ros2 run ros1_bridge dynamic_bridge --print-pairs | grep -q 'irobot_create_msgs'" > "$TEMP4"
+  chmod a+x "$TEMP4"
   if ($TEMP4); then
     echo -e "${GRN}${BOLD}ros1_bridge dynamic_bridge found irobot_create_msgs interfaces!${NORM}${OFF}"
   else
     failed "Something went wrong when building ros1_bridge. ros1_bridge dynamic_bridge can't find irobot_create_msgs."
   fi
+  # shellcheck disable=SC2016,SC2129
   echo -e "export BRIDGE_WS=${BRIDGE_WS}" >> ~/.bashrc
   echo -e "export BRIDGE_MSGS_ROS1_WS=${BRIDGE_MSGS_ROS1_WS}" >> ~/.bashrc
   echo -e "export BRIDGE_MSGS_ROS2_WS=${BRIDGE_MSGS_ROS2_WS}" >> ~/.bashrc
@@ -495,8 +497,8 @@ function install_create3_ros2() {
     :
   else
     cd $INSTALL_PATH/src
-    git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b $ROS_DISTRO_TO_INSTALL
-    git clone https://github.com/iRobotEducation/create3_sim.git -b $ROS_DISTRO_TO_INSTALL
+    git clone https://github.com/iRobotEducation/irobot_create_msgs.git -b "$ROS_DISTRO_TO_INSTALL"
+    git clone https://github.com/iRobotEducation/create3_sim.git -b "$ROS_DISTRO_TO_INSTALL"
     # TODO: the block below can be removed when https://github.com/ros-controls/gz_ros2_control/issues/105 is resolved
     if [[ "$ROS_DISTRO_TO_INSTALL" = "humble" || "$ROS_DISTRO_TO_INSTALL" = "rolling" ]]; then
       git clone https://github.com/ros-controls/gz_ros2_control.git -b master
@@ -508,7 +510,8 @@ function install_create3_ros2() {
 }
 
 function config_rmw() {
-  # configures LoCoBot's computer
+  # configures LoCoBot's computer's RMW
+  # shellcheck disable=SC2016,SC2129
   if [ -z "$ROS_DISCOVERY_SERVER" ]; then
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
     echo "export FASTRTPS_DEFAULT_PROFILES_FILE=${FASTRTPS_DEFAULT_PROFILES_FILE}" >> ~/.bashrc
@@ -520,6 +523,7 @@ function config_rmw() {
 }
 
 function setup_env_vars_ros1() {
+  # shellcheck disable=SC2016,SC2129
   # Setup Environment Variables
   if [ -z "$INTERBOTIX_WS" ]; then
     echo "Setting up Environment Variables..."
@@ -556,7 +560,7 @@ do
     *) echo "Unknown argument $OPTION" && help && exit 0;;
   esac
 done
-shift "$(($OPTIND -1))"
+shift "$((OPTIND -1))"
 
 if [ "$NONINTERACTIVE" = false ]; then
   print_install_warning
@@ -573,18 +577,16 @@ UBUNTU_VERSION="$(lsb_release -rs)"
 
 # set default ROS distro before reading clargs
 if [ "$DISTRO_SET_FROM_CL" = false ]; then
-  if [ $UBUNTU_VERSION == "18.04" ]; then
-    if [ $BASE_TYPE == "create3" ]; then
+  if [ "$UBUNTU_VERSION" == "18.04" ]; then
+    if [ "$BASE_TYPE" == "create3" ]; then
       failed "The iRobot Create 3 base is incompatible with Ubuntu 18.04 and ROS 1 Melodic."
     fi
     ROS_DISTRO_TO_INSTALL="melodic"
-  elif [ $UBUNTU_VERSION == "20.04" ]; then
+  elif [ "$UBUNTU_VERSION" == "20.04" ]; then
     ROS_DISTRO_TO_INSTALL="noetic"
-  elif [ $UBUNTU_VERSION == "22.04" ]; then
-    ROS_DISTRO_TO_INSTALL="humble"
   else
     echo -e "${BOLD}${RED}Unsupported Ubuntu version: $UBUNTU_VERSION.${NORM}${OFF}"
-    failed "Interbotix LoCoBot only works with Ubuntu 18.04 bionic or 20.04 focal, or 22.04 jammy on your hardware."
+    failed "Interbotix LoCoBot only works with Ubuntu 18.04 bionic or 20.04 focal on your hardware."
   fi
 fi
 
@@ -630,7 +632,7 @@ sudo apt-get -y autoremove
 
 install_essential_packages
 
-mkdir -p $INSTALL_PATH/src
+mkdir -p "$INSTALL_PATH"/src
 
 shopt -s extglob
 
@@ -665,7 +667,7 @@ if [[ $BASE_TYPE == 'create3' ]]; then
     if [ ! -d "/etc/netplan/" ]; then
       sudo mkdir -p /etc/netplan/
     fi
-    sudo cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/conf/99_interbotix_config_locobot.yaml /etc/netplan/
+    sudo cp "$INSTALL_PATH"/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/conf/99_interbotix_config_locobot.yaml /etc/netplan/
     sudo netplan apply
     sleep 10
   fi
@@ -674,7 +676,7 @@ fi
 shopt -u extglob
 
 end_time="$(date -u +%s)"
-elapsed="$(($end_time-$start_time))"
+elapsed="$((end_time-start_time))"
 
 echo -e "${GRN}Installation complete, took $elapsed seconds in total.${OFF}"
 echo -e "${GRN}NOTE: Remember to reboot the computer before using the robot!${OFF}"

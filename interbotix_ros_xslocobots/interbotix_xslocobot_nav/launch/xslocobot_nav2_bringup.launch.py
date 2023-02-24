@@ -46,7 +46,6 @@ from launch.conditions import (
 from launch.substitutions import (
     PathJoinSubstitution,
     LaunchConfiguration,
-    TextSubstitution,
 )
 from launch_ros.actions import (
     Node,
@@ -83,7 +82,7 @@ def launch_setup(context, *args, **kwargs):
     ]
 
     lifecycle_nodes_localization = [
-        'map_server'
+        'map_server',
         'amcl'
     ]
 
@@ -97,14 +96,14 @@ def launch_setup(context, *args, **kwargs):
     # https://github.com/ros/robot_state_publisher/pull/30
     tf_remappings = [
         ('/tf', 'tf'),
-        ('/tf_static', 'tf_static'
-        )
+        ('/tf_static', 'tf_static')
     ]
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time_launch_arg,
         'autostart': autostart_launch_arg,
+        'yaml_filename': map_yaml_file_launch_arg,
     }
 
     configured_params = RewrittenYaml(
@@ -185,21 +184,20 @@ def launch_setup(context, *args, **kwargs):
         actions=[
             SetParameter('use_sim_time', use_sim_time_launch_arg),
             Node(
-                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationNotEquals('slam_mode', 'localization_amcl'),
                 package='nav2_map_server',
                 executable='map_saver_server',
+                name='map_saver_server',
                 output='screen',
                 respawn=use_respawn_launch_arg,
                 respawn_delay=2.0,
                 arguments=[
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
-                parameters=[
-                    configured_params
-                ],
+                parameters=[configured_params],
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization_amcl'),
                 package='nav2_map_server',
                 executable='map_server',
                 name='map_server',
@@ -209,14 +207,11 @@ def launch_setup(context, *args, **kwargs):
                 arguments=[
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
-                parameters=[
-                    configured_params,
-                    {'yaml_filename': map_yaml_file_launch_arg},
-                ],
+                parameters=[configured_params],
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization_amcl'),
                 package='nav2_amcl',
                 executable='amcl',
                 name='amcl',
@@ -228,7 +223,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationNotEquals('slam_mode', 'localization_amcl'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_slam',
@@ -237,12 +232,13 @@ def launch_setup(context, *args, **kwargs):
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
                 parameters=[
+                    {'use_sim_time': use_sim_time_launch_arg},
                     {'autostart': autostart_launch_arg},
                     {'node_names': lifecycle_nodes_slam},
                 ]
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization_amcl'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_localization',
@@ -251,6 +247,7 @@ def launch_setup(context, *args, **kwargs):
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
                 parameters=[
+                    {'use_sim_time': use_sim_time_launch_arg},
                     {'autostart': autostart_launch_arg},
                     {'node_names': lifecycle_nodes_localization},
                 ]
@@ -330,18 +327,21 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'slam_toolbox_mode',
+            'slam_mode',
             default_value='online_async',
             choices=(
                 # 'lifelong',
                 'localization',
+                'localization_amcl',
                 # 'offline',
                 'online_async',
                 'online_sync'
             ),
             description=(
-                "the node to launch the SLAM in using the slam_toolbox. Currently only "
+                "the mode to launch the SLAM in using the slam_toolbox. Currently only "
                 "'localization', 'online_sync', and 'online_async' modes are supported."
+                "'localization' mode takes a pose graph map defined in the slam_toolbox_localization.yaml"
+                "'localization_amcl' mode instead uses the amcl package to localize, given a map yaml file."
             ),
         )
     )
@@ -355,7 +355,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'log_level',
-            default_value='info',
+            default_value='warn',
             choices=('debug', 'info', 'warn', 'error', 'fatal'),
             description='set the logging level of the Nav2 nodes.'
         )

@@ -258,6 +258,7 @@ function config_rmw() {
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
     echo "export FASTRTPS_DEFAULT_PROFILES_FILE=${FASTRTPS_DEFAULT_PROFILES_FILE}" >> ~/.bashrc
     echo "export ROS_DISCOVERY_SERVER=${LOCOBOT_IP}:11811" >> ~/.bashrc
+    sed -i "s/remote/${USER}/g" "$IP_ROUTING_SERVICE_FILE"
     sudo cp "$IP_ROUTING_SERVICE_FILE" /lib/systemd/system/
     sed -i "s/127.0.0.1/${LOCOBOT_IP}/g" "$FASTRTPS_DEFAULT_PROFILES_FILE"
     sed -i "s/10.42.0.15/${LOCOBOT_IP}/g" "$IP_ROUTING_SCRIPT"

@@ -179,24 +179,20 @@ function install_locobot_ros1() {
   then
     echo "Interbotix LoCoBot ROS 1 packages already installed!"
   else
-    # install dependencies
+    # Install dependencies
     sudo apt-get install -yq                    \
       ros-"$ROS_DISTRO_TO_INSTALL"-rtabmap-ros  \
       ros-"$ROS_DISTRO_TO_INSTALL"-xacro
     # Install LoCoBot packages
-    if [ ! -d "$INSTALL_PATH/src" ]; then
-      echo -e "${GRN}Installing Simulation/Visualization ROS packages for the Interbotix LoCoBot...${OFF}"
-      cd "$INSTALL_PATH" || exit
-      # we run catkin_make before cloning repos to set up devel space
-      # don't care about building, just having launch files and resources i.e. descriptions, sim, etc.
-      catkin_make
-      git clone https://github.com/Interbotix/interbotix_ros_rovers.git src
-      git clone https://github.com/Interbotix/create3_sim_ros1.git -b ros1 src
-      cd interbotix_ros_rovers && git checkout "$ROS_DISTRO_TO_INSTALL" && cd ..
-      echo "source $INSTALL_PATH/devel/setup.bash" >> ~/.bashrc
-    else
-      echo "Interbotix LoCoBot ROS packages already installed!"
-    fi
+    echo -e "${GRN}Installing Simulation/Visualization ROS packages for the Interbotix LoCoBot...${OFF}"
+    cd "$INSTALL_PATH" || exit
+    # we run catkin_make before cloning repos to set up devel space
+    # don't care about building, just having launch files and resources i.e. descriptions, sim, etc.
+    catkin_make
+    git clone -b "$ROS_DISTRO_TO_INSTALL"  https://github.com/Interbotix/interbotix_ros_rovers.git src/interbotix_ros_rovers
+    git clone -b ros1 https://github.com/Interbotix/create3_sim_ros1.git src/create3_sim_ros1
+    cd src/interbotix_ros_rovers && git checkout "$ROS_DISTRO_TO_INSTALL" && cd "$INSTALL_PATH" || exit
+    echo "source $INSTALL_PATH/devel/setup.bash" >> ~/.bashrc
     source "$INSTALL_PATH"/devel/setup.bash
   fi
 }

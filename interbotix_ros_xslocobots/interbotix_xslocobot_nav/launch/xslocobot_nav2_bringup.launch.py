@@ -184,7 +184,7 @@ def launch_setup(context, *args, **kwargs):
         actions=[
             SetParameter('use_sim_time', use_sim_time_launch_arg),
             Node(
-                condition=LaunchConfigurationNotEquals('slam_mode', 'localization_amcl'),
+                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization_amcl'),
                 package='nav2_map_server',
                 executable='map_saver_server',
                 name='map_saver_server',
@@ -197,7 +197,7 @@ def launch_setup(context, *args, **kwargs):
                 parameters=[configured_params],
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_mode', 'localization_amcl'),
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization_amcl'),
                 package='nav2_map_server',
                 executable='map_server',
                 name='map_server',
@@ -211,7 +211,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_mode', 'localization_amcl'),
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization_amcl'),
                 package='nav2_amcl',
                 executable='amcl',
                 name='amcl',
@@ -223,7 +223,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationNotEquals('slam_mode', 'localization_amcl'),
+                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization_amcl'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_slam',
@@ -238,7 +238,7 @@ def launch_setup(context, *args, **kwargs):
                 ]
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_mode', 'localization_amcl'),
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization_amcl'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_localization',
@@ -286,7 +286,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'cmd_vel_topic',
-            default_value=(LaunchConfiguration('robot_name'), '/mobile_base/cmd_vel'),
+            default_value=(LaunchConfiguration('robot_name'), '/diffdrive_controller/cmd_vel_unstamped'),
             description="topic to remap /cmd_vel to."
         )
     )
@@ -327,7 +327,7 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'slam_mode',
+            'slam_toolbox_mode',
             default_value='online_async',
             choices=(
                 # 'lifelong',
@@ -355,7 +355,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             'log_level',
-            default_value='warn',
+            default_value='info',
             choices=('debug', 'info', 'warn', 'error', 'fatal'),
             description='set the logging level of the Nav2 nodes.'
         )

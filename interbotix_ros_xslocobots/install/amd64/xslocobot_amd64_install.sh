@@ -502,22 +502,7 @@ function install_create3_ros1() {
 
 function install_create3_ros2() {
   # Install LoCoBot packages for the Create 3 base
-  if source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash 2>/dev/null && \
-     ros2 pkg list | grep -q create3_sim 2>/dev/null && \
-     ros2 pkg list | grep -q irobot_create_msgs;
-  then
-  # if [ -d "$INSTALL_PATH/src/irobot_create_msgs" ]; then
-    :
-  else
-    cd "$INSTALL_PATH"/src
-    # TODO: the block below can be removed when https://github.com/ros-controls/gz_ros2_control/issues/105 is resolved
-    if [[ "$ROS_DISTRO_TO_INSTALL" = "humble" || "$ROS_DISTRO_TO_INSTALL" = "rolling" ]]; then
-      git clone https://github.com/ros-controls/gz_ros2_control.git -b master
-      cd gz_ros2_control
-      git checkout 9087043
-      cd -
-    fi
-  fi
+  :
 }
 
 function config_rmw() {

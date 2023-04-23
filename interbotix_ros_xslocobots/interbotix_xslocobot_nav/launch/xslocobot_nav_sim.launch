@@ -92,7 +92,7 @@
       type="nodelet"
       name="rgbd_sync"
       output="screen"
-      args="standalone rtabmap_ros/rgbd_sync">
+      args="standalone rtabmap_sync/rgbd_sync">
       <param name="approx_sync"                   value="false"/>
       <remap from="rgb/image"                     to="/$(arg robot_name)/camera/color/image_raw"/>
       <remap from="depth/image"                   to="/$(arg robot_name)/camera/aligned_depth_to_color/image_raw"/>
@@ -105,7 +105,7 @@
       type="nodelet"
       name="points_xyzrgb"
       output="screen"
-      args="standalone rtabmap_ros/point_cloud_xyzrgb">
+      args="standalone rtabmap_util/point_cloud_xyzrgb">
       <param name="decimation"                    value="4"/>
       <param name="voxel_size"                    value="0.05"/>
       <param name="approx_sync"                   value="false"/>
@@ -117,7 +117,7 @@
       type="nodelet"
       name="obstacle_detection"
       output="screen"
-      args="standalone rtabmap_ros/obstacles_detection">
+      args="standalone rtabmap_util/obstacles_detection">
       <param name="wait_for_transform"            value="true"/>
       <param name="frame_id"                      value="$(arg robot_name)/base_footprint"/>
       <remap from="cloud"                         to="depth/color/voxels"/>
@@ -127,7 +127,7 @@
 
     <node
       name="rtabmap"
-      pkg="rtabmap_ros"
+      pkg="rtabmap_slam"
       type="rtabmap"
       output="screen"
       args="$(arg rtabmap_default_args)">
@@ -162,7 +162,7 @@
     </node>
 
     <node if="$(arg use_rtabmapviz)"
-      pkg="rtabmap_ros"
+      pkg="rtabmap_viz"
       type="rtabmapviz"
       name="rtabmapviz"
       args="$(arg rtabmapviz_args)"

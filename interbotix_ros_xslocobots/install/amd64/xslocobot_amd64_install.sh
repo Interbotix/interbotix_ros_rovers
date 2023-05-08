@@ -360,6 +360,8 @@ function install_locobot_ros2() {
     git clone -b "$ROS_DISTRO_TO_INSTALL" https://github.com/Interbotix/interbotix_ros_toolboxes.git
     # TODO(lsinterbotix) remove below when moveit_visual_tools is available in apt repo
     git clone https://github.com/ros-planning/moveit_visual_tools.git -b ros2
+    # TODO(lsinterbotix) remove below when sllidar_ros2 is available in ROS index
+    git clone https://github.com/Slamtec/sllidar_ros2.git
     # remove IGNOREs from perception and moveit_interface packages
     rm                                                                                                  \
       interbotix_ros_toolboxes/interbotix_perception_toolbox/COLCON_IGNORE                              \

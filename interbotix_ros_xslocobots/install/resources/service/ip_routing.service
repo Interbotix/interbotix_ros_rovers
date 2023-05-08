@@ -8,6 +8,8 @@
 
 [Unit]
 Description=Enable LoCoBot IP routing for 192.168.186.0/24
+Wants=network-online.target
+After=network.target network-online.target
 
 [Service]
 Type=simple

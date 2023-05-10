@@ -171,6 +171,14 @@ function check_ubuntu_version() {
   esac
 }
 
+function check_ros_is_installed() {
+  # check if the specific distro of ROS is installed on this machine
+  if [ -f /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash ]; then
+    return 0
+  else
+    failed "ROS $ROS_DISTRO_TO_INSTALL is not installed. Please install it before running this script."
+  fi
+}
 
 function install_locobot_ros1() {
   if source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash &> /dev/null && \
@@ -307,6 +315,7 @@ shift "$((OPTIND-1))"
 validate_base_type
 
 if ! command -v lsb_release &> /dev/null; then
+  # lsb_release is needed to determine the Ubuntu version
   sudo apt update
   sudo apt-get install -yq lsb-release
 fi
@@ -330,6 +339,7 @@ fi
 
 validate_distro
 check_ubuntu_version
+check_ros_is_installed
 
 if [ -z "$HOSTNAME" ]; then
   # prompt for hostname
@@ -370,6 +380,11 @@ export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}
 # Update the system
 sudo apt-get update && sudo apt-get -y upgrade
 sudo apt-get -y autoremove
+
+if ! command -v git &> /dev/null; then
+  # git is needed to clone dependency repositories
+  sudo apt-get install -yq git
+fi
 
 mkdir -p "$INSTALL_PATH"/src
 

@@ -8,10 +8,12 @@
 
 [Unit]
 Description=Enable LoCoBot IP routing for 192.168.186.0/24
+Wants=network-online.target
+After=network.target network-online.target
 
 [Service]
 Type=simple
-ExecStart=/home/locobot/interbotix_ws/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/ip_routing.sh
+ExecStart=/home/remote/interbotix_ws/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/ip_routing.sh
 RestartSec=1
 Restart=on-failure
 

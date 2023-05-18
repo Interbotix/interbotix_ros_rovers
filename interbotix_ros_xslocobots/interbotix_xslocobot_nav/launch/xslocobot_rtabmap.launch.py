@@ -169,7 +169,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     rtabmap_rgbd_sync_node = Node(
-        package='rtabmap_ros',
+        package='rtabmap_sync',
         executable='rgbd_sync',
         name='rgbd_sync',
         namespace=(robot_name_launch_arg, '/rtabmap'),
@@ -186,7 +186,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     rtabmap_point_cloud_xyzrgb_node = Node(
-        package='rtabmap_ros',
+        package='rtabmap_util',
         executable='point_cloud_xyzrgb',
         name='point_cloud_xyzrgb',
         namespace=(robot_name_launch_arg, '/rtabmap'),
@@ -203,7 +203,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     rtabmap_obstacles_detection_node = Node(
-        package='rtabmap_ros',
+        package='rtabmap_util',
         executable='obstacles_detection',
         namespace=(robot_name_launch_arg, '/rtabmap'),
         name='obstacles_detection',
@@ -222,7 +222,7 @@ def launch_setup(context, *args, **kwargs):
 
     rtabmap_mapping_node = Node(
         condition=LaunchConfigurationEquals('slam_mode', 'mapping'),
-        package='rtabmap_ros',
+        package='rtabmap_slam',
         executable='rtabmap',
         name='rtabmap',
         namespace=(robot_name_launch_arg, '/rtabmap'),
@@ -240,7 +240,7 @@ def launch_setup(context, *args, **kwargs):
 
     rtabmap_localization_node = Node(
         condition=LaunchConfigurationEquals('slam_mode', 'localization'),
-        package='rtabmap_ros',
+        package='rtabmap_slam',
         executable='rtabmap',
         name='rtabmap',
         namespace=(robot_name_launch_arg, '/rtabmap'),
@@ -257,7 +257,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     rtabmapviz_node = Node(
-        package='rtabmap_ros',
+        package='rtabmap_viz',
         executable='rtabmapviz',
         namespace=robot_name_launch_arg,
         parameters=[{

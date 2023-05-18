@@ -20,6 +20,7 @@
   <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == create3">interbotix_tf_tools</depend>
   <depend>realsense2_camera</depend>
   <depend>rplidar_ros</depend>
+  <depend>sllidar_ros2</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

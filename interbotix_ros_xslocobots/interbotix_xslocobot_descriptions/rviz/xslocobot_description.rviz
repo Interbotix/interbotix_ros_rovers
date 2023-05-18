@@ -480,7 +480,7 @@ Visualization Manager:
       Value: false
     - Class: rviz_common/Group
       Displays:
-        - Class: rtabmap_ros/Info
+        - Class: rtabmap_rviz_plugins/Info
           Enabled: true
           Name: Info
           Topic:
@@ -499,7 +499,7 @@ Visualization Manager:
             Value: true
           Axis: Z
           Channel Name: intensity
-          Class: rtabmap_ros/MapCloud
+          Class: rtabmap_rviz_plugins/MapCloud
           Cloud decimation: 4
           Cloud from scan: false
           Cloud max depth (m): 4
@@ -536,7 +536,7 @@ Visualization Manager:
           Use rainbow: true
           Value: false
         - Alpha: 1
-          Class: rtabmap_ros/MapGraph
+          Class: rtabmap_rviz_plugins/MapGraph
           Enabled: true
           Global loop closure: 255; 0; 0
           Landmark: 0; 128; 0

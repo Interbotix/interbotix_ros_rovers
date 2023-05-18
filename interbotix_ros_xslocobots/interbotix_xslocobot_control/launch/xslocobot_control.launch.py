@@ -169,7 +169,10 @@ def launch_setup(context, *args, **kwargs):
     )
 
     rplidar_node = Node(
-        condition=IfCondition(use_lidar_launch_arg),
+        condition=AndCondition([
+            IfCondition(use_lidar_launch_arg),
+            LaunchConfigurationEquals('lidar_type', 'rplidar_a2m8'),
+        ]),
         package='rplidar_ros',
         executable='rplidar_composition',
         namespace=robot_name_launch_arg,
@@ -177,8 +180,27 @@ def launch_setup(context, *args, **kwargs):
         name='rplidar_composition',
         parameters=[{
             'serial_port': '/dev/rplidar',
-            'serial_baudrate': 115200,  # A1 / A2
-            # 'serial_baudrate': 256000, # A3
+            'serial_baudrate': 115200,  # A1 / A2M8
+            'frame_id': (robot_name_launch_arg, '/laser_frame_link'),
+            'inverted': False,
+            'angle_compensate': True,
+        }],
+    )
+
+    sllidar_node = Node(
+        condition=AndCondition([
+            IfCondition(use_lidar_launch_arg),
+            LaunchConfigurationEquals('lidar_type', 'rplidar_a2m12'),
+        ]),
+        package='sllidar_ros2',
+        executable='sllidar_node',
+        namespace=robot_name_launch_arg,
+        output={'both': 'screen'},
+        name='rplidar_composition',
+        parameters=[{
+            'channel_type': 'serial',
+            'serial_port': '/dev/rplidar',
+            'serial_baudrate': 256000, # A2M12, A3
             'frame_id': (robot_name_launch_arg, '/laser_frame_link'),
             'inverted': False,
             'angle_compensate': True,
@@ -242,6 +264,7 @@ def launch_setup(context, *args, **kwargs):
         xs_sdk_sim_node,
         kobuki_node,
         rplidar_node,
+        sllidar_node,
         rs_camera_node,
         tf_rebroadcaster_launch_include,
     ]
@@ -340,6 +363,19 @@ def generate_launch_description():
             default_value='false',
             choices=('true', 'false'),
             description='if `true`, the RPLidar node is launched.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'lidar_type',
+            default_value=EnvironmentVariable(
+                name='INTERBOTIX_XSLOCOBOT_LIDAR_TYPE',
+                default_value='rplidar_a2m12'),
+            choices=('rplidar_a2m8', 'rplidar_a2m12'),
+            description=(
+                'the lidar model on the LoCoBot. SLAMTEC RPLidars with a red band surrounding '
+                'their emitter window are A2M8s while those with a purple band are A2M12s.'
+            ),
         )
     )
     declared_arguments.append(

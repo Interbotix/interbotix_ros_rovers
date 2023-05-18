@@ -8,6 +8,7 @@
   <arg name="use_rviz"                          default="false"/>
   <arg name="rviz_frame"                        default="$(arg robot_name)/base_footprint"/>
   <arg name="base_type"                         default="$(optenv INTERBOTIX_XSLOCOBOT_BASE_TYPE create3)"/> <!-- 'kobuki', 'create3' -->
+  <arg name="lidar_type"                        default="$(optenv INTERBOTIX_XSLOCOBOT_LIDAR_TYPE rplidar_a2m8)"/> <!-- 'rplidar_a2m8', 'rplidar_a2m12' -->
   <arg name="use_base"                          default="false"/>
   <arg name="use_dock"                          default="false"/>
   <arg name="use_lidar"                         default="false"/>
@@ -118,6 +119,9 @@
     </node>
   </group>
 
+  <arg name="rplidar_serial_baudrate" value="115200" if="$(eval arg('lidar_type') == 'rplidar_a2m8')"/>
+  <arg name="rplidar_serial_baudrate" value="256000" if="$(eval arg('lidar_type') == 'rplidar_a2m12')"/>
+
   <node if="$(arg use_lidar)"
 	  name="rplidarNode"
 	  pkg="rplidar_ros"
@@ -125,7 +129,7 @@
 	  output="screen"
     ns="$(arg robot_name)">
   	<param name="serial_port"       type="string" value="/dev/rplidar"/>
-  	<param name="serial_baudrate"   type="int"    value="115200"/>
+  	<param name="serial_baudrate"   type="int"    value="$(arg rplidar_serial_baudrate)"/>
   	<param name="frame_id"          type="string" value="$(arg robot_name)/laser_frame_link"/>
   	<param name="inverted"          type="bool"   value="false"/>
   	<param name="angle_compensate"  type="bool"   value="true"/>

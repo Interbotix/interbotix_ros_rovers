@@ -63,6 +63,7 @@ def launch_setup(context, *args, **kwargs):
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
     slam_toolbox_params_file_launch_arg = LaunchConfiguration('slam_toolbox_params_file')
     slam_toolbox_mode_launch_arg = LaunchConfiguration('slam_toolbox_mode')
+    use_camera_launch_arg = LaunchConfiguration('use_camera')
     camera_tilt_angle_launch_arg = LaunchConfiguration('camera_tilt_angle')
     launch_driver_launch_arg = LaunchConfiguration('launch_driver')
     hardware_type_launch_arg = LaunchConfiguration('hardware_type')
@@ -93,7 +94,7 @@ def launch_setup(context, *args, **kwargs):
             'use_rviz': use_rviz_launch_arg,
             'use_base_odom_tf': use_base_odom_tf_launch_arg,
             'rviz_frame': 'map',
-            'use_camera': 'true',
+            'use_camera': use_camera_launch_arg,
             'rs_camera_align_depth': 'true',
             'use_base': 'true',
             # 'use_dock': 'true',
@@ -222,6 +223,14 @@ def generate_launch_description():
             default_value='INFO',
             choices=('DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'),
             description='set the logging level of the X-Series Driver.'
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'use_camera',
+            default_value='false',
+            choices=('true', 'false'),
+            description='if `true`, the RealSense camera nodes are launched.',
         )
     )
     declared_arguments.append(

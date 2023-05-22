@@ -61,6 +61,7 @@ def launch_setup(context, *args, **kwargs):
     use_sim_time_launch_arg = LaunchConfiguration('use_sim_time')
     log_level_launch_arg = LaunchConfiguration('log_level')
     autostart_launch_arg = LaunchConfiguration('autostart')
+    use_composition_launch_arg = LaunchConfiguration('use_composition')
     use_respawn_launch_arg = LaunchConfiguration('use_respawn')
     nav2_params_file_launch_arg = LaunchConfiguration('nav2_params_file')
     cmd_vel_topic_launch_arg = LaunchConfiguration('cmd_vel_topic')
@@ -184,6 +185,15 @@ def launch_setup(context, *args, **kwargs):
         actions=[
             SetParameter('use_sim_time', use_sim_time_launch_arg),
             Node(
+                condition=IfCondition(use_composition_launch_arg),
+                name='nav2_container',
+                package='rclcpp_components',
+                executable='component_container_isolated',
+                parameters=[configured_params, {'autostart': autostart_launch_arg}],
+                arguments=['--ros-args', '--log-level', log_level_launch_arg],
+                remappings=tf_remappings,
+                output='screen'),
+            Node(
                 condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization_amcl'),
                 package='nav2_map_server',
                 executable='map_saver_server',
@@ -281,6 +291,14 @@ def generate_launch_description():
             default_value='true',
             choices=('true', 'false'),
             description='automatically startup the Nav2 stack.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'use_composition',
+            default_value='true',
+            choices=('true', 'false'),
+            description='Whether to use composed bringup',
         )
     )
     declared_arguments.append(

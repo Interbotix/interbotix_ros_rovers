@@ -41,7 +41,6 @@ from launch.actions import (
 from launch.conditions import (
     IfCondition,
     LaunchConfigurationEquals,
-    LaunchConfigurationNotEquals,
 )
 from launch.substitutions import (
     PathJoinSubstitution,
@@ -194,7 +193,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings,
                 output='screen'),
             Node(
-                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization_amcl'),
+                condition=LaunchConfigurationEquals('slam_mode', 'mapping'),
                 package='nav2_map_server',
                 executable='map_saver_server',
                 name='map_saver_server',
@@ -207,7 +206,7 @@ def launch_setup(context, *args, **kwargs):
                 parameters=[configured_params],
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization_amcl'),
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
                 package='nav2_map_server',
                 executable='map_server',
                 name='map_server',
@@ -221,7 +220,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization_amcl'),
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
                 package='nav2_amcl',
                 executable='amcl',
                 name='amcl',
@@ -233,7 +232,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization_amcl'),
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'mapping'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_slam',
@@ -248,7 +247,7 @@ def launch_setup(context, *args, **kwargs):
                 ]
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization_amcl'),
+                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_localization',
@@ -345,22 +344,10 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'slam_toolbox_mode',
-            default_value='online_async',
-            choices=(
-                # 'lifelong',
-                'localization',
-                'localization_amcl',
-                # 'offline',
-                'online_async',
-                'online_sync'
-            ),
-            description=(
-                "the mode to launch the SLAM in using the slam_toolbox. Currently only "
-                "'localization', 'online_sync', and 'online_async' modes are supported."
-                "'localization' mode takes a pose graph map defined in the slam_toolbox_localization.yaml"
-                "'localization_amcl' mode instead uses the amcl package to localize, given a map yaml file."
-            ),
+            'slam_mode',
+            default_value='mapping',
+            choices=('mapping', 'localization'),
+            description='the mode to launch the SLAM in using RTAB-MAP or SLAM Toolbox.',
         )
     )
     declared_arguments.append(

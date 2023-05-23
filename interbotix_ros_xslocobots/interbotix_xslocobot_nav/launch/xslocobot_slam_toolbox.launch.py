@@ -171,7 +171,7 @@ def launch_setup(context, *args, **kwargs):
             'autostart': 'true',
             'params_file': LaunchConfiguration('nav2_params_file'),
             'use_slam_toolbox': 'true',
-            'slam_toolbox_mode': slam_toolbox_mode_launch_arg,
+            'slam_mode': 'mapping',
             'map': map_yaml_file_launch_arg,
         }.items(),
     )
@@ -287,17 +287,15 @@ def generate_launch_description():
             default_value='online_async',
             choices=(
                 # 'lifelong',
-                'localization',
-                'localization_amcl',
+                # 'localization',
                 # 'offline',
                 'online_async',
                 'online_sync'
             ),
             description=(
                 "the mode to launch the SLAM in using the slam_toolbox. Currently only "
-                "'localization', 'online_sync', and 'online_async' modes are supported."
+                "'online_sync', and 'online_async' modes are supported."
                 "'localization' mode takes a pose graph map defined in the slam_toolbox_localization.yaml"
-                "'localization_amcl' mode instead uses the amcl package to localize, given a map yaml file."
             ),
         )
     )

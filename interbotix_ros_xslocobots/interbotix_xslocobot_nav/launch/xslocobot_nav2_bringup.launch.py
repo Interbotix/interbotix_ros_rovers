@@ -206,7 +206,7 @@ def launch_setup(context, *args, **kwargs):
                 parameters=[configured_params],
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization'),
                 package='nav2_map_server',
                 executable='map_server',
                 name='map_server',
@@ -220,7 +220,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization'),
                 package='nav2_amcl',
                 executable='amcl',
                 name='amcl',
@@ -232,7 +232,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'mapping'),
+                condition=LaunchConfigurationEquals('slam_mode', 'mapping'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_slam',
@@ -247,7 +247,7 @@ def launch_setup(context, *args, **kwargs):
                 ]
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_localization',

@@ -191,12 +191,12 @@ def launch_setup(context, *args, **kwargs):
                 parameters=[configured_params, {'autostart': autostart_launch_arg}],
                 arguments=['--ros-args', '--log-level', log_level_launch_arg],
                 remappings=tf_remappings,
-                output='screen'),
+                output='screen'
+            ),
             Node(
                 condition=LaunchConfigurationEquals('slam_mode', 'mapping'),
                 package='nav2_map_server',
                 executable='map_saver_server',
-                name='map_saver_server',
                 output='screen',
                 respawn=use_respawn_launch_arg,
                 respawn_delay=2.0,
@@ -204,6 +204,7 @@ def launch_setup(context, *args, **kwargs):
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
                 parameters=[configured_params],
+                remappings=tf_remappings
             ),
             Node(
                 condition=LaunchConfigurationEquals('slam_mode', 'localization'),

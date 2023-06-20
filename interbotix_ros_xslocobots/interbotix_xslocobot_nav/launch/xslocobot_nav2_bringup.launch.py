@@ -64,7 +64,6 @@ def launch_setup(context, *args, **kwargs):
     use_respawn_launch_arg = LaunchConfiguration('use_respawn')
     nav2_params_file_launch_arg = LaunchConfiguration('nav2_params_file')
     cmd_vel_topic_launch_arg = LaunchConfiguration('cmd_vel_topic')
-    use_slam_toolbox_launch_arg = LaunchConfiguration('use_slam_toolbox')
     map_yaml_file_launch_arg = LaunchConfiguration('map')
     # Set env var to print messages to stdout immediately
     set_logging_env_var = SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -180,7 +179,6 @@ def launch_setup(context, *args, **kwargs):
     )
 
     slam_toolbox_nav2_nodes = GroupAction(
-        condition=IfCondition(use_slam_toolbox_launch_arg),
         actions=[
             SetParameter('use_sim_time', use_sim_time_launch_arg),
             Node(
@@ -330,16 +328,6 @@ def generate_launch_description():
                 'tells ROS nodes asking for time to get the Gazebo-published simulation time, '
                 'published over the ROS topic /clock; this value is automatically set to `true` if'
                 ' using Gazebo hardware.'
-            )
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            'use_slam_toolbox',
-            default_value='false',
-            choices=('true', 'false'),
-            description=(
-                'whether to use slam_toolbox over rtabmap.'
             )
         )
     )

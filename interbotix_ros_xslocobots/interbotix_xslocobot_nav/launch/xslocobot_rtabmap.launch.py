@@ -63,7 +63,7 @@ def launch_setup(context, *args, **kwargs):
     xs_driver_logging_level_launch_arg = LaunchConfiguration('xs_driver_logging_level')
     use_lidar_launch_arg = LaunchConfiguration('use_lidar')
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
-    slam_mode_launch_arg = LaunchConfiguration('slam_mode')
+    # slam_mode_launch_arg = LaunchConfiguration('slam_mode')
     rtabmap_args_launch_arg = LaunchConfiguration('rtabmap_args')
     use_rtabmapviz_launch_arg = LaunchConfiguration('use_rtabmapviz')
     rtabmap_output_location_launch_arg = LaunchConfiguration('rtabmap_output_location')
@@ -118,10 +118,11 @@ def launch_setup(context, *args, **kwargs):
         'use_sim_time': use_sim_time_param,
     }
 
-    remappings_rtabmap=[
+    remappings_rtabmap = [
         ('scan', ('/', robot_name_launch_arg, '/scan')),
         ('initialpose', '/initialpose'),
         ('map', '/map'),
+        ('odom', ('/', robot_name_launch_arg, '/mobile_base/odom'))
     ]
 
     if IfCondition(use_lidar_launch_arg.perform(context)).evaluate(context):
@@ -178,9 +179,12 @@ def launch_setup(context, *args, **kwargs):
             'use_sim_time': use_sim_time_param,
         }],
         remappings=[
-            ('rgb/image', ('/', robot_name_launch_arg,'/camera/color/image_raw')),
-            ('depth/image', ('/', robot_name_launch_arg,'/camera/aligned_depth_to_color/image_raw')),
-            ('rgb/camera_info', ('/', robot_name_launch_arg,'/camera/color/camera_info')),
+            ('rgb/image',
+                ('/', robot_name_launch_arg, '/camera/color/image_raw')),
+            ('depth/image',
+                ('/', robot_name_launch_arg, '/camera/aligned_depth_to_color/image_raw')),
+            ('rgb/camera_info',
+                ('/', robot_name_launch_arg, '/camera/color/camera_info')),
         ],
         output={'both': rtabmap_output_location_launch_arg.perform(context)},
     )
@@ -247,8 +251,8 @@ def launch_setup(context, *args, **kwargs):
         parameters=[
             rtabmap_parameters,
             {
-                'Mem/IncrementalMemory':'False',
-                'Mem/InitWMWithAllNodes':'True'
+                'Mem/IncrementalMemory': 'False',
+                'Mem/InitWMWithAllNodes': 'True'
             },
         ],
         remappings=remappings_rtabmap,
@@ -299,6 +303,7 @@ def launch_setup(context, *args, **kwargs):
             'use_sim_time': use_sim_time_param,
             'autostart': 'true',
             'params_file': LaunchConfiguration('nav2_params_file'),
+            'use_lidar': use_lidar_launch_arg,
         }.items(),
     )
 
@@ -310,8 +315,8 @@ def launch_setup(context, *args, **kwargs):
     )
 
     camera_tilt_angle_cmd = (
-        f"ros2 topic pub --once {robot_name_launch_arg.perform(context)}/commands/joint_group "
-        "interbotix_xs_msgs/msg/JointGroupCommand "
+        f'ros2 topic pub --once {robot_name_launch_arg.perform(context)}/commands/joint_group '
+        'interbotix_xs_msgs/msg/JointGroupCommand '
         f"'{{name: 'camera', cmd: [0, {camera_tilt_angle_launch_arg.perform(context)}]}}'"
     )
 
@@ -383,7 +388,10 @@ def generate_launch_description():
             'use_lidar',
             default_value='false',
             choices=('true', 'false'),
-            description='if `true`, the RPLidar node is launched.',
+            description=(
+                'if `true`, the RPLidar node is launched and Nav2 is configured to use lidar as an'
+                ' observation source.'
+            ),
         )
     )
     declared_arguments.append(
@@ -507,7 +515,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'cmd_vel_topic',
             default_value=(LaunchConfiguration('robot_name'), '/mobile_base/cmd_vel'),
-            description="topic to remap /cmd_vel to."
+            description='topic to remap /cmd_vel to.'
         )
     )
     declared_arguments.append(

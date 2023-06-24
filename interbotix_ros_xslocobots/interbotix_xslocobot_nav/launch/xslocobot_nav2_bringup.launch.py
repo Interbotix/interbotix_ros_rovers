@@ -26,11 +26,6 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""
-This launch script borrows heavily from the original Nav2 bringup launch file:
-    https://github.com/ros-planning/navigation2/blob/2de3f92c0f476de4bda21d1fc5268657b499b258/nav2_bringup/bringup/launch/bringup_launch.py
-"""
-
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
@@ -38,9 +33,8 @@ from launch.actions import (
     SetEnvironmentVariable
 )
 from launch.substitutions import (
-    PathJoinSubstitution,
     LaunchConfiguration,
-    TextSubstitution,
+    PathJoinSubstitution,
 )
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -73,6 +67,10 @@ def launch_setup(context, *args, **kwargs):
     param_substitutions = {
         'use_sim_time': use_sim_time_launch_arg,
         'autostart': autostart_launch_arg,
+        'local_costmap.local_costmap.ros__parameters.laser_layer.enabled':
+            LaunchConfiguration('use_lidar'),
+        'global_costmap.global_costmap.ros__parameters.laser_layer.enabled':
+            LaunchConfiguration('use_lidar'),
     }
 
     configured_params = RewrittenYaml(
@@ -85,7 +83,7 @@ def launch_setup(context, *args, **kwargs):
     controller_server_node = Node(
         package='nav2_controller',
         executable='controller_server',
-        output='screen',
+        output={'both': 'screen'},
         parameters=[
             configured_params
         ],
@@ -96,7 +94,7 @@ def launch_setup(context, *args, **kwargs):
         package='nav2_planner',
         executable='planner_server',
         name='planner_server',
-        output='screen',
+        output={'both': 'screen'},
         parameters=[
             configured_params
         ],
@@ -107,7 +105,7 @@ def launch_setup(context, *args, **kwargs):
         package='nav2_recoveries',
         executable='recoveries_server',
         name='recoveries_server',
-        output='screen',
+        output={'both': 'screen'},
         parameters=[
             configured_params
         ],
@@ -118,7 +116,7 @@ def launch_setup(context, *args, **kwargs):
         package='nav2_bt_navigator',
         executable='bt_navigator',
         name='bt_navigator',
-        output='screen',
+        output={'both': 'screen'},
         parameters=[
             configured_params
         ],
@@ -129,7 +127,7 @@ def launch_setup(context, *args, **kwargs):
         package='nav2_waypoint_follower',
         executable='waypoint_follower',
         name='waypoint_follower',
-        output='screen',
+        output={'both': 'screen'},
         parameters=[
             configured_params
         ],
@@ -140,12 +138,12 @@ def launch_setup(context, *args, **kwargs):
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
         name='lifecycle_manager_navigation',
-        output='screen',
+        output={'both': 'screen'},
         parameters=[
             {'use_sim_time': use_sim_time_launch_arg},
             {'autostart': autostart_launch_arg},
             {'node_names': lifecycle_nodes},
-        ]
+        ],
     )
 
     return [
@@ -158,8 +156,24 @@ def launch_setup(context, *args, **kwargs):
         lifecycle_manager_navigation_node,
     ]
 
+
 def generate_launch_description():
     declared_arguments = []
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'robot_name',
+            default_value='locobot',
+            description='name of the robot (could be anything but defaults to `locobot`).',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'use_lidar',
+            default_value='false',
+            choices=('true', 'false'),
+            description='if `true`, configure Nav2 to use lidar as an observation source.',
+        )
+    )
     declared_arguments.append(
         DeclareLaunchArgument(
             'namespace',
@@ -179,7 +193,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'cmd_vel_topic',
             default_value=(LaunchConfiguration('robot_name'), '/mobile_base/cmd_vel'),
-            description="topic to remap /cmd_vel to."
+            description='topic to remap /cmd_vel to.'
         )
     )
     declared_arguments.append(

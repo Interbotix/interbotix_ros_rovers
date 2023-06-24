@@ -31,7 +31,7 @@ bt_navigator:
     # Default timeout value (in milliseconds) while a BT action node is waiting for acknowledgement
     # from an action server. This value will be overwritten for a BT node if the input port
     # “server_timeout” is provided. (default: 20)
-    default_server_timeout: 20
+    default_server_timeout: 40
 
     # Blackboard variable to use to supply the goal to the behavior tree for NavigateToPose. Should
     # match ports of BT XML file. (default: "goal")
@@ -113,7 +113,7 @@ bt_navigator:
 controller_server:
   ros__parameters:
     # Frequency to run controller (Hz). (default 20.0)
-    controller_frequency: 20.0
+    controller_frequency: 15.0
 
     # The controller server filters the velocity portion of the odometry messages received before
     # sending them to the controller plugin. Odometry values below this threshold (in m/s) will be
@@ -444,7 +444,7 @@ local_costmap:
       publish_frequency: 2.0
 
       # Reference frame. (default: map)
-      global_frame: locobot/odom
+      global_frame: map
 
       # Robot base frame. (default: base_link)
       robot_base_frame: locobot/base_link
@@ -467,7 +467,7 @@ local_costmap:
       # List of mapped plugin names for parameter namespaces and names. Note: Each plugin namespace
       # defined in this list needs to have a plugin parameter defining the type of plugin to be
       # loaded in the namespace.
-      plugins: ["obstacle_layer", "inflation_layer"]
+      plugins: ["depth_layer", "laser_layer", "inflation_layer"]
 
       # List of mapped costmap filter names for parameter namespaces and names. Note: Costmap
       # filters are also loadable plugins just as ordinary costmap layers. This separation is made
@@ -477,16 +477,83 @@ local_costmap:
       # namespace.
       # filters:
 
-      inflation_layer:
-        plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 0.55
-
-      obstacle_layer:
+      depth_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         # https://navigation.ros.org/configuration/packages/costmap-plugins/obstacle.html
 
-        # Whether the obstacle_layer plugin is enabled. (default: True)
+        # Whether the depth_layer plugin is enabled. (default: True)
+        enabled: True
+
+        # Clear any occupied cells under robot footprint.
+        footprint_clearing_enabled: True
+
+        # Maximum height to add return to occupancy grid. (default: 2.0)
+        max_obstacle_height: 2.0
+
+        # Enum for method to add data to master costmap. Must be 0, 1 or 2, (default: 1)
+        # 0 - Overwrite: Overwrite master costmap with every valid observation.
+        # 1 - Max: Sets the new value to the maximum of the master_grid’s value and this layer’s
+        # value. This is the default.
+        # 2 - MaxWithoutUnknownOverwrite: Sets the new value to the maximum of the master_grid’s
+        # value and this layer's value. If the master value is NO_INFORMATION, it is NOT
+        # overwritten. It can be used to make sure that the static map is the dominant source of
+        # information, and prevent the robot to go through places that are not present in the
+        # static map.
+        combination_method: 1
+
+        # namespace of sources of data.
+        observation_sources: depth
+
+        depth:
+          # Topic of data.
+          topic: /locobot/camera/depth/color/points
+
+          # Frame of sensor, to use if not provided by message. If empty, uses message frame_id.
+          sensor_frame: ""
+
+          # How long to store messages in a buffer to add to costmap before removing them (s).
+          # (default: 0.0)
+          observation_persistence: 0.0
+
+          # Expected rate to get new data from sensor. (default: 0.0)
+          expected_update_rate: 0.0
+
+          # Data type of input, LaserScan or PointCloud2. (default: LaserScan)
+          data_type: "PointCloud2"
+
+          # Minimum height to add return to occupancy grid. (default: 0.0)
+          min_obstacle_height: 0.0
+
+          # Maximum height to add return to occupancy grid. (default: 0.0)
+          max_obstacle_height: 2.0
+
+          # Are infinite returns from laser scanners valid measurements to raycast. (default:
+          # False)
+          inf_is_valid: False
+
+          # Whether source should mark in costmap. (default: True)
+          marking: True
+
+          # Whether source should raytrace clear in costmap. (default: False)
+          clearing: True
+
+          # Maximum range to mark obstacles in costmap. (default: 2.5)
+          obstacle_max_range: 2.5
+
+          # Minimum range to mark obstacles in costmap. (default: 0.0)
+          obstacle_min_range: 0.0
+
+          # Maximum range to raytrace clear obstacles from costmap. (default: 3.0)
+          raytrace_max_range: 3.0
+
+          # Minimum range to raytrace clear obstacles from costmap. (default: 0.0)
+          raytrace_min_range: 0.0
+
+      laser_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/obstacle.html
+
+        # Whether the laser_layer plugin is enabled. (default: True)
         enabled: True
 
         # Clear any occupied cells under robot footprint.
@@ -545,6 +612,11 @@ local_costmap:
 
           # Minimum range to raytrace clear obstacles from costmap. (default: 0.0)
           raytrace_min_range: 0.0
+
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.55
 
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
@@ -629,7 +701,7 @@ global_costmap:
       # List of mapped plugin names for parameter namespaces and names. Note: Each plugin namespace
       # defined in this list needs to have a plugin parameter defining the type of plugin to be
       # loaded in the namespace.
-      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      plugins: ["static_layer", "depth_layer", "laser_layer", "inflation_layer"]
 
       # List of mapped costmap filter names for parameter namespaces and names. Note: Costmap
       # filters are also loadable plugins just as ordinary costmap layers. This separation is made
@@ -639,11 +711,103 @@ global_costmap:
       # namespace.
       # filters:
 
-      obstacle_layer:
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/static.html
+
+        # Whether the static_layer plugin is enabled. (default: True)
+        enabled: True
+
+        # Subscribe to static map updates after receiving first. (default: False)
+        subscribe_to_updates: False
+
+        # QoS settings for map topic. (default: True)
+        map_subscribe_transient_local: True
+
+        # TF tolerance. (default: 0.0)
+        transform_tolerance: 0.0
+
+        # Map topic to subscribe to. If left empty the map topic will default to the global
+        # map_topic parameter in costmap_2d_ros. (default: "")
+        map_topic: "/map"
+
+      depth_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         # https://navigation.ros.org/configuration/packages/costmap-plugins/obstacle.html
 
-        # Whether the obstacle_layer plugin is enabled. (default: True)
+        # Whether the depth_layer plugin is enabled. (default: True)
+        enabled: True
+
+        # Clear any occupied cells under robot footprint.
+        footprint_clearing_enabled: True
+
+        # Maximum height to add return to occupancy grid. (default: 2.0)
+        max_obstacle_height: 2.0
+
+        # Enum for method to add data to master costmap. Must be 0, 1 or 2, (default: 1)
+        # 0 - Overwrite: Overwrite master costmap with every valid observation.
+        # 1 - Max: Sets the new value to the maximum of the master_grid’s value and this layer’s
+        # value. This is the default.
+        # 2 - MaxWithoutUnknownOverwrite: Sets the new value to the maximum of the master_grid’s
+        # value and this layer's value. If the master value is NO_INFORMATION, it is NOT
+        # overwritten. It can be used to make sure that the static map is the dominant source of
+        # information, and prevent the robot to go through places that are not present in the
+        # static map.
+        combination_method: 1
+
+        # namespace of sources of data.
+        observation_sources: depth
+
+        depth:
+          # Topic of data.
+          topic: /locobot/camera/depth/color/points
+
+          # Frame of sensor, to use if not provided by message. If empty, uses message frame_id.
+          sensor_frame: ""
+
+          # How long to store messages in a buffer to add to costmap before removing them (s).
+          # (default: 0.0)
+          observation_persistence: 0.0
+
+          # Expected rate to get new data from sensor. (default: 0.0)
+          expected_update_rate: 0.0
+
+          # Data type of input, LaserScan or PointCloud2. (default: LaserScan)
+          data_type: "PointCloud2"
+
+          # Minimum height to add return to occupancy grid. (default: 0.0)
+          min_obstacle_height: 0.0
+
+          # Maximum height to add return to occupancy grid. (default: 0.0)
+          max_obstacle_height: 2.0
+
+          # Are infinite returns from laser scanners valid measurements to raycast. (default:
+          # False)
+          inf_is_valid: False
+
+          # Whether source should mark in costmap. (default: True)
+          marking: True
+
+          # Whether source should raytrace clear in costmap. (default: False)
+          clearing: True
+
+          # Maximum range to mark obstacles in costmap. (default: 2.5)
+          obstacle_max_range: 2.5
+
+          # Minimum range to mark obstacles in costmap. (default: 0.0)
+          obstacle_min_range: 0.0
+
+          # Maximum range to raytrace clear obstacles from costmap. (default: 3.0)
+          raytrace_max_range: 3.0
+
+          # Minimum range to raytrace clear obstacles from costmap. (default: 0.0)
+          raytrace_min_range: 0.0
+
+      laser_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/obstacle.html
+
+        # Whether the laser_layer plugin is enabled. (default: True)
         enabled: True
 
         # Clear any occupied cells under robot footprint.
@@ -703,26 +867,6 @@ global_costmap:
           # Minimum range to raytrace clear obstacles from costmap. (default: 0.0)
           raytrace_min_range: 0.0
 
-      static_layer:
-        plugin: "nav2_costmap_2d::StaticLayer"
-        # https://navigation.ros.org/configuration/packages/costmap-plugins/static.html
-
-        # Whether the static_layer plugin is enabled. (default: True)
-        enabled: True
-
-        # Subscribe to static map updates after receiving first. (default: False)
-        subscribe_to_updates: False
-
-        # QoS settings for map topic. (default: True)
-        map_subscribe_transient_local: True
-
-        # TF tolerance. (default: 0.0)
-        transform_tolerance: 0.0
-
-        # Map topic to subscribe to. If left empty the map topic will default to the global
-        # map_topic parameter in costmap_2d_ros. (default: "")
-        map_topic: ""
-
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         # https://navigation.ros.org/configuration/packages/costmap-plugins/inflation.html
@@ -770,7 +914,9 @@ planner_server:
     # Expected planner frequency. If the current frequency is less than the expected frequency,
     # display the warning message.
     expected_planner_frequency: 20.0
+
     planner_plugins: ["GridBased"]
+
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
       # Tolerance in meters between requested goal pose and end of path. (default: 0.5)

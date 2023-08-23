@@ -13,6 +13,7 @@
   <arg name="rate"                              default="10"/>
   <arg name="source_list"                       default="[]"/>
   <arg name="use_rviz"                          default="true"/>
+  <arg name="load_gazebo_configs"               default="false"/>
   <arg name="rviz_frame"                        default="$(arg robot_name)/base_footprint"/>
   <arg name="rvizconfig"                        default="$(find interbotix_xslocobot_descriptions)/rviz/xslocobot_description.rviz" />
   <arg name="model"                             default="$(find interbotix_xslocobot_descriptions)/urdf/locobot.urdf.xacro
@@ -23,7 +24,8 @@
                                                          show_lidar:=$(arg show_lidar)
                                                          show_gripper_bar:=$(arg show_gripper_bar)
                                                          show_gripper_fingers:=$(arg show_gripper_fingers)
-                                                         external_urdf_loc:=$(arg external_urdf_loc)"/>
+                                                         external_urdf_loc:=$(arg external_urdf_loc)
+                                                         load_gazebo_configs:=$(arg load_gazebo_configs)"/>
 
   <param name="$(arg robot_name)/robot_description" command="xacro $(arg model)"/>
 

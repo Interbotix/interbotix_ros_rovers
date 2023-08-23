@@ -9,6 +9,7 @@
   <xacro:arg name="show_gripper_bar"      default="true"/>
   <xacro:arg name="show_gripper_fingers"  default="true"/>
   <xacro:arg name="external_urdf_loc"     default=""/>
+  <xacro:arg name="load_gazebo_configs"   default="false"/>
 
   <xacro:property name="arm_type"         value="$(arg arm_model)"/>
   <xacro:property name="base_type"        value="$(arg base_model)"/>

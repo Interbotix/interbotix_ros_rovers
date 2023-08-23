@@ -361,7 +361,9 @@
         <parent link="$(arg robot_name)/fingers_link"/>
         <child link="$(arg robot_name)/right_finger_link"/>
         <dynamics friction="0.1"/>
-        <mimic joint="left_finger" multiplier="-1" offset="0"/>
+        <xacro:unless value="$(arg load_gazebo_configs)">
+          <mimic joint="left_finger" multiplier="-1" offset="0"/>
+        </xacro:unless>
       </joint>
 
       <transmission name="trans_right_finger">

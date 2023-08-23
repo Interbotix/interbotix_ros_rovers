@@ -105,6 +105,7 @@
     <arg name="external_urdf_loc"                 value="$(arg external_urdf_loc)"/>
     <arg name="use_rviz"                          value="$(arg use_rviz)"/>
     <arg name="rviz_frame"                        value="$(arg rviz_frame)"/>
+    <arg name="load_gazebo_configs"               value="true"/>
   </include>
 
   <node

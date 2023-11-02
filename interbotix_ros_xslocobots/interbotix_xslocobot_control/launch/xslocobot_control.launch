@@ -116,6 +116,7 @@
       <param name="topic_to"                value="/tf"/>
       <param name="topic_from"              value="/mobile_base/tf"/>
       <param name="filepath_config"         value="$(find interbotix_xslocobot_control)/config/tf_rebroadcaster.yaml"/>
+      <param name="set_zero_z_translation"  value="true"/>
     </node>
   </group>
 

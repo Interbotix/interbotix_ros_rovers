@@ -4,13 +4,20 @@
   <arg unless="$(arg debug)" name="launch_prefix" value="" />
   <arg     if="$(arg debug)" name="launch_prefix" value="gdb --ex run --args" />
 
-  <arg name="robot_name" default=""/>
+  <arg name="robot_name" default="locobot"/>
   <arg name="config" default="false" />
-  <arg unless="$(arg config)" name="command_args" value="-f $(arg robot_name)/base_footprint" />
-  <arg     if="$(arg config)" name="command_args" value="-f $(arg robot_name)/base_footprint -d $(find interbotix_xslocobot_moveit)/launch/moveit.rviz" />
+  <arg unless="$(arg config)" name="command_args" value="-f $(arg robot_name)/base_link" />
+  <arg     if="$(arg config)" name="command_args" value="-f $(arg robot_name)/base_link -d $(find interbotix_xslocobot_moveit)/launch/moveit.rviz" />
 
-  <node name="$(anon rviz)" launch-prefix="$(arg launch_prefix)" pkg="rviz" type="rviz" respawn="false"
-	args="$(arg command_args)" output="screen">
+  <node
+    name="$(anon rviz)"
+    launch-prefix="$(arg launch_prefix)"
+    pkg="rviz"
+    type="rviz"
+    respawn="false"
+    ns="$(arg robot_name)"
+	  args="$(arg command_args)"
+    output="screen">
     <rosparam command="load" file="$(find interbotix_xslocobot_moveit)/config/kinematics.yaml"/>
   </node>
 

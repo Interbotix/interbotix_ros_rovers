@@ -56,7 +56,7 @@
     <arg name="publish_monitored_planning_scene"  value="true" />
   </include>
 
-  <include if="$(arg use_moveit_rviz)" file="$(find interbotix_xslocobot_moveit)/launch/moveit_rviz.launch" ns="$(arg robot_name)">
+  <include if="$(arg use_moveit_rviz)" file="$(find interbotix_xslocobot_moveit)/launch/moveit_rviz.launch">
     <arg name="robot_name"                        value="$(arg robot_name)"/>
     <arg name="config"                            value="true"/>
   </include>

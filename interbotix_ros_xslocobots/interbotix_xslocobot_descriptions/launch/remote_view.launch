@@ -1,7 +1,7 @@
 <launch>
 
   <arg name="robot_name"                        default="locobot"/>
-  <arg name="rviz_frame"                        default="$(arg robot_name)/odom"/>
+  <arg name="rviz_frame"                        default="$(arg robot_name)/base_link"/>
   <arg name="rvizconfig"                        default="$(find interbotix_xslocobot_descriptions)/rviz/xslocobot_description.rviz" />
 
   <node

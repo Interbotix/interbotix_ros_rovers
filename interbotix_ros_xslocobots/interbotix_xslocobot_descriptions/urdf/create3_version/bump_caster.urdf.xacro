@@ -4,10 +4,10 @@
   <xacro:macro name="bump_caster" params="*origin">
 
     <joint name="bump_caster" type="fixed">
-        <axis xyz="0 0 0"/>
-        <xacro:insert_block name="origin"/>
-        <parent link="${robot_name}/base_link"/>
-        <child link="${robot_name}/bump_caster_link"/>
+      <axis xyz="0 0 0"/>
+      <xacro:insert_block name="origin"/>
+      <parent link="$(arg robot_name)/base_link"/>
+      <child link="$(arg robot_name)/bump_caster_link"/>
     </joint>
 
     <link name="${robot_name}/bump_caster_link">
@@ -19,9 +19,9 @@
         <material name="interbotix_black"/>
       </visual>
       <collision>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin rpy="0 ${pi/2} 0" xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://interbotix_xslocobot_descriptions/meshes/locobot_meshes/create3_version/bump_caster.stl"/>
+          <cylinder radius="0.009" length="0.02"/>
         </geometry>
       </collision>
       <inertial>

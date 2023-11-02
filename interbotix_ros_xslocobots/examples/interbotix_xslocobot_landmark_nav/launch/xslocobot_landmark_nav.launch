@@ -5,16 +5,18 @@
     <arg name="robot_name"                      default="locobot"/>
     <arg name="camera_color_topic"              default="$(arg robot_name)/camera/color/image_raw"/>
     <arg name="camera_info_topic"               default="$(arg robot_name)/camera/color/camera_info"/>
-    
+
     <!-- Landmark Args -->
     <arg name="landmarks_ns"                    default="landmarks"/>
     <arg name="obs_frame"                       default="$(arg robot_name)/camera_color_optical_frame"/>
     <arg name="fixed_frame"                     default="landmarks"/>
 
-    <!-- rtabmap Args -->   
+    <!-- rtabmap Args -->
     <arg name="rtabmap_args"                    default=""/>
 
     <arg name="use_lidar"                       default="true"/>
+    <arg name="base_type"                       default="$(optenv INTERBOTIX_XSLOCOBOT_BASE_TYPE create3)"/> <!-- 'kobuki', 'create3' -->
+    <arg name="lidar_type"                      default="$(optenv INTERBOTIX_XSLOCOBOT_LIDAR_TYPE rplidar_a2m8)"/> <!-- 'rplidar_a2m8', 'rplidar_a2m12' -->
     <arg name="launch_driver"                   default="true"/>
     <arg name="mapping"                         default="false"/>
     <arg name="localization"                    default="false"/>
@@ -37,7 +39,6 @@
 
     <!-- Mapping Functions -->
     <group if="$(arg mapping)">
-    
         <!-- Landmark Finder -->
         <node
             pkg="interbotix_landmark_modules"
@@ -65,7 +66,6 @@
             <arg name="use_lidar"               value="$(arg use_lidar)"/>
             <arg name="launch_driver"           value="$(arg launch_driver)"/>
             <arg name="camera_tilt_angle"       value="$(arg camera_tilt_angle)"/>
-
         </include>
     </group>
 
@@ -77,9 +77,11 @@
             <arg name="robot_model"             value="$(arg robot_model)"/>
             <arg name="robot_name"              value="$(arg robot_name)"/>
             <arg name="use_base"                value="true"/>
+            <arg name="base_type"               value="$(arg base_type)"/>
             <arg name="use_nav"                 value="true"/>
             <arg name="use_dock"                value="true"/>
             <arg name="use_lidar"               value="$(arg use_lidar)"/>
+            <arg name="lidar_type"              value="$(arg lidar_type)"/>
         </include>
 
         <!-- Navigation to Landmark Node -->

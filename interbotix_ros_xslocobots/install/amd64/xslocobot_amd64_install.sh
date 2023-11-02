@@ -225,7 +225,7 @@ function install_ros1() {
     echo -e "${GRN}Installing ROS 1 $ROS_DISTRO_TO_INSTALL...${OFF}"
     sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
     curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-    sudo apt update
+    sudo apt-get update
     sudo apt-get install -yq ros-"$ROS_DISTRO_TO_INSTALL"-desktop-full
     if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
       sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
@@ -263,8 +263,8 @@ function install_ros2() {
       gnupg
     sudo add-apt-repository -y universe
     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-    sudo apt update
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo "$UBUNTU_CODENAME") main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+    sudo apt-get update
     sudo apt-get install -yq ros-"$ROS_DISTRO_TO_INSTALL"-desktop
     if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
       sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
@@ -279,7 +279,7 @@ function install_ros2() {
     sudo rosdep init
     rosdep update --include-eol-distros
     if [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
-      echo "source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash" >> ~/.bashrc
+      echo source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash >> ~/.bashrc
       source /opt/ros/"$ROS_DISTRO_TO_INSTALL"/setup.bash
     fi
   else
@@ -298,10 +298,11 @@ function install_perception_ros2() {
     echo -e "${GRN}${BOLD}Installing Apriltag ROS Wrapper...${NORM}${OFF}"
     mkdir -p $APRILTAG_WS/src
     cd $APRILTAG_WS/src
-    git clone https://github.com/Interbotix/apriltag_ros.git -b ros2-port
+    git clone -b ros2-port https://github.com/Interbotix/apriltag_ros.git
     cd $APRILTAG_WS
     rosdep install --from-paths src --ignore-src -r -y --rosdistro="$ROS_DISTRO_TO_INSTALL"
-    if colcon build; then
+    # cmake-args flags disables warnings as errors unrelated to ROS
+    if colcon build --cmake-args -DCMAKE_CXX_FLAGS="-w"; then
       echo -e "${GRN}${BOLD}Apriltag ROS Wrapper built successfully!${NORM}${OFF}"
       echo "source $APRILTAG_WS/install/setup.bash" >> ~/.bashrc
     else
@@ -359,7 +360,7 @@ function install_locobot_ros2() {
     git clone -b "$ROS_DISTRO_TO_INSTALL" https://github.com/Interbotix/interbotix_ros_rovers.git
     git clone -b "$ROS_DISTRO_TO_INSTALL" https://github.com/Interbotix/interbotix_ros_toolboxes.git
     # TODO(lsinterbotix) remove below when moveit_visual_tools is available in apt repo
-    git clone https://github.com/ros-planning/moveit_visual_tools.git -b ros2
+    git clone -b ros2 https://github.com/ros-planning/moveit_visual_tools.git
     # TODO(lsinterbotix) remove below when sllidar_ros2 is available in ROS index
     git clone https://github.com/Slamtec/sllidar_ros2.git
     # remove IGNOREs from perception and moveit_interface packages
@@ -508,7 +509,7 @@ function install_create3_ros2() {
 }
 
 function config_rmw() {
-  # configures LoCoBot's computer's RMW
+  # Configure LoCoBot's computer's RMW
   if [ -z "$ROS_DISCOVERY_SERVER" ]; then
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
     echo "export FASTRTPS_DEFAULT_PROFILES_FILE=${FASTRTPS_DEFAULT_PROFILES_FILE}" >> ~/.bashrc
@@ -520,7 +521,7 @@ function config_rmw() {
 }
 
 function setup_env_vars_ros1() {
-  # Setup Environment Variables
+  # Set up Environment Variables
   if [ -z "$INTERBOTIX_WS" ]; then
     echo "Setting up Environment Variables..."
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp"                   >> ~/.bashrc
@@ -565,7 +566,7 @@ fi
 validate_base_type
 
 if ! command -v lsb_release &> /dev/null; then
-  sudo apt update
+  sudo apt-get update
   sudo apt-get install -yq lsb-release
 fi
 

@@ -62,3 +62,10 @@ topics:
   -
     topic: /mobile_base/wheel_vels
     type: irobot_create_msgs/msg/WheelVels
+
+services_2_to_1: []
+  # -
+  #   service: /mobile_base/reset_pose
+  #   type: irobot_create_msgs/srv/ResetPose
+
+services_1_to_2: []

@@ -28,10 +28,6 @@
     <xacro:inertial_sphere mass="${mass}" radius="${radius}"/>
   </link>
 
-  <gazebo reference="${name}_joint">
-    <preserveFixedJoint>true</preserveFixedJoint>
-  </gazebo>
-
   <gazebo reference="${robot_name}/${name}_link">
     <material>Gazebo/DarkGrey</material>
     <mu1>0.1</mu1>

@@ -1,60 +1,63 @@
 #!/usr/bin/env python
 
-import six
 import rospy
 import rospkg
-from interbotix_xs_modules.locobot import InterbotixLocobotXS as Locobot
+from interbotix_xs_modules.locobot import InterbotixLocobotXS
 from interbotix_landmark_modules.landmark import LandmarkCollection
 
 # Update this value with your model
-MODEL = "px100"
+MODEL = "wx250s"
 
-class NavigationInerface(object):
-    landmarks = LandmarkCollection(
-        ros_on=True)
+class NavigationInterface(object):
+    landmarks = LandmarkCollection(ros_on=True)
 
     def __init__(self):
         self.active_lm = None
         self.tags = []
-        self.locobot = Locobot(
-            robot_model="locobot_"+MODEL,
-            use_move_base_action=True)
+        self.locobot = InterbotixLocobotXS(
+            robot_model=f"locobot_{MODEL}",
+            use_move_base_action=True
+        )
         r = rospkg.RosPack()
         pkg_path = r.get_path("interbotix_xslocobot_landmark_nav")
         self.lm_config_filepath = rospy.get_param(
             "~landmark_config",
-            "{}/landmarks/landmarks.yaml".format(pkg_path))
+            f"{pkg_path}/landmarks/landmarks.yaml"
+        )
         self._load_landmarks()
 
     def run(self):
         while not rospy.is_shutdown():
             print("Landmarks available to navigate to")
             for lm in self.set_lms:
-                print("\t- ({}): {}".format(lm.id_, lm.label_))
-                print("\t\tmounted: {}".format(lm.is_mounted()))
-                print("\t\tmounted offset:\t{}".format((lm.get_mounted_offset())))
+                print(f"\t- ({lm.id_}): {lm.label_}")
+                print(f"\t\tmounted: {lm.is_mounted()}")
+                print(f"\t\tmounted offset:\t{lm.get_mounted_offset()}")
             print("//======================//")
 
             while True:
-                self.active_lm = int(six.moves.input("Choose landmark: "))
-                if self.active_lm in self.landmarks.data.keys():
-                    print(
-                        "You have chosen to nav to {}.".format(
-                            self.landmarks.data[self.active_lm].get_label()))
+                lm_id = int(input("Choose landmark: "))
+                if lm_id in self.landmarks.data.keys():
+                    lm = self.landmarks.data[lm_id]
+                    print(f"You have chosen to nav to '{lm.get_label()}'.")
                     break
                 else:
-                    print("'%s' is not in the list of landmarks. Choose again."
-                        % self.active_lm)
-            x, y, yaw = self.landmarks.data[self.active_lm].get_mb_goal()
+                    print(f"'{lm_id}' is not in the list of landmarks. Choose again.")
+            x, y, yaw = lm.get_mb_goal()
 
             result = self.locobot.base.move_to_pose(x, y, yaw, wait=True)
             if result:
-                print(
-                    "Successfully reached landmark {}".format(
-                        self.landmarks.data[self.active_lm].get_label()))
+                print(f"Successfully reached landmark '{lm.get_label()}'")
                 print("Go to another landmark?")
                 print("\t[y/n]")
-                more = str(six.moves.input("  >  "))
+                more = str(input("  >  ")).lower()
+                if (more != "y") or (more != "yes"):
+                    break
+            else:
+                print(f"Failed to reach landmark '{lm.get_label()}'")
+                print("Try again?")
+                print("\t[y/n]")
+                more = str(input("  >  ")).lower()
                 if (more != "y") or (more != "yes"):
                     break
 
@@ -68,8 +71,9 @@ class NavigationInerface(object):
             self.landmarks.pub_markers(self.landmarks.get_set_tags())
             self.landmarks.pub_tfs(self.landmarks.get_set_tags())
         else:
+            print("Failed to load landmarks. Exiting.")
             exit()
 
 if __name__ == "__main__":
-    nav = NavigationInerface()
+    nav = NavigationInterface()
     nav.run()

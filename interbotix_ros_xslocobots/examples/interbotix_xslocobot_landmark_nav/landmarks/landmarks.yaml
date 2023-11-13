@@ -3,10 +3,12 @@
   label: landmark_1
   mounted: true
   mounted_offset: 0.4
+  rotation_offset: 0.0
   set: false
 413:
   id: 413
   label: landmark_2
-  mounted: true
-  mounted_offset: 1.0
+  mounted: false
+  mounted_offset: 0.0
+  rotation_offset: -1.57
   set: false

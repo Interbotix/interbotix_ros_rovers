@@ -13,7 +13,7 @@ TrajectoryPlannerROS:
 
   holonomic_robot: false
 
-  vx_samples: 3
+  vx_samples: 20
   meter_scoring: true
 
   path_distance_bias: 0.75

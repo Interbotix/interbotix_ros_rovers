@@ -26,5 +26,5 @@ depth_layer:
     clearing: true
 
 inflation_layer:
-  cost_scaling_factor: 2.5
+  cost_scaling_factor: 5.0
   inflation_radius: 0.3

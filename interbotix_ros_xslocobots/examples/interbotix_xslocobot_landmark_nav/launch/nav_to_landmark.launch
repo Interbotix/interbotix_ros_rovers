@@ -1,0 +1,19 @@
+<launch>
+
+    <arg name="landmark_config"         default="$(find interbotix_xslocobot_landmark_nav)/landmarks/landmarks.yaml"/>
+    <arg name="spawn_terminal"          default="true"/>
+
+    <arg     if="$(arg spawn_terminal)" name="launch_prefix" default="gnome-terminal --command"/>
+    <arg unless="$(arg spawn_terminal)" name="launch_prefix" default=""/>
+
+    <node
+        if="$(arg launch_nav_to_landmark)"
+        pkg="interbotix_xslocobot_landmark_nav"
+        type="nav_to_landmark"
+        name="nav_to_landmark"
+        launch-prefix="$(arg launch_prefix)"
+        output="screen">
+        <param name="landmark_config"   value="$(arg landmark_config)"/>
+    </node>
+
+</launch>

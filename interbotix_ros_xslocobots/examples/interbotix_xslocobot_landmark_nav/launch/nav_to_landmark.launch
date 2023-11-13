@@ -7,7 +7,6 @@
     <arg unless="$(arg spawn_terminal)" name="launch_prefix" default=""/>
 
     <node
-        if="$(arg launch_nav_to_landmark)"
         pkg="interbotix_xslocobot_landmark_nav"
         type="nav_to_landmark"
         name="nav_to_landmark"

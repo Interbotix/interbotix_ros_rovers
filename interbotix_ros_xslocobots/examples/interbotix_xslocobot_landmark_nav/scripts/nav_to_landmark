@@ -32,7 +32,8 @@ class NavigationInterface(object):
             for lm in self.set_lms:
                 print(f"\t- ({lm.id_}): {lm.label_}")
                 print(f"\t\tmounted: {lm.is_mounted()}")
-                print(f"\t\tmounted offset:\t{lm.get_mounted_offset()}")
+                print(f"\t\tmounted offset (m):\t{lm.get_mounted_offset()}")
+                print(f"\t\trotation offset (rad):\t{lm.get_rotation_offset()}")
             print("//======================//")
 
             # Get ID of landmark and do some basic input validation

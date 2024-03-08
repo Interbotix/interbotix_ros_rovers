@@ -1,4 +1,4 @@
-locobot:
+$(var robot_name):
   controller_manager:
     ros__parameters:
       update_rate: 1000

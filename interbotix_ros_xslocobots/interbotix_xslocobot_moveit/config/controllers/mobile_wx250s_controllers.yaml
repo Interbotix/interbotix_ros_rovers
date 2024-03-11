@@ -20,3 +20,4 @@ locobot/gripper_controller:
   default: true
   joints:
     - left_finger
+    - right_finger

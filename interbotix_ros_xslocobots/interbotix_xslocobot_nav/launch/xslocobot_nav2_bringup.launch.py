@@ -41,12 +41,10 @@ from launch.actions import (
 from launch.conditions import (
     IfCondition,
     LaunchConfigurationEquals,
-    LaunchConfigurationNotEquals,
 )
 from launch.substitutions import (
     PathJoinSubstitution,
     LaunchConfiguration,
-    TextSubstitution,
 )
 from launch_ros.actions import (
     Node,
@@ -62,10 +60,10 @@ def launch_setup(context, *args, **kwargs):
     use_sim_time_launch_arg = LaunchConfiguration('use_sim_time')
     log_level_launch_arg = LaunchConfiguration('log_level')
     autostart_launch_arg = LaunchConfiguration('autostart')
+    use_composition_launch_arg = LaunchConfiguration('use_composition')
     use_respawn_launch_arg = LaunchConfiguration('use_respawn')
     nav2_params_file_launch_arg = LaunchConfiguration('nav2_params_file')
     cmd_vel_topic_launch_arg = LaunchConfiguration('cmd_vel_topic')
-    use_slam_toolbox_launch_arg = LaunchConfiguration('use_slam_toolbox')
     map_yaml_file_launch_arg = LaunchConfiguration('map')
     # Set env var to print messages to stdout immediately
     set_logging_env_var = SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -83,7 +81,7 @@ def launch_setup(context, *args, **kwargs):
     ]
 
     lifecycle_nodes_localization = [
-        'map_server'
+        'map_server',
         'amcl'
     ]
 
@@ -97,14 +95,14 @@ def launch_setup(context, *args, **kwargs):
     # https://github.com/ros/robot_state_publisher/pull/30
     tf_remappings = [
         ('/tf', 'tf'),
-        ('/tf_static', 'tf_static'
-        )
+        ('/tf_static', 'tf_static')
     ]
 
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time_launch_arg,
         'autostart': autostart_launch_arg,
+        'yaml_filename': map_yaml_file_launch_arg,
     }
 
     configured_params = RewrittenYaml(
@@ -181,11 +179,20 @@ def launch_setup(context, *args, **kwargs):
     )
 
     slam_toolbox_nav2_nodes = GroupAction(
-        condition=IfCondition(use_slam_toolbox_launch_arg),
         actions=[
             SetParameter('use_sim_time', use_sim_time_launch_arg),
             Node(
-                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization'),
+                condition=IfCondition(use_composition_launch_arg),
+                name='nav2_container',
+                package='rclcpp_components',
+                executable='component_container_isolated',
+                parameters=[configured_params, {'autostart': autostart_launch_arg}],
+                arguments=['--ros-args', '--log-level', log_level_launch_arg],
+                remappings=tf_remappings,
+                output='screen'
+            ),
+            Node(
+                condition=LaunchConfigurationEquals('slam_mode', 'mapping'),
                 package='nav2_map_server',
                 executable='map_saver_server',
                 output='screen',
@@ -194,12 +201,11 @@ def launch_setup(context, *args, **kwargs):
                 arguments=[
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
-                parameters=[
-                    configured_params
-                ],
+                parameters=[configured_params],
+                remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization'),
                 package='nav2_map_server',
                 executable='map_server',
                 name='map_server',
@@ -209,14 +215,11 @@ def launch_setup(context, *args, **kwargs):
                 arguments=[
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
-                parameters=[
-                    configured_params,
-                    {'yaml_filename': map_yaml_file_launch_arg},
-                ],
+                parameters=[configured_params],
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization'),
                 package='nav2_amcl',
                 executable='amcl',
                 name='amcl',
@@ -228,7 +231,7 @@ def launch_setup(context, *args, **kwargs):
                 remappings=tf_remappings
             ),
             Node(
-                condition=LaunchConfigurationNotEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'mapping'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_slam',
@@ -237,12 +240,13 @@ def launch_setup(context, *args, **kwargs):
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
                 parameters=[
+                    {'use_sim_time': use_sim_time_launch_arg},
                     {'autostart': autostart_launch_arg},
                     {'node_names': lifecycle_nodes_slam},
                 ]
             ),
             Node(
-                condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
+                condition=LaunchConfigurationEquals('slam_mode', 'localization'),
                 package='nav2_lifecycle_manager',
                 executable='lifecycle_manager',
                 name='lifecycle_manager_localization',
@@ -251,6 +255,7 @@ def launch_setup(context, *args, **kwargs):
                     '--ros-args', '--log-level', log_level_launch_arg
                 ],
                 parameters=[
+                    {'use_sim_time': use_sim_time_launch_arg},
                     {'autostart': autostart_launch_arg},
                     {'node_names': lifecycle_nodes_localization},
                 ]
@@ -288,8 +293,16 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            'use_composition',
+            default_value='true',
+            choices=('true', 'false'),
+            description='Whether to use composed bringup',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'cmd_vel_topic',
-            default_value=(LaunchConfiguration('robot_name'), '/mobile_base/cmd_vel'),
+            default_value=(LaunchConfiguration('robot_name'), '/diffdrive_controller/cmd_vel_unstamped'),
             description="topic to remap /cmd_vel to."
         )
     )
@@ -320,29 +333,10 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'use_slam_toolbox',
-            default_value='false',
-            choices=('true', 'false'),
-            description=(
-                'whether to use slam_toolbox over rtabmap.'
-            )
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            'slam_toolbox_mode',
-            default_value='online_async',
-            choices=(
-                # 'lifelong',
-                'localization',
-                # 'offline',
-                'online_async',
-                'online_sync'
-            ),
-            description=(
-                "the node to launch the SLAM in using the slam_toolbox. Currently only "
-                "'localization', 'online_sync', and 'online_async' modes are supported."
-            ),
+            'slam_mode',
+            default_value='mapping',
+            choices=('mapping', 'localization'),
+            description='the mode to launch the SLAM in using RTAB-MAP or SLAM Toolbox.',
         )
     )
     declared_arguments.append(

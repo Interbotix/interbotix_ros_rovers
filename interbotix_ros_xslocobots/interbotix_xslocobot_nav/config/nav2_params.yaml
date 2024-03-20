@@ -16,6 +16,9 @@ bt_navigator:
     # for details on this file. New to Galactic after NavigateThroughPoses was added.
     # default_nav_through_poses_bt_xml: CONFIGURED IN LAUNCH FILE
 
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
+
     # Reference frame. (default: map)
     global_frame: map
 
@@ -52,53 +55,85 @@ bt_navigator:
     groot_zmq_server_port: 1667
 
     # List of behavior tree node shared libraries. (default:
-    # nav2_compute_path_to_pose_action_bt_node,
-    # nav2_follow_path_action_bt_node,
-    # nav2_back_up_action_bt_node,
-    # nav2_spin_action_bt_node,
-    # nav2_wait_action_bt_node,
-    # nav2_clear_costmap_service_bt_node,
-    # nav2_is_stuck_condition_bt_node,
-    # nav2_goal_reached_condition_bt_node,
-    # nav2_goal_updated_condition_bt_node,
-    # nav2_initial_pose_received_condition_bt_node,
-    # nav2_reinitialize_global_localization_service_bt_node,
-    # nav2_rate_controller_bt_node,
-    # nav2_distance_controller_bt_node,
-    # nav2_speed_controller_bt_node,
-    # nav2_recovery_node_bt_node,
-    # nav2_pipeline_sequence_bt_node,
-    # nav2_round_robin_node_bt_node,
-    # nav2_transform_available_condition_bt_node,
-    # nav2_time_expired_condition_bt_node,
-    # nav2_distance_traveled_condition_bt_node,
-    # nav2_single_trigger_bt_node)
+    # - nav2_compute_path_to_pose_action_bt_node
+    # - nav2_compute_path_through_poses_action_bt_node
+    # - nav2_smooth_path_action_bt_node
+    # - nav2_follow_path_action_bt_node
+    # - nav2_spin_action_bt_node
+    # - nav2_wait_action_bt_node
+    # - nav2_assisted_teleop_action_bt_node
+    # - nav2_back_up_action_bt_node
+    # - nav2_drive_on_heading_bt_node
+    # - nav2_clear_costmap_service_bt_node
+    # - nav2_is_stuck_condition_bt_node
+    # - nav2_goal_reached_condition_bt_node
+    # - nav2_goal_updated_condition_bt_node
+    # - nav2_globally_updated_goal_condition_bt_node
+    # - nav2_is_path_valid_condition_bt_node
+    # - nav2_initial_pose_received_condition_bt_node
+    # - nav2_reinitialize_global_localization_service_bt_node
+    # - nav2_rate_controller_bt_node
+    # - nav2_distance_controller_bt_node
+    # - nav2_speed_controller_bt_node
+    # - nav2_truncate_path_action_bt_node
+    # - nav2_truncate_path_local_action_bt_node
+    # - nav2_goal_updater_node_bt_node
+    # - nav2_recovery_node_bt_node
+    # - nav2_pipeline_sequence_bt_node
+    # - nav2_round_robin_node_bt_node
+    # - nav2_transform_available_condition_bt_node
+    # - nav2_time_expired_condition_bt_node
+    # - nav2_path_expiring_timer_condition
+    # - nav2_distance_traveled_condition_bt_node
+    # - nav2_single_trigger_bt_node
+    # - nav2_goal_updated_controller_bt_node
+    # - nav2_is_battery_low_condition_bt_node
+    # - nav2_navigate_through_poses_action_bt_node
+    # - nav2_navigate_to_pose_action_bt_node
+    # - nav2_remove_passed_goals_action_bt_node
+    # - nav2_planner_selector_bt_node
+    # - nav2_controller_selector_bt_node
+    # - nav2_goal_checker_selector_bt_node
+    # - nav2_controller_cancel_bt_node
+    # - nav2_path_longer_on_approach_bt_node
+    # - nav2_wait_cancel_bt_node
+    # - nav2_spin_cancel_bt_node
+    # - nav2_back_up_cancel_bt_node
+    # - nav2_assisted_teleop_cancel_bt_node
+    # - nav2_drive_on_heading_cancel_bt_node
     plugin_lib_names:
     - nav2_compute_path_to_pose_action_bt_node
     - nav2_compute_path_through_poses_action_bt_node
+    - nav2_smooth_path_action_bt_node
     - nav2_follow_path_action_bt_node
-    - nav2_back_up_action_bt_node
     - nav2_spin_action_bt_node
     - nav2_wait_action_bt_node
+    # - nav2_assisted_teleop_action_bt_node
+    - nav2_back_up_action_bt_node
+    # - nav2_drive_on_heading_bt_node
     - nav2_clear_costmap_service_bt_node
     - nav2_is_stuck_condition_bt_node
     - nav2_goal_reached_condition_bt_node
     - nav2_goal_updated_condition_bt_node
+    - nav2_globally_updated_goal_condition_bt_node
+    - nav2_is_path_valid_condition_bt_node
     - nav2_initial_pose_received_condition_bt_node
     - nav2_reinitialize_global_localization_service_bt_node
     - nav2_rate_controller_bt_node
     - nav2_distance_controller_bt_node
     - nav2_speed_controller_bt_node
     - nav2_truncate_path_action_bt_node
+    - nav2_truncate_path_local_action_bt_node
     - nav2_goal_updater_node_bt_node
     - nav2_recovery_node_bt_node
     - nav2_pipeline_sequence_bt_node
     - nav2_round_robin_node_bt_node
     - nav2_transform_available_condition_bt_node
     - nav2_time_expired_condition_bt_node
+    - nav2_path_expiring_timer_condition
     - nav2_distance_traveled_condition_bt_node
     - nav2_single_trigger_bt_node
-    # - nav2_goal_updated_controller_bt_node
+    - nav2_goal_updated_controller_bt_node
     - nav2_is_battery_low_condition_bt_node # TODO(lsinterbotix): configure to use mobile_base battery
     - nav2_navigate_through_poses_action_bt_node
     - nav2_navigate_to_pose_action_bt_node
@@ -106,12 +141,32 @@ bt_navigator:
     - nav2_planner_selector_bt_node
     - nav2_controller_selector_bt_node
     - nav2_goal_checker_selector_bt_node
+    - nav2_controller_cancel_bt_node
+    - nav2_path_longer_on_approach_bt_node
+    - nav2_wait_cancel_bt_node
+    - nav2_spin_cancel_bt_node
+    - nav2_back_up_cancel_bt_node
+    # - nav2_assisted_teleop_cancel_bt_node
+    # - nav2_drive_on_heading_cancel_bt_node
+
+bt_navigator_navigate_through_poses_rclcpp_node:
+  ros__parameters:
+      # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+      use_sim_time: False
+
+bt_navigator_navigate_to_pose_rclcpp_node:
+  ros__parameters:
+      # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+      use_sim_time: False
 
 # The Controller Server implements the server for handling the controller requests for the stack
 # and host a map of plugin implementations. It will take in path and plugin names for controller,
 # progress checker and goal checker to use and call the appropriate plugins.
 controller_server:
   ros__parameters:
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
+
     # Frequency to run controller (Hz). (default 20.0)
     controller_frequency: 20.0
 
@@ -434,6 +489,9 @@ controller_server:
 local_costmap:
   local_costmap:
     ros__parameters:
+      # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+      use_sim_time: False
+
       # Whether to send full costmap every update, rather than updates. (default: false)
       always_send_full_costmap: True
 
@@ -510,7 +568,7 @@ local_costmap:
 
           # How long to store messages in a buffer to add to costmap before removing them (s).
           # (default: 0.0)
-          observation_persistence: 0.0
+          observation_persistence: 0.2
 
           # Expected rate to get new data from sensor. (default: 0.0)
           expected_update_rate: 0.0
@@ -546,19 +604,15 @@ local_costmap:
           # Minimum range to raytrace clear obstacles from costmap. (default: 0.0)
           raytrace_min_range: 0.0
 
-      static_layer:
-        plugin: "nav2_costmap_2d::StaticLayer"
-        # https://navigation.ros.org/configuration/packages/costmap-plugins/static.html
-
-        # QoS settings for map topic. (default: True)
-        map_subscribe_transient_local: True
-
 # The Costmap 2D package implements a 2D grid-based costmap for environmental representations and a
 # number of sensor processing plugins. It is used in the planner and controller servers for
 # creating the space to check for collisions or higher cost areas to negotiate around.
 global_costmap:
   global_costmap:
     ros__parameters:
+      # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+      use_sim_time: False
+
       # Whether to send full costmap every update, rather than updates. (default: false)
       always_send_full_costmap: True
 
@@ -631,13 +685,25 @@ global_costmap:
       # loaded in the namespace.
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
 
-      # List of mapped costmap filter names for parameter namespaces and names. Note: Costmap
-      # filters are also loadable plugins just as ordinary costmap layers. This separation is made
-      # to avoid plugin and filter interference and places these filters on top of the combined
-      # layered costmap. As with plugins, each costmap filter namespace defined in this list needs
-      # to have a plugin parameter defining the type of filter plugin to be loaded in the
-      # namespace.
-      # filters:
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        # https://navigation.ros.org/configuration/packages/costmap-plugins/static.html
+
+        # Whether the static_layer plugin is enabled. (default: True)
+        enabled: True
+
+        # Subscribe to static map updates after receiving first. (default: False)
+        subscribe_to_updates: False
+
+        # QoS settings for map topic. (default: True)
+        map_subscribe_transient_local: True
+
+        # TF tolerance. (default: 0.0)
+        transform_tolerance: 1.0
+
+        # Map topic to subscribe to. If left empty the map topic will default to the global
+        # map_topic parameter in costmap_2d_ros. (default: "")
+        map_topic: "/map"
 
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -667,7 +733,7 @@ global_costmap:
 
           # How long to store messages in a buffer to add to costmap before removing them (s).
           # (default: 0.0)
-          observation_persistence: 0.0
+          observation_persistence: 0.2
 
           # Expected rate to get new data from sensor. (default: 0.0)
           expected_update_rate: 0.0
@@ -702,27 +768,7 @@ global_costmap:
 
           # Minimum range to raytrace clear obstacles from costmap. (default: 0.0)
           raytrace_min_range: 0.0
-
-      static_layer:
-        plugin: "nav2_costmap_2d::StaticLayer"
-        # https://navigation.ros.org/configuration/packages/costmap-plugins/static.html
-
-        # Whether the static_layer plugin is enabled. (default: True)
-        enabled: True
-
-        # Subscribe to static map updates after receiving first. (default: False)
-        subscribe_to_updates: False
-
-        # QoS settings for map topic. (default: True)
-        map_subscribe_transient_local: True
-
-        # TF tolerance. (default: 0.0)
-        transform_tolerance: 0.0
-
-        # Map topic to subscribe to. If left empty the map topic will default to the global
-        # map_topic parameter in costmap_2d_ros. (default: "")
-        map_topic: ""
-
+          
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         # https://navigation.ros.org/configuration/packages/costmap-plugins/inflation.html
@@ -749,6 +795,9 @@ global_costmap:
 map_saver:
   ros__parameters:
     # https://navigation.ros.org/configuration/packages/configuring-map-server.html
+    
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
 
     # Timeout to attempt saving the map (seconds). (default: 2)
     save_map_timeout: 5.0
@@ -769,7 +818,11 @@ planner_server:
   ros__parameters:
     # Expected planner frequency. If the current frequency is less than the expected frequency,
     # display the warning message.
-    expected_planner_frequency: 20.0
+    expected_planner_frequency: 5.0
+    
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
+    
     planner_plugins: ["GridBased"]
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
@@ -784,7 +837,6 @@ planner_server:
       # points of the path. (default: false)
       use_final_approach_orientation: false
 
-# TODO (lsinterbotix): Update to behavior_server on Humble
 # The Behavior Server implements the server for handling recovery behavior requests and hosting a
 # vector of plugins implementing various C++ behaviors. It is also possible to implement
 # independent behavior servers for each custom behavior, but this server will allow multiple
@@ -797,20 +849,32 @@ behavior_server:
   ros__parameters:
     # https://navigation.ros.org/configuration/packages/configuring-behavior-server.html?highlight=recoveries_server
 
-    # Raw costmap topic for collision checking. (default: local_costmap/costmap_raw)
-    costmap_topic: local_costmap/costmap_raw
+    # Raw local costmap topic for collision checking. (default: local_costmap/costmap_raw)
+    local_costmap_topic: local_costmap/costmap_raw
 
-    # Topic for footprint in the costmap frame. (default: local_costmap/published_footprint)
-    footprint_topic: local_costmap/published_footprint
+    # Topic for footprint in the local costmap frame. (default: local_costmap/published_footprint)
+    local_footprint_topic: local_costmap/published_footprint
+
+    # Raw global costmap topic for collision checking. (default: global_costmap/costmap_raw)
+    global_costmap_topic: global_costmap/costmap_raw
+
+    # Topic for footprint in the global costmap frame. (default: global_costmap/published_footprint)
+    global_footprint_topic: global_costmap/published_footprint
 
     # Frequency to run behavior plugins. (default: 10.0)
     cycle_frequency: 10.0
 
     # TF transform tolerance. (default: 0.1)
-    transform_tolerance: 0.1
+    transform_tolerance: 0.3
 
-    # Reference frame. (default: odom)
-    global_frame: locobot/odom
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
+
+    # Locl reference frame. (default: odom)
+    local_frame: locobot/odom
+
+    # Global reference frame. (default: map)
+    global_frame: map
 
     # Robot base frame. (default: base_link)
     robot_base_frame: locobot/base_link
@@ -818,7 +882,7 @@ behavior_server:
     # List of plugin names to use, also matches action server names. Note: Each plugin namespace
     # defined in this list needs to have a plugin parameter defining the type of plugin to be
     # loaded in the namespace. (default: {“spin”, “back_up”, “drive_on_heading”, “wait”})
-    recovery_plugins: ["spin", "backup", "wait"]
+    behavior_plugins: ["spin", "backup", "wait"]
 
     spin:
       plugin: "nav2_behaviors/Spin"
@@ -851,6 +915,9 @@ waypoint_follower:
   ros__parameters:
     # https://navigation.ros.org/configuration/packages/configuring-waypoint-follower.html
 
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
+
     # Whether to fail action task if a single waypoint fails. If false, will continue to next
     # waypoint. (default: True)
     stop_on_failure: True
@@ -873,3 +940,88 @@ waypoint_follower:
       # Amount of time in milliseconds, for robot to sleep/wait after each waypoint is reached. If
       # zero, robot will directly continue to next waypoint. (default: 0)
       waypoint_pause_duration: 200
+
+# The Map Server implements the server for handling the map load requests for the stack and host a map topic. 
+# It also implements a map saver server which will run in the background and save maps based on service requests. 
+# There exists a map saver CLI similar to ROS 1 as well for a single map save.
+map_server:
+  ros__parameters:
+    # https://navigation.ros.org/configuration/packages/configuring-map-server.html
+    
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
+
+    # Path to map yaml file. 
+    yaml_filename: ""
+
+    # Topic to publish loaded map to. (default: "map")
+    topic_name: "map"
+
+    # Frame to publish loaded map in. (default: "map")
+    frame_id: "map"
+
+map_saver:
+  ros__parameters:
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
+
+    # Timeout to attempt saving the map (seconds). (default: 2.0)
+    save_map_timeout: 5.0
+
+    # Free space maximum probability threshold value for occupancy grid. (default: 0.25)
+    free_thresh_default: 0.25
+
+    # Occupied space minimum probability threshhold value for occupancy grid. (default: 0.65)
+    occupied_thresh_default: 0.65
+
+# For localization mode with AMCL (without using slam_toolbox)
+amcl:
+  ros__parameters:
+    # Whether to use simulation time. This paremeter will always be rewritten from the launch file.
+    use_sim_time: False
+    alpha1: 0.2
+    alpha2: 0.2
+    alpha3: 0.2
+    alpha4: 0.2
+    alpha5: 0.2
+    base_frame_id: "locobot/base_footprint"
+    beam_skip_distance: 0.5
+    beam_skip_error_threshold: 0.9
+    beam_skip_threshold: 0.3
+    do_beamskip: false
+    global_frame_id: "map"
+    lambda_short: 0.1
+    laser_likelihood_max_dist: 2.0
+    laser_max_range: 16.0
+    laser_min_range: -1.0
+    laser_model_type: "likelihood_field"
+    max_beams: 60
+    max_particles: 2000
+    min_particles: 500
+    odom_frame_id: "locobot/odom"
+    pf_err: 0.05
+    pf_z: 0.99
+    recovery_alpha_fast: 0.0
+    recovery_alpha_slow: 0.0
+    resample_interval: 1
+    robot_model_type: "nav2_amcl::DifferentialMotionModel"
+    save_pose_rate: 0.5
+    sigma_hit: 0.2
+    tf_broadcast: true
+    transform_tolerance: 0.3
+    update_min_a: 0.2
+    update_min_d: 0.25
+    z_hit: 0.5
+    z_max: 0.05
+    z_rand: 0.5
+    z_short: 0.05
+    scan_topic: locobot/scan
+    map_topic: map
+    set_initial_pose: true
+    always_reset_initial_pose: false
+    first_map_only: false
+    initial_pose:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      yaw: 0.0

@@ -62,7 +62,8 @@ def launch_setup(context, *args, **kwargs):
     xs_driver_logging_level_launch_arg = LaunchConfiguration('xs_driver_logging_level')
     use_rviz_launch_arg = LaunchConfiguration('use_rviz')
     slam_toolbox_params_file_launch_arg = LaunchConfiguration('slam_toolbox_params_file')
-    slam_mode_launch_arg = LaunchConfiguration('slam_mode')
+    slam_toolbox_mode_launch_arg = LaunchConfiguration('slam_toolbox_mode')
+    use_camera_launch_arg = LaunchConfiguration('use_camera')
     camera_tilt_angle_launch_arg = LaunchConfiguration('camera_tilt_angle')
     launch_driver_launch_arg = LaunchConfiguration('launch_driver')
     hardware_type_launch_arg = LaunchConfiguration('hardware_type')
@@ -93,7 +94,7 @@ def launch_setup(context, *args, **kwargs):
             'use_rviz': use_rviz_launch_arg,
             'use_base_odom_tf': use_base_odom_tf_launch_arg,
             'rviz_frame': 'map',
-            'use_camera': 'true',
+            'use_camera': use_camera_launch_arg,
             'rs_camera_align_depth': 'true',
             'use_base': 'true',
             # 'use_dock': 'true',
@@ -114,7 +115,7 @@ def launch_setup(context, *args, **kwargs):
         shell=True,
     )
     slam_toolbox_online_sync_slam_node = Node(
-        condition=LaunchConfigurationEquals('slam_mode', 'online_sync'),
+        condition=LaunchConfigurationEquals('slam_toolbox_mode', 'online_sync'),
         package='slam_toolbox',
         executable='sync_slam_toolbox_node',
         name='slam_toolbox',
@@ -128,7 +129,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     slam_toolbox_online_async_slam_node = Node(
-        condition=LaunchConfigurationEquals('slam_mode', 'online_async'),
+        condition=LaunchConfigurationEquals('slam_toolbox_mode', 'online_async'),
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
@@ -142,7 +143,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     slam_toolbox_localization_slam_node = Node(
-        condition=LaunchConfigurationEquals('slam_mode', 'localization'),
+        condition=LaunchConfigurationEquals('slam_toolbox_mode', 'localization'),
         package='slam_toolbox',
         executable='localization_slam_toolbox_node',
         name='slam_toolbox',
@@ -170,7 +171,7 @@ def launch_setup(context, *args, **kwargs):
             'autostart': 'true',
             'params_file': LaunchConfiguration('nav2_params_file'),
             'use_slam_toolbox': 'true',
-            'slam_toolbox_mode': slam_mode_launch_arg,
+            'slam_mode': 'mapping',
             'map': map_yaml_file_launch_arg,
         }.items(),
     )
@@ -226,6 +227,14 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            'use_camera',
+            default_value='false',
+            choices=('true', 'false'),
+            description='if `true`, the RealSense camera nodes are launched.',
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'camera_tilt_angle',
             default_value='0.2618',
             description=(
@@ -274,25 +283,26 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'slam_mode',
+            'slam_toolbox_mode',
             default_value='online_async',
             choices=(
                 # 'lifelong',
-                'localization',
+                # 'localization',
                 # 'offline',
                 'online_async',
                 'online_sync'
             ),
             description=(
                 "the mode to launch the SLAM in using the slam_toolbox. Currently only "
-                "'localization', 'online_sync', and 'online_async' modes are supported."
+                "'online_sync', and 'online_async' modes are supported."
+                "'localization' mode takes a pose graph map defined in the slam_toolbox_localization.yaml"
             ),
         )
     )
     declared_arguments.append(
         DeclareLaunchArgument(
             'slam_toolbox_params_filename',
-            default_value=('slam_toolbox_', LaunchConfiguration('slam_mode'), '.yaml')
+            default_value=('slam_toolbox_', LaunchConfiguration('slam_toolbox_mode'), '.yaml')
         )
     )
     declared_arguments.append(

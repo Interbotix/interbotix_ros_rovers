@@ -15,6 +15,7 @@
   <depend>joint_state_publisher</depend>
   <depend>joint_state_publisher_gui</depend>
   <depend>robot_state_publisher</depend>
+  <depend>topic_based_ros2_control</depend>
   <depend>rviz2</depend>
   <depend>xacro</depend>
   <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == kobuki">kobuki_description</depend>

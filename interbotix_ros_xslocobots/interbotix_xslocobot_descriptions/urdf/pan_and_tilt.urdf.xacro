@@ -235,27 +235,26 @@
           <ros>
             <namespace>/$(arg robot_name)</namespace>
           </ros>
-          <alwaysOn>true</alwaysOn>
-          <updateRate>0.0</updateRate>
-          <cameraName>camera</cameraName>
-          <imageTopicName>color/image_raw</imageTopicName>
-          <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
-          <depthImageTopicName>aligned_depth_to_color/image_raw</depthImageTopicName>
-          <depthImageCameraInfoTopicName>aligned_depth_to_color/camera_info</depthImageCameraInfoTopicName>
-          <pointCloudTopicName>depth_registered/points</pointCloudTopicName>
-          <frameName>${robot_name}/camera_depth_link</frameName>
-          <pointCloudCutoff>0.01</pointCloudCutoff>
-          <pointCloudCutoffMax>10</pointCloudCutoffMax>
-          <distortionK1>0.00000001</distortionK1>
-          <distortionK2>0.00000001</distortionK2>
-          <distortionK3>0.00000001</distortionK3>
-          <distortionT1>0.00000001</distortionT1>
-          <distortionT2>0.00000001</distortionT2>
-          <CxPrime>0</CxPrime>
-          <Cx>0</Cx>
-          <Cy>0</Cy>
-          <focalLength>0</focalLength>
-          <hackBaseline>0</hackBaseline>
+          <always_on>true</always_on>
+          <update_rate>0.0</update_rate>
+          <camera_name>camera</camera_name>
+          <image_topic_name>color/image_raw</image_topic_name>
+          <camera_info_topic_name>color/camera_info</camera_info_topic_name>
+          <depth_image_topic_name>aligned_depth_to_color/image_raw</depth_image_topic_name>
+          <depth_image_camera_info_topic_name>aligned_depth_to_color/camera_info</depth_image_camera_info_topic_name>
+          <point_cloud_topic_name>depth_registered/points</point_cloud_topic_name>
+          <frame_name>${robot_name}/camera_depth_link</frame_name>
+          <point_cloud_cutoff>0.01</point_cloud_cutoff>
+          <point_cloud_cutoff_max>10</point_cloud_cutoff_max>
+          <distortion_k1>0.00000001</distortion_k1>
+          <distortion_k2>0.00000001</distortion_k2>
+          <distortion_k3>0.00000001</distortion_k3>
+          <distortion_t1>0.00000001</distortion_t1>
+          <distortion_t2>0.00000001</distortion_t2>
+          <cx>0</cx>
+          <cy>0</cy>
+          <focal_length>0</focal_length>
+          <hack_baseline>0</hack_baseline>
         </plugin>
       </sensor>
     </gazebo>

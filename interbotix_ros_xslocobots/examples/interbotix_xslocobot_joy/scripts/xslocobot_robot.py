@@ -35,6 +35,7 @@ from threading import Lock
 import time
 
 from interbotix_common_modules.angle_manipulation import angle_manipulation as ang
+from interbotix_common_modules.common_robot.robot import (robot_shutdown, robot_startup)
 from interbotix_xs_modules.xs_robot.locobot import InterbotixLocobotXS
 from interbotix_xs_msgs.msg import LocobotJoy
 import numpy as np
@@ -73,10 +74,9 @@ class XSLocobotRobot(InterbotixLocobotXS):
             robot_name=pargs.robot_name,
             arm_model=self.arm_model,
             use_base=self.use_base,
-            start_on_init=True,
             args=args
         )
-        self.rate = self.core.create_rate(self.current_loop_rate)
+        self.rate = self.core.get_node().create_rate(self.current_loop_rate)
         if self.arm_model is not None:
             self.num_joints = self.arm.group_info.num_joints
             self.waist_index = self.arm.group_info.joint_names.index('waist')
@@ -85,23 +85,23 @@ class XSLocobotRobot(InterbotixLocobotXS):
             self.T_sy = np.identity(4)
             self.T_yb = np.identity(4)
             self.update_T_yb()
-        self.core.create_subscription(
+        self.core.get_node().create_subscription(
             msg_type=LocobotJoy,
             topic='commands/joy_processed',
             callback=self.joy_control_cb,
             qos_profile=10,
         )
         time.sleep(0.5)
-        self.core.get_logger().info('Ready to receive processed joystick commands.')
+        self.core.get_node().loginfo('Ready to receive processed joystick commands.')
 
     def start_robot(self) -> None:
         try:
-            self.start()
+            robot_startup()
             while rclpy.ok():
                 self.controller()
                 self.rate.sleep()
         except KeyboardInterrupt:
-            self.shutdown()
+            robot_shutdown()
 
     def update_speed(self, loop_rate: float) -> None:
         """
@@ -110,8 +110,8 @@ class XSLocobotRobot(InterbotixLocobotXS):
         :param loop_rate: desired loop frequency [Hz]
         """
         self.current_loop_rate = loop_rate
-        self.rate = self.core.create_rate(self.current_loop_rate)
-        self.core.get_logger().info(f'Current loop rate is {self.current_loop_rate:0d} Hz.')
+        self.rate = self.core.get_node().create_rate(self.current_loop_rate)
+        self.core.get_node().loginfo(f'Current loop rate is {self.current_loop_rate:0.0f} Hz.')
 
     def update_T_yb(self) -> None:
         """Calculate the pose of the end-effector w.r.t. T_y."""
@@ -128,7 +128,7 @@ class XSLocobotRobot(InterbotixLocobotXS):
         """
         self.current_gripper_pressure = gripper_pressure
         self.gripper.set_pressure(self.current_gripper_pressure)
-        self.core.get_logger().info(
+        self.core.get_node().loginfo(
             f'Gripper pressure is at {(self.current_gripper_pressure * 100.0):2f}%.'
         )
 
@@ -150,11 +150,11 @@ class XSLocobotRobot(InterbotixLocobotXS):
         # Check the speed_toggle_cmd
         if (msg.speed_toggle_cmd == LocobotJoy.SPEED_COARSE):
             self.loop_rates['fine'] = self.current_loop_rate
-            self.core.get_logger().info('Switched to Coarse Control')
+            self.core.get_node().loginfo('Switched to Coarse Control')
             self.update_speed(self.loop_rates['coarse'])
         elif (msg.speed_toggle_cmd == LocobotJoy.SPEED_FINE):
             self.loop_rates['coarse'] = self.current_loop_rate
-            self.core.get_logger().info('Switched to Fine Control')
+            self.core.get_node().loginfo('Switched to Fine Control')
             self.update_speed(self.loop_rates['fine'])
 
         # check base_reset_odom_cmd

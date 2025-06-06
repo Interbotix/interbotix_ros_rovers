@@ -8,31 +8,22 @@
   <license>BSD</license>
   <author email="trsupport@trossenrobotics.com">Solomon Wiznitzer</author>
 
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>joint_state_publisher</build_depend>
-  <build_depend>joint_state_publisher_gui</build_depend>
-  <build_depend>robot_state_publisher</build_depend>
-  <build_depend>roslaunch</build_depend>
-  <build_depend>rviz</build_depend>
-  <build_depend>tf2_ros</build_depend>
-  <build_depend>xacro</build_depend>
-  <build_export_depend>joint_state_publisher</build_export_depend>
-  <build_export_depend>joint_state_publisher_gui</build_export_depend>
-  <build_export_depend>robot_state_publisher</build_export_depend>
-  <build_export_depend>roslaunch</build_export_depend>
-  <build_export_depend>rviz</build_export_depend>
-  <build_export_depend>tf2_ros</build_export_depend>
-  <build_export_depend>xacro</build_export_depend>
-  <exec_depend>joint_state_publisher</exec_depend>
-  <exec_depend>joint_state_publisher_gui</exec_depend>
-  <exec_depend>robot_state_publisher</exec_depend>
-  <exec_depend>roslaunch</exec_depend>
-  <exec_depend>rviz</exec_depend>
-  <exec_depend>tf2_ros</exec_depend>
-  <exec_depend>xacro</exec_depend>
-  <exec_depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == kobuki">kobuki_description</exec_depend>
-  <exec_depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == create3">irobot_create_description</exec_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>interbotix_xs_modules</depend>
+  <depend>interbotix_common_sim</depend>
+  <exec_depend>interbotix_xs_rviz</exec_depend>
+  <depend>joint_state_publisher</depend>
+  <depend>joint_state_publisher_gui</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>rviz2</depend>
+  <depend>xacro</depend>
+  <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == kobuki">kobuki_description</depend>
+  <depend condition="$INTERBOTIX_XSLOCOBOT_BASE_TYPE == create3">irobot_create_description</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
 
   <export>
+    <build_type>ament_cmake</build_type>
   </export>
 </package>

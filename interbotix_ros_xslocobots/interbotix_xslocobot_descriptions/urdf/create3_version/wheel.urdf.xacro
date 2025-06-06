@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-<xacro:macro name="wheel" params="name parent_link *origin">
+<xacro:macro name="wheel" params="name gazebo parent_link *origin">
 
   <xacro:property name="mass"   value="0.2" />
   <xacro:property name="radius" value="${3.575*cm2m}" />
@@ -11,13 +11,13 @@
   <xacro:property name="wheel_joint_name" value="${wheel_link_name}_joint"/>
 
   <joint name="${wheel_joint_name}" type="continuous">
-    <parent link="$(arg robot_name)/${parent_link}"/>
-    <child link="$(arg robot_name)/${wheel_link_name}"/>
+    <parent link="${robot_name}/${parent_link}"/>
+    <child link="${robot_name}/${wheel_link_name}"/>
     <xacro:insert_block name="origin"/>
     <axis xyz="0 0 1"/>
   </joint>
 
-  <link name="$(arg robot_name)/${wheel_link_name}">
+  <link name="${robot_name}/${wheel_link_name}">
     <visual>
       <geometry>
         <cylinder length="${width}" radius="${radius}"/>
@@ -34,28 +34,18 @@
       length="${width}" />
   </link>
 
-  <gazebo reference="${wheel_link_name}">
+  <gazebo reference="${robot_name}/${wheel_link_name}">
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
-    <kp>1000000.0</kp>
-    <kd>100.0</kd>
+    <kp>1e12</kp>
+    <kd>1e12</kd>
     <minDepth>0.0001</minDepth>
     <maxVel>1.0</maxVel>
     <material>Gazebo/DarkGrey</material>
   </gazebo>
 
-  <!-- <transmission name="trans_${wheel_joint_name}">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="${wheel_joint_name}">
-      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="${wheel_joint_name}_motor">
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission> -->
-
-  <!-- <xacro:if value="${gazebo == 'classic'}">
-    <ros2_control name="${wheel_link_name}_controller" type="system">
+  <!-- <xacro:if value="${hardware_type == 'gz_classic'}">
+    <ros2_control name="${robot_name}/${wheel_link_name}_controller" type="system">
       <hardware>
         <plugin>gazebo_ros2_control/GazeboSystem</plugin>
       </hardware>
@@ -67,8 +57,21 @@
     </ros2_control>
   </xacro:if> -->
 
-  <!-- <xacro:if value="${gazebo == 'ignition'}">
-    <ros2_control name="${wheel_link_name}_controller" type="system">
+  <!-- bach-todo: add if -->
+  <ros2_control name="GazeboSimSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="${wheel_joint_name}">
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <command_interface name="velocity" />
+    </joint>
+  </ros2_control>
+
+
+  <xacro:if value="${hardware_type == 'gz_ignition'}">
+    <ros2_control name="${robot_name}/${wheel_link_name}_controller" type="system">
       <hardware>
         <plugin>ign_ros2_control/IgnitionSystem</plugin>
       </hardware>
@@ -78,7 +81,7 @@
         <command_interface name="velocity" />
       </joint>
     </ros2_control>
-  </xacro:if> -->
+  </xacro:if>
 
 </xacro:macro>
 </robot>

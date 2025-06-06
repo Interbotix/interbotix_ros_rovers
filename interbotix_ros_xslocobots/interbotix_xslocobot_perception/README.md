@@ -1,6 +1,6 @@
 # interbotix_xslocobot_perception
 
-[![View Documentation](https://docs.trossenrobotics.com/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros1_packages/perception_pipeline_configuration.html)
+[![View Documentation](https://docs.trossenrobotics.com/docs_button.svg)](https://docs.trossenrobotics.com/interbotix_xslocobots_docs/ros2_packages/perception_pipeline_configuration.html)
 
 ## Overview
 

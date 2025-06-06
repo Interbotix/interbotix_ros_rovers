@@ -1,0 +1,16 @@
+camera_namespace: locobot
+enable_color: true
+rgb_camera.color_profile: 640,480,30
+enable_depth: true
+depth_module.depth_profile: 640,480,30 
+align_depth.enable: true
+enable_sync: true
+enable_infra1: false
+enable_infra2: false
+hole_filling_filter.enable: false
+initial_reset: false
+pointcloud.ordered_pc: false
+spatial_filter.enable: false
+temporal_filter.enable: false
+publish_tf: true
+tf_publish_rate: 1.0

@@ -4,28 +4,28 @@
 <!-- The robot has a bumper with 5 contact sensors. The center one is
 functional, while the 4 remaining ones are created as dummy links. -->
 <xacro:macro name="dummy_bumper_zone" params="name parent_link:=base_link *origin">
-  <xacro:property name="link_name" value="${name}"/>
+  <xacro:property name="link_name" value="${robot_name}/${name}"/>
   <xacro:property name="joint_name" value="${name}_joint"/>
 
   <joint name="${joint_name}" type="fixed">
-    <parent link="$(arg robot_name)/${parent_link}"/>
-    <child link="$(arg robot_name)/${link_name}"/>
+    <parent link="${robot_name}/${parent_link}"/>
+    <child link="${link_name}"/>
     <xacro:insert_block name="origin"/>
   </joint>
-  <link name="$(arg robot_name)/${link_name}"/>
+  <link name="${link_name}"/>
 </xacro:macro>
 
-<xacro:macro name="bumper" params="name:=bump_front_center parent_link:=base_link update_rate:=62.0 visual_mesh collision_mesh
+<xacro:macro name="bumper" params="name:=bump_front_center parent_link:=base_link update_rate:=62.0 gazebo visual_mesh collision_mesh
   *origin *inertial">
-  <xacro:property name="link_name" value="${name}"/>
+  <xacro:property name="link_name" value="${robot_name}/${name}"/>
   <xacro:property name="joint_name" value="${name}_joint"/>
 
   <joint name="${joint_name}" type="fixed">
-    <parent link="$(arg robot_name)/${parent_link}"/>
-    <child link="$(arg robot_name)/${link_name}"/>
+    <parent link="${robot_name}/${parent_link}"/>
+    <child link="${link_name}"/>
     <xacro:insert_block name="origin"/>
   </joint>
-  <link name="$(arg robot_name)/${link_name}">
+  <link name="${link_name}">
     <visual>
       <geometry>
         <mesh filename="${visual_mesh}"/>
@@ -39,7 +39,7 @@ functional, while the 4 remaining ones are created as dummy links. -->
     <xacro:insert_block name="inertial"/>
   </link>
 
-  <gazebo reference="$(arg robot_name)/${name}" >
+  <gazebo reference="${name}" >
     <mu1>0.1</mu1>
     <mu2>0.1</mu2>
     <maxVel>0.01</maxVel>
@@ -52,11 +52,10 @@ functional, while the 4 remaining ones are created as dummy links. -->
       <contact>
         <collision>${link_name}_collision</collision>
       </contact>
-      <!-- Disabled for ROS 1 -->
-      <!-- <xacro:if value="${gazebo == 'classic'}">
+      <!-- <xacro:if value="${hardware_type == 'gz_classic'}">
         <plugin name="${name}_plugin" filename="libgazebo_ros_create_bumper.so">
           <ros>
-            <namespace>/</namespace>
+            <namespace>/${robot_name}</namespace>
             <remapping>~/out:=_internal/bumper/event</remapping>
           </ros>
         </plugin>

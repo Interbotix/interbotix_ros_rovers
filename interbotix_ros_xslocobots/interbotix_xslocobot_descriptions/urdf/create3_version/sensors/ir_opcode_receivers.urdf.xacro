@@ -3,6 +3,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:macro name="ir_opcode_receivers" params="name:=ir_omni
+                                                  gazebo
                                                   robot_model_name
                                                   dock_model_name
                                                   emitter_link_name
@@ -20,13 +21,13 @@
     <xacro:property name="joint_name" value="${name}_joint" />
     <xacro:property name="receiver_link_name" value="${name}" />
 
-    <joint name="$(arg robot_name)/${joint_name}" type="fixed">
+    <joint name="${joint_name}" type="fixed">
       <xacro:insert_block name="origin" />
-      <parent link="$(arg robot_name)/${parent}"/>
-      <child link="$(arg robot_name)/${receiver_link_name}"/>
+      <parent link="${robot_name}/${parent}"/>
+      <child link="${robot_name}/${receiver_link_name}"/>
     </joint>
 
-    <link name="$(arg robot_name)/${receiver_link_name}">
+    <link name="${robot_name}/${receiver_link_name}">
       <xacro:inertial_dummy />
     </link>
 
@@ -34,8 +35,8 @@
     This there is no need for high update rates. -->
     <xacro:if value="${visualize}">
       <!-- Sensor 0 visualization -->
-      <gazebo reference="${receiver_link_name}">
-        <xacro:ray_sensor sensor_name="sensor_0"
+      <gazebo reference="${robot_name}/${receiver_link_name}">
+        <xacro:ray_sensor sensor_name="sensor_0" gazebo="${gazebo}"
                       update_rate="1" visualize="${visualize}"
                       h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_0_fov/2}" h_max_angle="${sensor_0_fov/2}"
                       r_min="${min_range}" r_max="${sensor_0_range}" r_res="0.01">
@@ -44,8 +45,8 @@
       </gazebo>
 
       <!-- Sensor 1 visualization -->
-      <gazebo reference="${receiver_link_name}">
-        <xacro:ray_sensor sensor_name="sensor_1"
+      <gazebo reference="${robot_name}/${receiver_link_name}">
+        <xacro:ray_sensor sensor_name="sensor_1" gazebo="${gazebo}"
                       update_rate="1" visualize="${visualize}"
                       h_samples="${samples}" h_res="1.0" h_min_angle="-${sensor_1_fov/2}" h_max_angle="${sensor_1_fov/2}"
                       r_min="${min_range}" r_max="${sensor_1_range}" r_res="0.01">
@@ -54,26 +55,25 @@
       </gazebo>
     </xacro:if>
 
-    <!-- Disabled for ROS 1 -->
-    <!-- <xacro:if value="${gazebo == 'classic'}">
+    <xacro:if value="${hardware_type == 'gz_classic'}">
       <gazebo>
         <plugin name="${name}_plugin" filename="libgazebo_ros_create_ir_opcode.so">
           <ros>
-            <namespace>/</namespace>
+            <namespace>/${robot_name}</namespace>
             <remapping>~/out:=ir_opcode</remapping>
           </ros>
           <update_rate>${update_rate}</update_rate>
           <robot_model_name>${robot_model_name}</robot_model_name>
-          <receiver_link_name>${receiver_link_name}</receiver_link_name>
+          <receiver_link_name>${robot_name}/${receiver_link_name}</receiver_link_name>
           <dock_model_name>${dock_model_name}</dock_model_name>
-          <emitter_link_name>${emitter_link_name}</emitter_link_name>
+          <emitter_link_name>${robot_name}/${emitter_link_name}</emitter_link_name>
           <sensor_0_fov>${sensor_0_fov}</sensor_0_fov>
           <sensor_0_range>${sensor_0_range}</sensor_0_range>
           <sensor_1_fov>${sensor_1_fov}</sensor_1_fov>
           <sensor_1_range>${sensor_1_range}</sensor_1_range>
         </plugin>
       </gazebo>
-    </xacro:if> -->
+    </xacro:if>
 
     <gazebo reference="${joint_name}" >
       <preserveFixedJoint>true</preserveFixedJoint>

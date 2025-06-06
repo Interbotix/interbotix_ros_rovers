@@ -1,5 +1,0 @@
-hardware_interface:
-  loop_hz: 10
-  group_name: arm
-  gripper_name: gripper
-  joint_states_topic: dynamixel/joint_states

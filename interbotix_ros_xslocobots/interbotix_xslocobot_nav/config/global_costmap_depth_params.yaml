@@ -1,8 +1,0 @@
-global_costmap:
-  global_frame: map
-  update_frequency: 1.0
-  publish_frequency: 0.5
-  plugins:
-  - {name: static_layer, type: "costmap_2d::StaticLayer"}
-  - {name: depth_layer, type: "costmap_2d::ObstacleLayer"}
-  - {name: inflation_layer, type: "costmap_2d::InflationLayer"}
